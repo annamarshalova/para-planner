@@ -1,0 +1,193 @@
+body{background-color:#F6F5F5;
+font-family: 'Montserrat', sans-serif;
+font-weight:light;
+color:black;
+font-size:30px;}
+
+ul#menu{list-style-type: none;
+margin: 0;
+padding: 0;
+overflow:hidden;
+font-size:30;
+width:100%;
+text-align:center;
+position:relative;
+display:table;}
+
+li{display: table-cell;
+	position: relative;}
+
+li a{color:black;
+text-decoration:none;
+border-radius:10px;
+display: block;
+position: relative;
+margin:0px;
+padding-left:10px;
+padding-right:10px;}
+
+
+ul li a:hover{font-weight:bold;}
+
+.dropdown-content {
+    padding-top:5px;
+    display: none;
+    position: relative;
+	z-index:1;
+    background-color:white;
+	text-align:center;
+	border-radius:10px;}
+
+.dropdown-content a {
+    text-decoration: none;
+    display:block;}
+
+.dropdown:hover .dropdown-content {display: block;}
+
+p a {text-decoration:none;
+color:595959;}
+
+.subject {border-radius:35px;
+margin-bottom:20px;
+left:30px;
+width:700px;
+height:100px;}
+
+.tooltiptext {
+  visibility: hidden;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 10px;
+  position: absolute;
+  z-index: 1;
+}
+
+button {border:none;font-family:Montserrat;font-size:20px;border-radius:7px;}
+
+ .switch {
+  position: absolute;
+  top:180px;
+  left:450px;
+  display: inline-block;
+  width: 60px;
+  height: 24px;
+}
+
+.switch input {display:none;}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 25px;
+  width: 25px;
+  left: 4px;
+  bottom: 0px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+#toggle:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+#toggle:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+.slider.round {
+  border-radius: 24px;
+}
+
+.slider.round:before {
+  border-radius: 50%;}
+
+button:hover{cursor:pointer;}
+
+
+
+.time {width:70px;text-align:center;font-size:20;position:absolute; left:20px; top:20px}
+.emoji {height:40px;position:absolute;left:35px; margin-top:0px;}
+.subject-name {font-size:28; font-weight:bold; position:absolute; left:100px;margin-top:0;}
+.hometask {font-size:20;position:absolute; left:140px; top:18px; width:400px;}
+.done {position:absolute;top:40px;left:120;}
+.exam {font-size:20px;position:absolute; left:100px;top:45px; width:600px;}
+.classroom {width:100%;text-align:center;font-size:18px;position:absolute; top:10px;}
+.type{width:100%;text-align:center;font-size:18px;position:absolute;top:50px;}
+.teacher{width:100%;text-align:center;font-size:18px;position:absolute;top:30px;}
+.link{position:absolute;top:5px;right:95px;padding:0px;}
+.notes{position:absolute;top:5px;right:70px;background-color:transparent;padding:0px;}
+.edit{position:absolute;top:4px;right:35px;padding:0px;}
+
+
+.relax{position:relative;top:20px;left:120px;font-size:20px;}
+
+.subject div{ margin-top:5px;margin-bottom:1px;}
+.window div{margin-top:5px;margin-bottom:1px;}
+
+.window {background-color:white;
+border-radius:35px;
+margin-bottom:20px;
+left:30px;
+width:700px;
+height:100px;
+color:#858585;}
+
+.teacher:hover .tooltiptext {
+  visibility: visible;
+}
+.link:hover .tooltiptext {
+  visibility: visible;
+}
+
+.subject-name:hover{cursor:pointer;}
+
+.relax-image:hover .tooltiptext {
+  visibility: visible;
+}
+.info-link:hover .tooltiptext {
+  visibility: visible;
+}
+h1 {position:absolute;left:60px;top:50px; font-size:48;}
+.headline {position:absolute;left:60px;top:50px; font-size:48;}
+#day-week-month {position:absolute;left:370px;top:90px; font-size:18px;width:70%;}
+#date{position:absolute;left:30px;top:100px;font-size:40;text-align:center;}
+.relax-text{position:absolute;top:125px;left:55px;font-size:48px;color:#858585;}
+.relax-image img {position:absolute;top:290px;left:55px;}
+#background {z-index:1;background-color:black;opacity:0.3;height:1000%;position:absolute;width:100%;display:none;margin:0px;top:0px;left:0px;}
+.close{z-index:4;position:fixed;top:30px;left:1060px;margin-right:5px;background-color:transparent;display:none;}
+iframe {z-index:2;position:fixed;background-color:white;display:none;height:500px;width:1000px;border-radius:20px;left:100px;top:20px;}
+.now {position:relative;font-size:14px;}
+.add-new{position:absolute;font-size:20px;width:222px;text-align:left;background-color:white;}
+.add-new a {text-decoration:none;color:black;}
+.exam-block{border-radius:35px;margin-top:20px;left:30px;width:500px;height:100px;background-color:#858585;}
+.exam-name{font-size:28px; font-weight:bold; position:absolute; left:30px;margin-top:0;width:500px;}
+.deadline{font-size:20px; position:absolute;text-align:center;left:400px;margin-top:30px;}
+.exam-subject{font-size:20px;text-align:center;position:absolute;left:30px;margin-top:40px;}
+.exam-type{font-size:20px;text-align:center;position:absolute;left:30px;margin-top:70px;}
+.exam-notes{background-color:transparent;padding:0px;}
+#info_table{position:absolute;top:120px;left:50px;text-align:left;font-size:28px;border:none;}
+#info_table th{vertical-align:top;width:150px;}
+#info_table td {font-size:28px;width:200px;}
+#info-link{left:0px;top:0px;}
+#info-edit{left:40px;top:0px;}
+.plan-name{font-size:28px; font-weight:bold; position:absolute; left:30px;margin-top:0;width:600px;}
+.plan-type{font-size:20px;text-align:center;position:absolute;left:30px;margin-top:40px;}
+.plan-place{font-size:20px;text-align:center;position:absolute;left:30px;margin-top:70px;}
+.plan-notes{background-color:transparent;padding:0px;}

@@ -1,0 +1,248 @@
+<html>
+<head>
+    <title>Расписание | Пара планер</title>
+    <link rel="shortcut icon" href="/static/images/logo.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/styles.css" type="text/css">
+    <style>
+    body{background-color:#F6F5F5;}
+    .selected {display:inline;
+     background-color:{{ settings.theme }};}
+     button {background-color:{{ settings.theme }};}
+     .selected-link{padding:2px;border-radius:7px;background-color:{{settings.sub_color}};
+     font-weight:bold;}
+     .dropdown-content a:hover {background-color:{{settings.sub_color}};}
+table,tr,td{border-width:thin;}
+.timetable {border-collapse:collapse;border-width:thin;max-width:1200px;border-color:#858585;position:absolute;top:10px;left:0px;}
+.timetable tr {border:solid;height:45px;border-width:0.2px; border-color:#858585;}
+.timetable th {height:45px;border-width:thin;border-color:#858585; width:40px;}
+.timetable td {border-width:thin;text-align:center;vertical-align:top;width:155px;height:45px;}
+.timetable tr th {width:50px;font-weight:normal;text-align:left;padding-left:10px;border-color:#858585;}
+#toggle:checked + .slider {
+  background-color: {{settings.theme}};}
+.arrow {font-size:40px; font-weight:bold;color:{{settings.theme}}}
+.name { font-family: 'Roboto Mono', monospace;font-weight:regular;font-size:14px;top:2px;left:50px;}
+.name:hover{cursor:pointer;}
+.week-notes{background-color:transparent;padding:0px;}
+.switch{position:absolute;top:200;left:60px;}
+.switch-text{position:absolute;left:80px;top:-10px;width:350px}
+    </style>
+</head>
+
+<body>
+ <div id="background">
+        </div>
+<ul id="menu">
+    <div style="float:left;">
+    <li class="dropdown"><a href="{% url 'timetable' pk=today.pk %}"  class="selected" >Расписание</a>
+        <div class="dropdown-content">
+            <a href="{% url 'timetable' pk=today.pk %}">На день</a>
+            <a href="{% url 'timetable_week' pk=today.pk %}">На неделю</a>
+            <a href="{% url 'timetable_month' pk=today.pk %}">На месяц</a>
+        </div>
+    </li>
+    <li><a href="/tasks">Задания</a></li>
+    <li><a href="/exams">Экзамены</a></li>
+    <li><a href="/subjects">Предметы</a></li>
+        </div>
+    <li class="dropdown" style="float:right;padding-right:20px;text-align:center;"><a>{% if user.first_name%}{{user.first_name}}{% else %}Твой профиль{% endif %}</a>
+    <div class="dropdown-content" style="position:fixed;right:20px;">
+        <a href="/settings">Настройки</a>
+        <a href="/accounts/login">Выйти</a>
+        </div>
+    </li>
+</ul>
+{% for weekday in weekdays %}
+<input type="hidden" class="weekday" value={{weekday}}>
+{% endfor %}
+<h1 >Расписание</h1>
+<p id="day-week-month"><a href="{% url 'timetable' pk=today.pk %}">На день</a>
+    / <a class="selected-link" href="">На неделю</a> / <a href="{% url 'timetable_month' pk=today.pk %}">На месяц</a> /</p>
+<p id='date'>
+    <span class="arrow" id="previous"><a href="{% url 'timetable_week' pk=pk|add:'-7' %}"><</a></span>
+    {{ week.first.date }}<span>{% if week.first.date != week.last.date %} - {{ week.last.date }}{% endif %}</span>
+ <span class="arrow" id="next"><a href="{% url 'timetable_week' pk=pk|add:'7' %}">></a></span>
+    </p>
+ {% if hours != None %}
+<label class="switch" style="">
+  <input type="checkbox" id="toggle" checked onchange="Toggle()">
+  <span class="slider round"></span>
+    <span class="switch-text" style="" >По номерам занятий </span>
+</label>
+ {% else %}
+ <p id="nothing_planned" style="position:absolute;top:150px;left:30px;color:#858585;">На эту неделю ничего не запланировано.</p>
+ {% endif %}
+<div id='timetable_times' style="position:absolute;top:230px;margin-left:30px;" >
+    <table class="timetable">
+        <th><td></td>{% for day in week %}
+            {% if day == today %}
+        <td class="weeknum1b" style="background-color:{{settings.sub_color}};border-radius:5px;"><b>{{day.date|date:'d.m'}}<br></b></td>
+        {% else %}
+            <td class="weeknum1">{{day.date|date:'d.m'}}<br> </td>
+        {% endif %}
+            {% endfor %}</th>
+{% for time in times %}
+        <tr>
+            <th>{{time.number}}</th>
+            <th>{{time.start_time}}-<br>{{time.end_time}}</th>
+         {% for day in week %}
+            <td style="width:155px;">
+                {% if day in blanks %}
+                <div style="width:155px;height:45px;"></div>
+                {% endif %}
+               {% for lesson in lessons %} {% if lesson.date == day.date and lesson.time == time.number %}
+                <button class="close btn btn-default" id='close_{{lesson.pk}}_0' style="z-index:4;position:fixed;top:30px;left:1060px;margin-right:5px;background-color:transparent;display:none;" onclick="Close({{lesson.pk}},'_0')">X</button>
+
+                <div style="background-color:{{lesson.color}};border-radius:5px; width:155px;height:45px;vertical-align:middle;">
+                    <p class="name" onclick="Info({{lesson.pk}},'_0')">{% if lesson.title|length <= 20 %}{{lesson.title}}{% else %} {{lesson.title_short}} {% endif %}</p>
+                    <div style="margin-top:-12px;text-decoration:none;">
+            {% if lesson.link %}<a class="week-link" href={{ lesson.link }} target="_blank" style="text-decoration:none;"><img alt="Ссылка" src="/static/images/link.svg" width="20px">
+                <span class="tooltiptext" style="font-size:10px;">{{ lesson.link }}</span> </a>{% endif %}
+            <button class="week-notes" onclick="Notes({{lesson.pk}},'_0')"><img alt="Заметки" src="/static/images/notes.svg" width="19px"></button>
+            <a  href="{% url 'lesson_edit' pk=lesson.pk page='timetable_week' fix_day=day.pk %}"><img alt="Редактировать" src="/static/images/edit.svg" class="week-edit" width="23px"></a>
+                        {% for hometask in hometasks %} {% if hometask.lesson == lesson %}
+                        <a  href="" style="text-decoration:none;color:black;font-weight:100;font-size:26px;font-family: 'Roboto Mono', monospace;">ДЗ</a>{% endif %}{% endfor %}
+                        {% for exam in exams %} {% if exam.lesson == lesson %}
+                        <a  href="" style="text-decoration:none;color:black;font-weight:100;font-size:26px;font-family: 'Roboto Mono', monospace;">КР</a>{% endif %}{% endfor %}
+                    </div>
+                </div>{% endif %} {% endfor %}
+            {% for exam in exams %} {% if not exam.lesson and exam.date == day.date and exam.start_time == time.start_time %}
+                <button class="close btn btn-default" id='close_{{exam.pk}}_0' style="z-index:4;position:fixed;top:30px;left:1060px;margin-right:5px;background-color:transparent;display:none;" onclick="Close({{exam.pk}},'_0')">X</button>
+    <iframe src="{% url 'notes_exam' pk=exam.pk %}" id="notes_{{exam.pk}}_0" style="z-index:2;position:fixed;background-color:white;display:none;height:500px;width:1000px;border-radius:20px;left:100px;top:20px;">
+      </iframe>
+                    <div style="background-color:{{exam.select_subject.color}};border-radius:5px; width:155px;height:45px;vertical-align:middle;">
+                     <div style="float:left;margin-left:10px;margin-top:5px;">
+            <button class="notes" onclick="Notes({{exam.pk}},'_0')"><img alt="Заметки" src="/static/images/notes.svg" width="18px"></button>
+            <a  href="{% url 'exam_edit' pk=exam.pk %}"><img alt="Редактировать" src="/static/images/edit.svg" class="week-edit" width="21px"></a>
+                    </div>
+                        <p class="name" style="right:10px;margin-right:5px;text-align:right;margin:0px;padding:0px;width:100px;overflow:hidden;">{{exam.select_subject.title_short}}</p>
+                    <p class="name" style="right:10px;top:0px;text-align:right;margin:0px;padding:0px;">{{exam.type}}</p>
+                    </div>
+                {% endif %} {% endfor %}
+                {% for plan in plans %} {% if  plan.start_date == day.date and plan.weekday == time.weekday %}
+                <div style="background-color:{{plan.color}};border-radius:5px; width:155px;height:45px;vertical-align:middle;z-index:5;"></div>
+                {% endif %} {% endfor %}
+            </td>
+            {% endfor %}
+        </tr>
+{% endfor %}
+        </table>
+    <br>
+</div>
+<div id='timetable_hours' style="position:absolute;top:230px;margin-left:30px;display:none;" >
+    {% if hours != None %}
+    <table class="timetable">
+        <th>{% for day in week %}
+            {% if day == today %}
+        <td class="weeknum2b" style="background-color:{{settings.sub_color}};border-radius:5px;"><b>{{day.date|date:'d.m'}}<br></b></td>
+        {% else %}
+            <td class="weeknum2">{{day.date|date:'d.m'}}<br> </td>
+        {% endif %}
+            {%  endfor %}</th>
+{% for prev,hour,next in hours %}
+        <p>{{a}}</p>
+        <tr style="height:60px;">
+            <th>{{hour}}</th>
+         {% for day in week %}
+            <td style="padding-top:7px;height:60px;">
+                {% if day in blanks %}
+                <div style="width:155px;height:45px;"></div>
+                {% endif %}{% for lesson in lessons %} {% if lesson.date == day.date and lesson.start_time >= hour and lesson.start_time < next  %}
+                <button class="close btn btn-default" id='close_{{lesson.pk}}_1' style="z-index:4;position:fixed;top:30px;left:1060px;margin-right:5px;background-color:transparent;display:none;" onclick="Close({{lesson.pk}},'_1')">X</button>
+
+                <div class="move" style="background-color:{{lesson.color}};border-radius:5px;height:120%;width:155px;position:relative;top:{{lesson.start_time.minute|add:'15'}}">
+                    <p class="name" onclick="Info({{lesson.pk}},'_1')">{% if lesson.title|length <= 20 %}{{lesson.title}}{% else %} {{lesson.title_short}} {% endif %}</p>
+                   <div style="margin-top:-12px;text-decoration:none;">
+            {% if lesson.link %}<a class="week-link" href={{ lesson.link }} target="_blank" style="text-decoration:none;"><img alt="Ссылка" src="/static/images/link.svg" width="20px">
+               <span class="tooltiptext" style="font-size:10px;">{{ lesson.link }}</span>  </a>{% endif %}
+            <button class="week-notes" onclick="Notes({{lesson.pk}},'_1')"><img alt="Заметки" src="/static/images/notes.svg" width="19px"></button>
+            <a  href="{% url 'lesson_edit' pk=lesson.pk page='timetable_week' fix_day=day.pk %}"><img alt="Редактировать" src="/static/images/edit.svg" class="week-edit" width="23px"></a>
+                        {% for hometask in hometasks %} {% if hometask.lesson == lesson %}
+                        <a  href="" style="text-decoration:none;color:black;font-weight:100;font-size:26px;font-family: 'Roboto Mono', monospace;">ДЗ</a>{% endif %}{% endfor %}
+                        {% for exam in exams %} {% if exam.lesson == lesson %}
+                        <a  href="" style="text-decoration:none;color:black;font-weight:100;font-size:26px;font-family: 'Roboto Mono', monospace;">КР</a>{% endif %}{% endfor %}
+                    </div>
+
+                   </div> {% endif %} {% endfor %}
+            </td>
+            {% endfor %}
+        </tr>
+{% endfor %}
+        </table>
+    {% endif %}
+    <br>
+</div>
+
+</body>
+    <script>
+var weekdays = document.getElementsByClassName("weekday");
+var weeknums1=document.getElementsByClassName("weeknum1");
+var weeknums1b=document.getElementsByClassName("weeknum1b");
+for (w=0;w<weeknums1.length;w++){
+weeknums1[w].innerHTML+=weekdays[w].value;};
+for (w=0;w<weeknums1b.length;w++){
+weeknums1b[w].innerHTML+='<b>'+weekdays[w].value+'</b>';};
+var weeknums2=document.getElementsByClassName("weeknum2");
+var weeknums2b=document.getElementsByClassName("weeknum2b");
+var weekdays = document.getElementsByClassName("weekday");
+for (w=0;w<weeknums2b.length;w++){
+weeknums2b[w].innerHTML+='<b>'+weekdays[w].value+'</b>';};
+for (w=0;w<weeknums2.length;w++){
+weeknums2[w].innerHTML+=weekdays[w].value;};
+
+function Toggle() {
+    var toggle=document.getElementById('toggle');
+    var timetable_times=document.getElementById('timetable_times');
+    var timetable_hours=document.getElementById('timetable_hours');
+    if (toggle.checked) {timetable_times.style.display='block';
+    timetable_hours.style.display='none';}
+    else {
+    timetable_times.style.display='none';
+    timetable_hours.style.display='block';};};
+
+var move=document.getElementsByClassName(move);
+for (m=0;m<move.length;m++){
+move.style.top=move.style.top*0.75;
+};
+function Info(pk,num){
+var info=document.getElementById('info'+'_'+pk+num);
+var close=document.getElementById('close'+'_'+pk+num);
+var back=document.getElementById('background');
+document.body.style.overflow='hidden';
+back.style.display='block';
+info.style.display='block';
+close.style.display='block';
+};
+
+function Notes(pk,num){
+var notes=document.getElementById('notes'+'_'+pk+num);
+var close=document.getElementById('close'+'_'+pk+num);
+var back=document.getElementById('background');
+document.body.style.overflow='hidden';
+back.style.display='block';
+notes.style.display='block';
+close.style.display='block';
+};
+
+function Close(pk,num){
+var notes=document.getElementById('notes'+'_'+pk+num);
+var info=document.getElementById('info'+'_'+pk+num);
+var close=document.getElementById('close'+'_'+pk+num);
+var back=document.getElementById('background');
+document.body.style.overflow='scroll';
+notes.style.display='none';
+back.style.display='none';
+close.style.display='none';
+info.style.display='none';
+}
+{% if days.last.pk < week.first.pk|add:'7' %}
+document.getElementById('next').style.display='none';;
+{% endif %}
+{% if days.first.pk > week.first.pk|add:'-7'  %}
+document.getElementById('previous').style.display='none';
+document.getElementById('date').style.left='60px';
+document.getElementById('nothing_planned').style.left='60px';
+{% endif %}
+    </script>
+</html>

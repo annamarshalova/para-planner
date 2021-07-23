@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css" type="text/css">
+
+<style>
+body{height:450px;}
+button {background-color:{{ settings.theme }};}
+</style>
+</head>
+<body>
+<div style="position:absolute;left:150px;height:200px;top:20px;">
+<form method="POST" class="post-form">{% csrf_token %}
+{{form.notes}}
+<button type="submit" class="save btn btn-default">Сохранить</button>
+</form>
+     </div>
+</body>
+</html>

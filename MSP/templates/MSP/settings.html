@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <title>Настройки | Пара планер</title>
+    <link rel="shortcut icon" href="/static/images/logo.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/styles.css?v1" type="text/css">
+    <style>
+    .selected {display:inline;
+     background-color:{{ settings.theme }};}
+     button {background-color:{{ settings.theme }};}
+     .dropdown-content a:hover {background-color:{{settings.sub_color}};}
+     #choose-settings {position:absolute;left:410px;top:110px; font-size:18px;width:70%;}
+     a {color:#595959;}
+     .selected-link{padding:2px;border-radius:7px;background-color:{{settings.sub_color}};font-weight:bold;}
+     .settings-block{display:none;}
+     .plus {font-size:30px;color:#858585;margin-left:-5px;user-select: none;}
+    .close_button {font-size:20px;color:#858585;margin-left:5px;}
+    .add_holidays {position:absolute;top:-10px;left:500px;width:500px;}
+    .right {margin-left:5px;margin-top:2px;}
+    .plus:hover {cursor:pointer;}
+    .close_button:hover {cursor:pointer;}
+    #holidays {position:absolute;top:65px;left:500px;font-size:14px;width:500px;}
+    #exams_date_label:hover .tooltiptext{visibility:visible;}
+    #semester_form_hover:hover .tooltiptext{visibility:visible;}
+    .tooltiptext {font-size:14px;width:300px;position:absolute;left:390px;}
+    #show_schedule {position:absolute;top:100px;left:570px;}
+    #edit_schedule {position:absolute;top:100px;left:570px;}
+    #auto_schedule {position:absolute;top:180px;left:70px;font-size:20px;}
+    #import_form {position:absolute;top:250px;left:660px;font-size:20px;}
+    </style>
+</head>
+<body>
+<ul id="menu">
+    <div style="float:left;">
+    <li class="dropdown"><a href="{% url 'timetable' pk=today.pk %}" >Расписание</a>
+        <div class="dropdown-content">
+            <a href="{% url 'timetable' pk=today.pk %}">На день</a>
+             {% if today.date >= settings.start_date and today.date <= settings.end_date %} <a href="{% url 'timetable_week' pk=today.pk %}">На неделю</a>
+            {% elif today.date < settings.start_date  %} <a href="{% url 'timetable_week' pk=start_date.pk %}">На неделю</a>
+            {% elif today.date > settings.start_date  %} <a href="{% url 'timetable_week' pk=end_date.pk %}">На неделю</a>
+            {% endif %}
+            {% if today.date >= settings.start_date and today.date <= settings.end_date %} <a href="{% url 'timetable_month' pk=today.pk %}">На месяц</a>
+            {% elif today.date < settings.start_date  %} <a href="{% url 'timetable_month' pk=start_date.pk %}">На месяц</a>
+            {% elif today.date > settings.start_date  %} <a href="{% url 'timetable_month' pk=end_date.pk %}">На месяц</a>
+            {% endif %}
+        </div>
+    </li>
+    <li><a href="/tasks">Задания</a></li>
+    <li><a href="/exams">Экзамены</a></li>
+    <li><a href="/subjects">Предметы</a></li>
+        </div>
+    <li class="dropdown" style="float:right;padding-right:20px;text-align:center;"><a  class="selected">{% if user.first_name%}{{user.first_name}}{% else %}Твой профиль{% endif %}</a>
+    <div class="dropdown-content" style="position:fixed;right:20px;">
+        <a href="/settings">Настройки</a>
+        <a href="/accounts/login">Выйти</a>
+        </div>
+    </li>
+</ul>
+<h1 style="">Настройки</h1>
+<p id="choose-settings">
+    <a id='dates_link' href="{% url 'settings' unit='dates' %}">Календарь</a> /
+    <a id='schedule_link' href="{% url 'settings' unit='schedule' %}">Расписание звонков</a> /
+    <a id='misc_link' href="{% url 'settings' unit='misc' %}">Другие настройки</a> /
+</p>
+<div id="dates" class="settings-block">
+    <form method="POST" class="post-form" style='position:absolute;top:185px;left:60px;font-size:20px;'>{% csrf_token %}
+        <div id="semester_form_hover">{{semester_form.as_p}}
+        <span class="tooltiptext" style="top:20px;">Пожалуйста, укажи правильные даты. Иначе приложение может работать неправильно.</span>
+        </div>
+        <div id="exams_block">
+        <label for="exams_date" id="exams_date_label">Дата начала сессии:<span class="tooltiptext" style="top:110px;">
+            Обрати внимание, что дата начала сессии должна быть меньше даты окончания семестра.</span></label>
+
+        <input type="date" id="exams_date" name="exams_date" value={{settings.exams_date|date:'Y-m-d'}}>
+            <span class="close_button" onclick="NoExams()">x</span>
+            </div>
+        <p id="add_holidays2" class="add_holidays" >Каникулы<span class="plus right" onclick="n=AddHoliday()" onmouseout="RemoveTooltip()">+</span><span class="plus right" onclick="DeleteHoliday()">-</span>
+        <span class="tooltiptext" id="tooltiptext-holidays" style="top:20px;left:350px;">Ты можешь добавить не более восьми каникул.</span></p>
+     <br>
+        <div id="holidays">
+            {% for holiday in settings.holidays.all %}
+            <div>c <input type="date" class="input_start" value={{holiday.start_date|date:'Y-m-d'}}>
+            по <input type="date" class="input_end" value={{holiday.end_date|date:'Y-m-d'}}>
+            <br>
+            <br>
+            <input type="hidden" class="hidden_pk" id="hidden_pk_{{holiday.pk}}" value={{holiday.pk}}>
+            </div>{% endfor %}</div>
+        <input type="hidden" id="holidays_to_delete" name="holidays_to_delete" value="">
+        <button type="submit" id="save_dates" name="save_dates"  class="save btn btn-default">Сохранить</button>
+
+</form>
+</div>
+
+
+
+<div id="schedule" class="settings-block">
+<div id="show_schedule" style="">
+    <table style="position:absolute; top:100px;font-size:20px;">
+    {% for time in schedule %}
+        <tr>
+      <td style="background-color:{{settings.sub_color}};">{{ time.number }}</td>
+      <td>{{ time.start_time }}</td>
+      <td>{{ time.end_time }}</td>
+        </tr>
+    {% endfor %}
+        </table>
+    <button onclick="Edit_schedule()" style="position:absolute;top:320px;" >Редактировать</button>
+</div>
+<div id="edit_schedule" style="display:none;">
+{% block schedule %}
+    <form method="POST" class="post-form" style="position:absolute;font-size:20px;">{% csrf_token %}
+        <table style="position:absolute; top:100px;font-size:20px;">
+    {% for time in schedule %}
+        <tr>
+      <td>{{ time.number }}</td>
+      <td><input class="select-time" type="time"  name ='start_time{{time.number}}' value='{{ time.start_time|time:"H:i"}}'></td>
+      <td><input class="select-time" type="time" name ='end_time{{time.number}}' value='{{ time.end_time|time:"H:i" }}'></td>
+        </tr>
+    {% endfor %}
+        </table>
+    <button  style="position:absolute; top:320px;font-size:20px;" name="save_manual"type="submit" class="save btn btn-default">Сохранить</button>
+    </form>
+{% endblock %}
+</div>
+{% block settings %}
+    <form method="POST" class="post-form" id='auto_schedule' style=''>{% csrf_token %}
+        {{ settings_form.as_p }}
+        <button type="submit"name="save_auto" class="save btn btn-default">Сохранить</button>
+    </form>
+{% endblock %}
+</div>
+
+<div id="misc" class="settings-block">
+    <form method="POST" class="post-form" style='position:absolute;top:160px;left:60px;font-size:20px;'>{% csrf_token %}
+        <p>Выбери цвет темы:</p>
+    {% for color in colors %}
+        {% if color == settings.theme %}
+        <input type="radio" class='color' name=color id= {{ color }} checked value={{ color }} onchange="Color('{{color}}')">
+        {% else %}
+        <input type="radio" class='color' name=color id= {{ color }} value={{ color }} onchange="Color('{{color}}')">
+        {% endif %}
+        <label for={{ color }} style='display:inline-block;background-color:{{ color }};height:40px;width:40px;border-radius:40px;'>⠀</label>
+        {% if color == '#80FE6C' %}
+        <br>
+        <br>
+        {% endif %}
+{% endfor %}
+<br>
+<br>
+    <input type="hidden" id="current-color" value={{ settings.theme }}>
+
+    <label for="homepage" style="margin:0px;">Выбери начальную страницу:</label>
+    <select name="homepage" id="homepage">
+        <option value="timetable" name="homepage" class="choose_homepage" {% if settings.homepage == "timetable" %}selected{% endif %}>Расписание на день</option>
+    <option value="timetable_week" name="homepage" class="choose_homepage" {% if settings.homepage == "timetable_week" %}selected{% endif %}>Расписание на неделю</option>
+    <option value="timetable_month" name="homepage" class="choose_homepage" {% if settings.homepage == "timetable_month" %}selected{% endif %}>Расписание на месяц</option>
+    <option value="tasks" name="homepage" class="choose_homepage" {% if settings.homepage == "tasks" %}selected{% endif %}>Задания</option>
+    <option value="exams" name="homepage" class="choose_homepage" {% if settings.homepage == "exams" %}selected{% endif %}>Экамены</option>
+    <option value="plans" name="homepage" class="choose_homepage" {% if settings.homepage == "plans" %}selected{% endif %}>Планы</option>
+    </select>
+    <br>
+    <button type="submit" name="save_misc"  class="save btn btn-default" style="margin-top:17px;">Сохранить</button>
+</form>
+
+    <form method="POST" class="post-form" style='position:absolute;top:160px;left:660px;font-size:20px;'>{% csrf_token %}
+        {% if settings.university %}
+        <p>Ты учишься в:<br> <b>{{ settings.university}}</b> <img src="/static/images/edit.svg" width="20px" onclick="ShowChange()"> </p>
+        {% else %}
+        <p>Выбери место, где ты учишься:</p>
+        {% endif %}
+        <div style="display:none;" id="change_university">
+            <label for="select">Выбрать из списка:</label>
+        <input list="select" name="select_university">
+        <datalist id="select">
+            <option value="" disabled selected>---------</option>
+            {% for university in universities %}
+            {% if settings.university == university %}
+            <option id="{{university}}" selected>{{university}}</option>
+            {% else %}
+            <option id="{{university}}">{{university}}</option>
+            {% endif %}
+            {% endfor %}
+        </datalist>
+            <br>
+            <input type="radio"  id="other_radio" onchange="Other()" {% if settings.university not in universities %} checked {% endif %}>
+            <input type="hidden" id="other"name="other" value="False">
+            <label for="other">Другое:</label>
+        <input id='other_university' name="other_university" type="text" {% if settings.university not in universities %} value={{settings.university}} {% endif %}>
+        <button type="submit" name="save_university"  class="save btn btn-default" style="margin-top:17px;">Сохранить</button>
+    </form>
+    </div>
+    <form method="POST" class="post-form" id="import_form" style='display:none;'>{% csrf_token %}
+        <p style="font-size:20px;">Тебе повезло!<br>
+            Просто введи <b>номер своей группы</b> и расписание запишется само.<br>
+            Ты в любой момент сможешь его отредактировать.<br>
+            Расписание звонков ты также можешь изменять в настройках.
+        </p>
+        <input type="text" name="group">
+    <button type="submit" name="import_timetable" class="save btn btn-default">Импортировать</button>
+</form>
+</div>
+<script>
+starts=document.getElementsByClassName('input_start');
+for (let i=0;i<starts.length;i++){
+starts[i].id='input_start'+i;
+starts[i].name='input_start'+i;};
+starts=document.getElementsByClassName('input_end');
+for (let i=0;i<starts.length;i++){
+starts[i].id='input_end'+i;
+starts[i].name='input_end'+i;};
+
+document.getElementById('{{unit}}_link').className='selected-link';
+document.getElementById('{{unit}}').style.display='block';
+    function Edit_schedule() {
+var edit_schedule=document.getElementById("edit_schedule");
+var show_schedule=document.getElementById("show_schedule");
+show_schedule.style.display="none";
+edit_schedule.style.display="block";
+  }
+function Show_schedule() {
+var edit_schedule=document.getElementById("edit_schedule");
+var show_schedule=document.getElementById("show_schedule");
+edit_schedule.style.display="none";
+show_schedule.style.display="block";
+}
+var numbers=document.getElementsByClassName('number');
+for (let i=0;i<numbers.length;i++){
+numbers[i].innerHTML=i+1};
+
+
+n={{settings.holidays.all|length}};
+function AddHoliday(){
+if (n<8){
+holidays=document.getElementById('holidays');
+var input=document.createElement("div");
+input.id= "holiday" + n;
+input.appendChild(document.createTextNode("с "));
+var input_start = document.createElement("input");
+input_start.type = "date";
+input_start.name = "holiday_start" + n;
+input_start.id= "holiday_start" + n;
+input_start.className="holiday start";
+input.appendChild(input_start);
+input.appendChild(document.createTextNode(" по "));
+var input_end = document.createElement("input");
+input_end.type = "date";
+input_end.name = "holiday_end" + n;
+input_end.id= "holiday_end" + n;
+input_start.className="holiday end";
+input.appendChild(input_end);
+input.appendChild(document.createElement("br"));
+input.appendChild(document.createElement("br"));
+holidays.appendChild(input);
+n++;
+}
+else {
+document.getElementById('tooltiptext-holidays').style.visibility='visible';};
+return n;}
+
+function DeleteHoliday(){
+holidays=document.getElementById('holidays');
+var lastch=holidays.lastChild;
+try {
+var pk=lastch.getElementsByClassName('hidden_pk')[0].value;
+document.getElementById('holidays_to_delete').value+=pk+'_';
+}
+finally {
+holidays.removeChild(lastch);
+n-=1;};};
+
+function RemoveTooltip(){
+document.getElementById('tooltiptext-holidays').style.visibility='hidden';};
+
+function Other(){
+radio=document.getElementById('other_radio');
+other=document.getElementById('other');
+if (radio.checked){other.value="True";}
+ else {other.value="False";};};
+    function Color(color){
+    button=document.getElementById('save_color');
+    button.style.backgroundColor=color;
+    };
+if (document.getElementById('Новосибирский государственный университет (НГУ)').selected) {
+document.getElementById('import_form').style.display='block';};
+
+function NoExams(){
+document.getElementById('exams_date').value='';};
+
+function ShowChange(){
+document.getElementById('change_university').style.display='block';
+document.getElementById('import_form').style.top='330px'};
+</script>
+</body>
+</html>

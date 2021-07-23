@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <title>Настройки | Пара планер</title>
+    <link rel="shortcut icon" href="/static/images/logo.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/styles.css" type="text/css">
+    <style>
+    .selected {display:inline;
+     background-color:{{ settings.theme }};}
+     button {background-color:{{ settings.theme }};}
+     .dropdown-content a:hover {background-color:{{settings.sub_color}};}
+
+    </style>
+</head>
+<body>
+<ul id="menu">
+    <div style="float:left;">
+    <li class="dropdown"><a href="{% url 'timetable' pk=today.pk %}" >Расписание</a>
+        <div class="dropdown-content">
+            <a href="{% url 'timetable' pk=today.pk %}">На день</a>
+             {% if today.date >= settings.start_date and today.date <= settings.end_date %} <a href="{% url 'timetable_week' pk=today.pk %}">На неделю</a>
+            {% elif today.date < settings.start_date  %} <a href="{% url 'timetable_week' pk=start_date.pk %}">На неделю</a>
+            {% elif today.date > settings.start_date  %} <a href="{% url 'timetable_week' pk=end_date.pk %}">На неделю</a>
+            {% endif %}
+            {% if today.date >= settings.start_date and today.date <= settings.end_date %} <a href="{% url 'timetable_month' pk=today.pk %}">На месяц</a>
+            {% elif today.date < settings.start_date  %} <a href="{% url 'timetable_month' pk=start_date.pk %}">На месяц</a>
+            {% elif today.date > settings.start_date  %} <a href="{% url 'timetable_month' pk=end_date.pk %}">На месяц</a>
+            {% endif %}
+        </div>
+    </li>
+    <li><a href="/tasks">Задания</a></li>
+    <li><a href="/exams">Экзамены</a></li>
+    
+        </div>
+    <li class="dropdown" style="float:right;padding-right:20px;text-align:center;"><a  class="selected">{% if user.first_name%}{{user.first_name}}{% else %}Твой профиль{% endif %}</a>
+    <div class="dropdown-content" style="position:fixed;right:20px;">
+        <a href="/settings">Настройки</a>
+        <a href="/subjects">Предметы</a>
+        <a href="/accounts/login">Выйти</a>
+        </div>
+    </li>
+</ul>
+<h1 style="position:absolute;left:60px;top:50px; font-size:48;">Импорт расписания</h1>
+
+<form method="POST" class="post-form" style='position:absolute;top:160px;left:60px;font-size:20px;'>{% csrf_token %}
+        <input type="text" name="group">
+    <button type="submit" class="save btn btn-default">Сохранить</button>
+</form>
+</body>
+</html>

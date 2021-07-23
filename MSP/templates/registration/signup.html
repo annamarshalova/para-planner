@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+   <title>Регистрация | Пара планер</title>
+   <link rel="shortcut icon" href="/static/images/logo.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css" type="text/css">
+</head>
+<body>
+<div style="position:absolute; top:50px;left:60px;background-color:white;border-radius:7px;padding:10px;">
+<h1 id='headline' style="font-size:48;">Регистрация</h1>
+  {% block content %}
+  <form method="post">{% csrf_token %}
+      <table>
+          {% for field in form %}
+<tr>
+  <td>{{ field.label_tag }}</td>
+  <td>{{ field }}</td>
+</tr>
+{% endfor %}
+</table>
+
+
+    <p><button type="submit" class="save btn btn-default" style="background-color:#FF81F2;">Зарегистрироваться</button>
+      <a href="/accounts/login" style="font-size:20px;">Уже есть аккаунт?</a></p>
+  </form>
+{% endblock %}
+</div>
+<div style="position:absolute;left:700px;top:30px;">
+    <img src="/static/images/logo.svg" width="500px;">
+    <p style="position:absolute;top:400px;font-size:40px;">Планируй и взлетай!</p>
+</div>
+</body>
+</html>

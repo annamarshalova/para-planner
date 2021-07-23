@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+     <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/styles.css" type="text/css">
+    <meta charset="UTF-8">
+    <title>Title</title>
+<style>
+body{height:450px;width:900px;}
+.check{left:20px;top:0px;}
+.hometask-info{font-size:20px;left:30px;top:0px;}
+.exam-info{font-size:20px;left:30px;top:0px;}
+.show_notes{text-decoration:none;color:black;}
+a {text-decoration:none;}
+</style>
+</head>
+    <h1 id="info_title" style="position:absolute; top:10px;left:120px;font-size:48px;padding-left:5px;padding-right:5px;border-radius:10px;background-color:{{lesson.color}};">
+        {{lesson.title}}
+    {% if lesson.date == today.date and lesson.start_time < time_now and lesson.end_time > time_now %}
+    <span style="background-color:transparent;font-size:28px;">идёт сейчас</span>{% endif %}</h1>
+        <div style="float:right;margin-top:10px;width:100px;">
+       <a id="info-link" target="_blank" href="{{lesson.link}}"><img alt="Ссылка" src="/static/images/link.svg" width="30px">
+           {% if lesson.link %}<span class="tooltiptext" style="font-size:10px;">{{ lesson.link }}</span>{% endif %}</a>
+           <a id="info-edit"> <img alt="Редактировать" src="/static/images/edit.svg" width="35px"></a>
+        </div>
+        {% if lesson.image %}
+        <img id="info_image" style="position:absolute; left:50px;width:50px;top:40px;" alt={{lesson.title}} src={{lesson.image}}>
+ {% endif %}
+        <table id="info_table">
+            {% if lesson.type %}
+            <tr><th>Тип занятия:</th><td id="info_type">{{lesson.type}}</td></tr>
+            {% endif %}
+            {% if lesson.date %}
+            <tr><th>Дата:</th><td id="info_date">{{lesson.date}}</td></tr>
+            {% if lesson.time %}
+            {% endif %}
+            <tr><th>Время:</th><td id="info_time">{{lesson.start_time}} - {{lesson.end_time}}</td></tr>
+             {% endif %}
+            {% if lesson.classroom %}
+            <tr><th>Кабинет:</th><td id="info_classroom">{{lesson.classroom}}</td></tr>
+             {% endif %}
+            {% if lesson.teacher %}
+            <tr><th>Преподаватель:</th><td id="info_teacher" width="50px">{{lesson.teacher}}</td></tr>
+             {% endif %}
+        </table>
+    <input type="hidden" id="info_lesson" id="info_lesson">
+    <div style="position:relative;left:550px;top:80px;width:400px">
+        <h4>Задания
+            <a style="left:100px;text-decoration:none;color:#595959;" href="{% url 'task_new_lesson' lesson=lesson.title date=lesson.date time=lesson.start_time menu='0' info=lesson.pk %}">+</a>
+        </h4>
+        <div style="position:relative;top:-50px;">
+        {% for hometask in hometasks %}
+                 <form id="form_{{hometask.pk}}">
+                <input type="checkbox" class="info-done" id='check_{{ hometask.pk }}' onchange="Hometask({{ hometask.pk }})" name="check_{{ hometask.pk }}" value={{hometask.done}}>
+                <label for='check_{{ hometask.pk }}' class="hometask-info" id='label_{{ hometask.pk }}' style="text-decoration:none;">{{ hometask.hometask }}</label><a class='show_notes' id='show_notes_{{hometask.pk}}' href="{% url 'notes_task' pk=hometask.pk %}">→</a>
+                     <input type="hidden" name="done_{{hometask.pk}}" id="done_{{hometask.pk}}" value="False">
+                 </form>
+                {% endfor %}
+            </div>
+    </div>
+          <div style="position:relative;left:550px;top:30px;width:500px">
+        <h4>Экзамены и контрольные
+        <a style="left:100px;text-decoration:none;color:#595959;" href="exam_new/">+</a>
+        </h4>
+        <div style="position:absolute;margin-top:-50px;">
+        {% for exam in exams %}
+            <p class="exam-info">{{exam.type}}<span>{% if exam.topic %}({{exam.topic}}){% endif %}</span></p>
+                 </form>
+                {% endfor %}
+    </div>
+          </div>
+</body>
+          <script>
+          function Hometask(id) {
+var check=document.getElementById('check_'+id);
+    var label=document.getElementById('label_'+id);
+    var done=document.getElementById('done_'+id);
+    if (check.checked == true)
+    {done.value="True";
+    label.style.textDecoration="line-through";}
+    else
+    {done.value="False";
+    label.style.textDecoration="none";};
+    document.getElementById('form_'+id).submit();}
+
+   var tasks=document.getElementsByClassName("info-done");
+    var labels=document.getElementsByClassName("hometask");
+    for (t=0;t<tasks.length;t++){
+    var task=tasks[t];
+    if (task.value == "True")
+    {task.checked=true;
+    labels[t].style.textDecoration="line-through";}
+    else
+    { task.checked=false;};};
+    </script>
+</html>

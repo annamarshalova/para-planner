@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Вход | Пара планер</title>
+     <link rel="shortcut icon" href="/static/images/logo.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css" type="text/css">
+    <style>
+</style>
+</head>
+<body>
+
+
+
+
+{% if next %}
+  {% if user.is_authenticated %}
+    <p>Your account doesn't have access to this page. To proceed,
+    please login with an account that has access.</p>
+  {% else %}
+    <p>Please login to see this page.</p>
+  {% endif %}
+{% endif %}
+<div style="position:absolute; top:50px;left:60px;background-color:white;border-radius:5px;padding:10px;">
+<h1 id='headline' style="font-size:48;">Вход</h1>
+
+    <div style="position:absolute; top:130px;left:15px;font-size:20px;width:400px;">
+    {% block content %}
+
+{% if form.errors %}
+   <b style="color:#FF81F2;">Неверный логин или пароль.</b>
+{% endif %}
+        </div>
+<form method="post" action="{% url 'login' %}">
+{% csrf_token %}
+<table>
+
+<tr>
+  <td>{{ form.username.label_tag }}</td>
+  <td>{{ form.username }}</td>
+</tr>
+
+<tr>
+  <td>{{ form.password.label_tag }}</td>
+  <td>{{ form.password }}</td>
+</tr>
+</table>
+
+<p><button type="submit" class="save btn btn-default" style="background-color:#FF81F2;">Войти</button>
+    <a href="/signup" style="font-size:20px;">Зарегистрироваться</a></p>
+<input type="hidden" name="next" value="{{ next }}" />
+</form>
+
+{# Assumes you setup the password_reset view in your URLconf #}
+<p><a href="{% url 'password_reset' %}" style="font-size:20px;">Не помнишь пароль?</a></p>
+
+{% endblock %}
+</div>
+<div style="position:absolute;left:700px;top:30px;">
+    <img src="/static/images/logo.svg" width="500px;">
+    <p style="position:absolute;top:400px;font-size:40px;">Планируй и взлетай!</p>
+</div>
+</body>
+</html>

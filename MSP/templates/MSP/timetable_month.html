@@ -1,0 +1,127 @@
+<html>
+<head>
+    <title>Расписание | Пара планер</title>
+    <link rel="shortcut icon" href="/static/images/logo.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/styles.css" type="text/css">
+    <link rel="stylesheet" href="/static/css/daily.css?v1" type="text/css">
+    <style>
+    body{background-color:#F6F5F5;}
+    .selected {display:inline;
+     background-color:{{ settings.theme }};}
+     button {background-color:{{ settings.theme }};}
+     .selected-link{padding:2px;border-radius:7px;background-color:{{settings.sub_color}};
+     font-weight:bold;}
+     .dropdown-content a:hover {background-color:{{settings.sub_color}};}
+table,tr,td{border-width:thin;}
+table {border-collapse:collapse;border-width:thin;width:1200px;}
+tr {border:solid;height:60px;border-width:thin;}
+th {height:50px;border-width:thin;}
+td {border:solid;text-align:center;width:155px;border-width:thin;}
+tr th {width:50px;font-weight:normal;text-align:left;padding-left:10px;}
+.arrow {font-size:40px; font-weight:bold;color:{{settings.theme}}}
+.name { font-family: 'Roboto Mono', monospace;font-weight:regular;font-size:14px;top:2px;left:50px;}
+    </style>
+
+</head>
+
+<body>
+
+<ul id="menu">
+    <div style="float:left;">
+    <li class="dropdown"><a href="{% url 'timetable' pk=today.pk %}"  class="selected">Расписание</a>
+        <div class="dropdown-content">
+            <a href="{% url 'timetable' pk=today.pk %}">На день</a>
+            <a href="{% url 'timetable_week' pk=today.pk %}">На неделю</a>
+            <a href="{% url 'timetable_month' pk=today.pk %}">На месяц</a>
+        </div>
+    </li>
+    <li><a href="/tasks">Задания</a></li>
+    <li><a href="/exams">Экзамены</a></li>
+    <li><a href="/subjects">Предметы</a></li>
+        </div>
+    <li class="dropdown" style="float:right;padding-right:20px;text-align:center;"><a>{% if user.first_name%}{{user.first_name}}{% else %}Твой профиль{% endif %}</a>
+    <div class="dropdown-content" style="position:fixed;right:20px;">
+        <a href="/settings">Настройки</a>
+        <a href="/accounts/login">Выйти</a>
+        </div>
+    </li>
+</ul>
+{% for weekday in weekdays %}
+<input type="hidden" class="weekday" value={{weekday}}>
+{% endfor %}
+<h1>Расписание</h1>
+<p id="day-week-month"><a href="{% url 'timetable' pk=today.pk %}">На день</a>
+    / <a  href="{% url 'timetable_week' pk=today.pk %}">На неделю</a> / <a class="selected-link" href="">На месяц</a> /</p>
+<p id='date'>
+    <span class="arrow"><a id="previous" href="{% url 'timetable_month' pk=pk|add:previous %}"><</a></span>
+   {{month_meta}}
+ <span class="arrow"><a id="next" href="{% url 'timetable_month' pk=pk|add:next %}">></a></span>
+    </p>
+
+<div id='show_windows' style="position:absolute;top:210px;margin-left:30px;" >
+    <table>
+
+{% for week in weeks %}
+        <tr>
+         {% for d in week %}
+            {% if d.date.month == month %}
+            <td style="text-align:left;vertical-align:top;" onclick="TimetableDay({{d.pk}})">{{d.date.day}}
+                {% for lesson in lessons %} {% if lesson.date == d.date  %}
+                <div style="background-color:{{lesson.color}};border-radius:5px; width:155px;height:20px;vertical-align:middle;margin-left:10px;">
+                    <p class="name">{{lesson.title_short}}</p>
+                   </div>{% endif %} {% endfor %}
+                {% for exam in exams %} {% if not exam.lesson and exam.date == d.date  %}
+                <div style="background-color:{{exam.select_subject.color}};border-radius:5px; width:155px;vertical-align:middle;margin-left:10px;">
+                    <p class="name">{{exam.select_subject.title_short}}<br>{{exam.type}}</p>
+                   </div>{% endif %} {% endfor %}
+                 {% for plan in plans %} {% if plan.start_date <= d.date and plan.end_date >= d.date %}
+                <div style="background-color:{{plan.color}};border-radius:5px; width:155px;vertical-align:middle;margin-left:10px;">
+                    <p class="name">{{plan.name}}</p>
+                   </div>{% endif %} {% endfor %}
+            </td>
+            {% else %}
+            <td style="color:#595959;border-color:#595959;text-align:left;vertical-align:top;" onclick="TimetableDay({{d.pk}})">{{d.date.day}}
+                {% for lesson in lessons %} {% if lesson.date == d.date  %}
+                    <p class="name">{{lesson.title_short}}</p>
+                   {% endif %} {% endfor %}
+                 {% for exam in exams %} {% if not exam.lesson and exam.date == d.date  %}
+                <div style="border-radius:5px; width:155px;vertical-align:middle;margin-left:10px;">
+                    <p class="name" style="font-weight:bold;">{{exam.select_subject.title_short}}<br>{{exam.type}}</p>
+                   </div>{% endif %} {% endfor %}
+                 {% for plan in plans %} {% if plan.start_date <= d.date and plan.end_date >= d.date %}
+                <div style="border-radius:5px; width:155px;vertical-align:middle;margin-left:10px;">
+                    <p class="name">{{plan.name}}</p>
+                   </div>{% endif %} {% endfor %}
+            </td>
+            {% endif %}
+            {% endfor %}
+        </tr>
+{% endfor %}
+        </table>
+    <br>
+</div>
+
+</body>
+    <script>
+
+var weeknums=document.getElementsByClassName("weeknum");
+var weekdays = document.getElementsByClassName("weekday");
+for (w=0;w<weeknums.length;w++){
+weeknums[w].innerHTML=weekdays[w].value;};
+{% if days.last.pk < pk|add:next %}
+document.getElementById('next').style.display='none';
+{% endif %}
+{% if previous == 0 %}
+document.getElementById('previous').style.display='none';
+document.getElementById('date').style.left='60px';
+{% endif %}
+function TimetableDay(d){
+try{
+window.open('/timetable/'+d);}
+finally {};
+};
+
+    </script>
+</html>

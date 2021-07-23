@@ -1,0 +1,29 @@
+<svg width="300" height="300" viewBox="0 0 300 300" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="108.54" y="150.873" width="82.921" height="122.736" fill="#ADF0FF"/>
+<rect x="191.46" y="201.629" width="99.2042" height="71.9806" fill="#75E4FD"/>
+<rect x="9.33533" y="201.629" width="99.2042" height="71.9806" fill="#75E4FD"/>
+<path d="M202.073 194.708V201.629H210.379V194.708L206.226 188.709L202.073 194.708Z" fill="#3DD8FA"/>
+<path d="M89.6211 194.708V201.629H97.9266V194.708L93.7739 188.709L89.6211 194.708Z" fill="#3DD8FA"/>
+<path d="M259.288 201.629V176.168L274.977 154.104L290.665 176.168V201.629V272.47H259.288V201.629Z" fill="#3DD8FA"/>
+<path d="M9.33533 201.629V176.168L25.0235 154.104L40.7115 176.168V201.629V272.871H9.33533V201.629Z" fill="#3DD8FA"/>
+<path d="M155.998 46.5938H144.002L146.77 52.1305L144.002 56.7447H155.998L152.769 52.1305L155.998 46.5938Z" fill="#30C7E8"/>
+<path d="M149.538 6.45068L152.768 46.5938H147.231L149.538 6.45068Z" fill="#30C7E8"/>
+<rect x="129.006" y="102.886" width="41.9887" height="47.9868" fill="#75E4FD"/>
+<rect x="132.466" y="90.8896" width="35.0675" height="11.9965" fill="#3DD8FA"/>
+<rect x="137.542" y="67.3574" width="24.9163" height="23.5322" fill="#3DD8FA"/>
+<rect x="141.002" y="56.7446" width="17.9952" height="10.6128" fill="#30C7E8"/>
+<path d="M129.006 150.873V273.611" stroke="#3DD8FA" stroke-width="3"/>
+<path d="M170.994 150.873V273.611" stroke="#3DD8FA" stroke-width="3"/>
+<path d="M206.226 195.169V273.611" stroke="#3DD8FA" stroke-width="3"/>
+<path d="M259.288 201.629V273.609" stroke="#3DD8FA" stroke-width="3"/>
+<path d="M108.54 150.873H191.461" stroke="#3DD8FA" stroke-width="3"/>
+<path d="M9.33533 201.629H108.54" stroke="#3DD8FA" stroke-width="3"/>
+<path d="M191.988 201.629H289.157" stroke="#3DD8FA" stroke-width="3"/>
+<path d="M150 150.873V273.611" stroke="#3DD8FA" stroke-width="3"/>
+<path d="M93.7738 195.168V273.61" stroke="#3DD8FA" stroke-width="3"/>
+<path d="M40.7115 200.39V273.609" stroke="#3DD8FA" stroke-width="3"/>
+<path d="M179.098 126.88L170.994 149.675H179.098V126.88Z" fill="#30C7E8"/>
+<path d="M120.902 126.88L129.006 149.675H120.902V126.88Z" fill="#30C7E8"/>
+<circle cx="149.077" cy="102.886" r="4" fill="#30C7E8"/>
+<rect x="143.771" y="118" width="12.4582" height="20.2775" fill="#ADF0FF"/>
+</svg>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+</body>
+</html>
+
+<iframe src="{% url 'info' pk=lesson.pk %}" id="info_{{lesson.pk}}_1" style="z-index:2;position:fixed;background-color:white;display:none;height:500px;width:1000px;border-radius:20px;left:100px;top:20px;">
+    </iframe>
+    <iframe src="{% url 'notes_lesson' pk=lesson.pk %}" id="notes_{{lesson.pk}}_1" style="z-index:2;position:fixed;background-color:white;display:none;height:500px;width:1000px;border-radius:20px;left:100px;top:20px;">
+      </iframe>
+
+
+ <iframe src="{% url 'info' pk=lesson.pk %}" id="info_{{lesson.pk}}_0" style="z-index:2;position:fixed;background-color:white;display:none;height:500px;width:1000px;border-radius:20px;left:100px;top:20px;">
+    </iframe>
+    <iframe src="{% url 'notes_lesson' pk=lesson.pk %}" id="notes_{{lesson.pk}}_0" style="z-index:2;position:fixed;background-color:white;display:none;height:500px;width:1000px;border-radius:20px;left:100px;top:20px;">
+      </iframe>
+
+
+holidays=document.getElementById('holidays')
+input=document.getElementById("holiday" + n);
+input.remove();
+holidays.removeChild(input);

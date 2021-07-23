@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% if exam %}
+     <title>Редактировать занятие | Пара планер</title>
+    {% else %}
+    <title>Добавить занятие | Пара планер</title>
+    {% endif %}
+
+    <link rel="shortcut icon" href="/static/images/logo.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css?v1" type="text/css">
+
+
+    <style>
+    .selected {display:inline;
+     background-color:{{ settings.theme }};}
+     button {background-color:{{ settings.theme }};}
+     .dropdown-content a:hover {background-color:{{settings.sub_color}};}
+     .colorpicker {position:absolute;top:30px;left:600px;background-color:white;border-radius:10px;padding:5px;width:440px;}
+     .colorpicker_title {position:absolute;top:-25px;left:600px;width:450px;}
+     .iconpicker {position:absolute;top:190px;left:600px;background-color:white;border-radius:10px;padding:5px;width:440px;}
+     .iconpicker_title {position:absolute;top:135px;left:600px;width:450px;}
+    </style>
+</head>
+<body>
+<ul id="menu">
+    <div style="float:left;">
+    <li class="dropdown"><a href="{% url 'timetable' pk=today.pk %}" class="selected">Расписание</a>
+        <div class="dropdown-content">
+            <a href="{% url 'timetable' pk=today.pk %}">На день</a>
+             {% if today.date >= settings.start_date and today.date <= settings.end_date %} <a href="{% url 'timetable_week' pk=today.pk %}">На неделю</a>
+            {% elif today.date < settings.start_date  %} <a href="{% url 'timetable_week' pk=start_date.pk %}">На неделю</a>
+            {% elif today.date > settings.start_date  %} <a href="{% url 'timetable_week' pk=end_date.pk %}">На неделю</a>
+            {% endif %}
+            {% if today.date >= settings.start_date and today.date <= settings.end_date %} <a href="{% url 'timetable_month' pk=today.pk %}">На месяц</a>
+            {% elif today.date < settings.start_date  %} <a href="{% url 'timetable_month' pk=start_date.pk %}">На месяц</a>
+            {% elif today.date > settings.start_date  %} <a href="{% url 'timetable_month' pk=end_date.pk %}">На месяц</a>
+            {% endif %}
+        </div>
+    </li>
+    <li><a href="/tasks">Задания</a></li>
+    <li><a href="/exams">Экзамены</a></li>
+    <li><a href="/subjects">Предметы</a></li>
+        </div>
+    <li class="dropdown" style="float:right;padding-right:20px;text-align:center;"><a>{% if user.first_name%}{{user.first_name}}{% else %}Твой профиль{% endif %}</a>
+    <div class="dropdown-content" style="position:fixed;right:20px;">
+        <a href="/settings">Настройки</a>
+        <a href="/accounts/login">Выйти</a>
+        </div>
+    </li>
+</ul>
+<h1 id='headline' style="position:absolute;left:60px;top:50px; font-size:48;">Добавить занятие</h1>
+<input type="hidden" id="subject_name" value={{lesson.title}}>
+<input type="hidden" id="subject_color" value={{lesson.color}}>
+{% block content %}
+    <form method="POST" class="post-form" id='form' style='position:absolute;top:170px;left:60px;font-size:20px;' onsubmit="return CheckTime();">{% csrf_token %}
+        <label for="date">Дата:</label>
+        <input type="date" name="date" value={{lesson.date|date:'Y-m-d'}}>
+        {{ form.as_p }}
+        <p class="colorpicker_title">Выбери цвет занятия:</p>
+        <div class="colorpicker" id="colorpicker">
+        {% for color in colors %}
+        {% if color == lesson.color %}
+        <input class='select-color' type="radio" name=color id= {{ color }} checked value={{ color }}>
+        {% else %}
+    <input class='select-color' type="radio" name=color id= {{ color }} value={{ color }} >
+        {% endif %}
+        <label for=color style='display:inline-block;background-color:{{ color }};;height:30px;width:30px;border-radius:40px;'>⠀</label>
+            {% if color == '#80FE6C' %}
+        <br>
+            <br>
+            {% endif %}
+{% endfor %}
+            </div>
+        <p class="iconpicker_title">Выбери иконку для занятия:</p>
+        <div class="iconpicker" id="iconpicker">
+        <input class='select-image' type="hidden" name=select-image value="">
+        <input id='lesson-image' type="hidden" value={{ lesson.image }}>
+        {% for image in images %}
+        <input class='select-image' type="radio" name=select-image id= {{ image.path }} value="/static/images/icons/{{ image.path }}">
+        <label for=select-image><img style="width:30px;" src="/static/images/icons/{{ image.path }}"></label>
+
+        {% endfor %}
+            <p style="font-size:10px;">Авторы иконок: <a href="https://www.flaticon.com/ru/authors/dinosoftlabs" title="DinosoftLabs">DinosoftLabs</a>, <a href="https://www.freepik.com" title="Freepik">Freepik</a> (<a href="https://www.flaticon.com/ru/" title="Flaticon">www.flaticon.com </a>)</p>
+        <label for=select-image-link>Другая иконка:</label>
+        <input id='select-image-link' type="url" name=select-image-link placeholder="URL">
+        </div>
+        <button type="submit" class="save btn btn-default">Сохранить</button>
+        {% if pk %}
+        <button><a href="{% url 'lesson_delete' pk=pk page=page fix_day=fix_day %}" style="text-decoration:none;color:black;">Удалить</a></button>
+        {% endif %}
+    </form>
+{% endblock %}
+</body>
+<script>
+    var subject=document.getElementById('subject_name').value;
+    if (subject){
+    var headline=document.getElementById('headline');
+    headline.innerHTML='Редактировать занятие'};
+    var inputs=document.getElementsByClassName('select-image');
+    var lesson_image=document.getElementById('lesson-image');
+    for (let i=0; i<inputs.length;i++){
+    if (inputs[i].value==lesson_image.value){
+    inputs[i].checked=true;}
+    }
+    function isURL(str) {
+  var pattern = new RegExp('^(https?:\\/\\/)?'+ // protocol
+  '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.?)+[a-z]{2,}|'+ // domain name
+  '((\\d{1,3}\\.){3}\\d{1,3}))'+ // OR ip (v4) address
+  '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*'+ // port and path
+  '(\\?[;&a-z\\d%_.~+=-]*)?'+ // query string
+  '(\\#[-a-z\\d_]*)?$','i'); // fragment locator
+  return pattern.test(str);
+}
+    var select_link=document.getElementById('select-image-link');
+    if (isURL(lesson_image.value)){
+    select_link.value=lesson_image.value};
+    var color = document.getElementById('subject_color');
+    if (color.value){}
+    else{
+    var select_colors=document.getElementsByClassName('select-color');
+    select_colors[0].checked=true};
+var form=document.getElementById('form');
+ function CheckTime(){
+ var form=document.getElementById('form');
+ var errors=0;
+ if (form.time.value=='' && form.start_time.value=='' && form.select_subject.value==''){
+alert('Выберите номер занятия, время начала или предмет');
+errors++;};
+ if (form.date.value=='' && form.select_subject.value==''){
+alert('Выберите дату');
+errors++;};
+if (errors>0) {return false};};
+
+
+</script>
+</html>

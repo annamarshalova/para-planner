@@ -1,0 +1,150 @@
+<html>
+<head>
+    <title>Предметы | Пара планер</title>
+    <link rel="shortcut icon" href="/static/images/logo.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/styles.css" type="text/css">
+    <style>
+    .body{height:5000px;}
+    .selected {display:inline;
+     background-color:{{ settings.theme }};}
+     button {background-color:{{ settings.theme }};}
+     .dropdown-content a:hover {background-color:{{settings.sub_color}};}
+     font-weight:bold;}
+     .subject {border-radius:35px;
+margin-bottom:20px;
+left:30px;
+width:700px;
+height:100px;}
+     .subject div{margin-top:1px;margin-bottom:1px;}
+.emoji {height:30px;position:absolute;left:30px; margin-top:0px;}
+
+.time {width:70px;text-align:center;font-size:20;position:absolute; left:20px; top:20px}
+
+.emoji {height:40px;position:absolute;left:30px; margin-top:0px;}
+.subject-name {font-size:28; font-weight:bold; position:absolute; left:100px;margin-top:0;}
+
+.write_weekday {font-size:20;position:absolute; left:100px; margin-top:40px;}
+
+.done {position:absolute;top:5px;}
+
+.exam {font-size:18px;font-weight:bold;position:absolute; left:100px;top:45px;}
+
+.classroom {width:100%;text-align:center;font-size:18px;position:absolute; top:10px;}
+.type{width:100%;text-align:center;font-size:18px;position:absolute;top:50px;}
+.teacher{width:100%;text-align:center;font-size:18px;position:absolute;top:30px;}
+.link{position:absolute;top:5px;right:100px;}
+.edit{position:absolute;top:5px;right:70px;}
+.double{position:absolute;top:5px;right:40px;}
+.delete{position:absolute;top:5px;right:10px;}
+.double:hover .tooltiptext {
+  visibility: visible;
+}
+
+.teacher:hover .tooltiptext {
+  visibility: visible;
+}
+.link:hover .tooltiptext {
+  visibility: visible;
+}
+
+    </style>
+
+</head>
+
+<body>
+
+<ul id="menu">
+    <div style="float:left;">
+    <li class="dropdown"><a href="{% url 'timetable' pk=today.pk %}" >Расписание</a>
+        <div class="dropdown-content">
+            <a href="{% url 'timetable' pk=today.pk %}">На день</a>
+            {% if today.date >= settings.start_date and today.date <= settings.end_date %} <a href="{% url 'timetable_week' pk=today.pk %}">На неделю</a>
+            {% elif today.date < settings.start_date  %} <a href="{% url 'timetable_week' pk=start_date.pk %}">На неделю</a>
+            {% elif today.date > settings.start_date  %} <a href="{% url 'timetable_week' pk=end_date.pk %}">На неделю</a>
+            {% endif %}
+            {% if today.date >= settings.start_date and today.date <= settings.end_date %} <a href="{% url 'timetable_month' pk=today.pk %}">На месяц</a>
+            {% elif today.date < settings.start_date  %} <a href="{% url 'timetable_month' pk=start_date.pk %}">На месяц</a>
+            {% elif today.date > settings.start_date  %} <a href="{% url 'timetable_month' pk=end_date.pk %}">На месяц</a>
+            {% endif %}
+        </div>
+    </li>
+    <li><a href="/tasks">Задания</a></li>
+    <li><a href="/exams">Экзамены</a></li>
+    <li><a href="/subjects" class="selected">Предметы</a></li>
+        </div>
+    <li class="dropdown" style="float:right;padding-right:20px;text-align:center;"><a  class="selected">{% if user.first_name%}{{user.first_name}}{% else %}Твой профиль{% endif %}</a>
+    <div class="dropdown-content" style="position:fixed;right:20px;">
+        <a href="/settings">Настройки</a>
+        <a href="/accounts/login">Выйти</a>
+        </div>
+    </li>
+</ul>
+<h1 style="position:absolute;left:60px;top:50px;font-size:60px;">Предметы<a href="/subject_new" style="text-decoration:none;color:black;">+</a></h1>
+{% for weekday in weekdays %}
+<input type="hidden" class="weekday" value={{weekday}}>
+{% endfor %}
+<div style="position:absolute;top:180px;margin-left:30px;">
+    {% for subject in subjects %}
+    <div class='subject' style="background-color:{{ subject.color }};">
+        <input type="hidden" class="weeknum" value={{subject.weekday}}>
+        <div style="position:absolute;">
+            {% if subject.image != '' %}
+            <span style="font-size:10px;"><img class="emoji" alt={{ subject.title }} src={{subject.image }}></span>
+            {% endif %}
+        <p class="time">{{ subject.start_time }} <br> {{ subject.end_time }}</p>
+        </div>
+        <div>
+
+            <p class="subject-name">{% if subject.title|length < 28 %}{{ subject.title }}{% else %}{{ subject.title_short }}{% endif %}</p>
+            <p  class='write_weekday' style="text-decoration:none;">{{subject.weekday}}</p>
+        </div>
+        <div style="display:inline;width:155px;position:absolute;right:15px;vertical-align:middle;text-align:center;">
+            <div>
+                 {% if subject.link %}
+            <a class="link" href={{ subject.link }} target="_blank"><img alt="Ссылка" src="/static/images/link.svg" width="20px">
+                <span class="tooltiptext" style="font-size:10px;">{{ subject.link }}</span>  </a>
+                {% else %}
+                <a class="link" href=""><img alt="Ссылка" src="/static/images/link_disabled.svg" width="20px"></a>
+                {% endif %}
+            <a  href="{% url 'subject_edit' pk=subject.pk %}"> <img alt="Редактировать" src="/static/images/edit.svg" class="edit" width="22px"> </a>
+                <a  href="{% url 'subject_double' pk=subject.pk %}"> <img alt="Копировать" src="/static/images/double.svg" class="double" width="22px">
+            <span class="tooltiptext" style="font-size:10px;">Копировать</span></a>
+            <a onclick="DeleteObject('{{subject.pk}}')"> <img alt="Удалить" src="/static/images/delete.svg" class="delete" width="22px"> </a>
+
+                </div>
+            <p class="type">{{ subject.type }}</p>
+            <p class="classroom">{{ subject.classroom }}</p>
+            <p class="teacher">{{ subject.teachershort }}<span class="tooltiptext">{{ subject.teacher }}</span></p>
+        </div>
+    </div>
+    {% endfor %}
+    <button style="position:absolute;font-size:20px;margin-top:10px;left:10px;background-color:{{settings.theme}};" class="white"><a href="/subject_new" style="text-decoration:none;color:black;">+ добавить предмет</a></button>
+</div>
+</body>
+    <script type="text/javascript">
+function Hometask(n) {
+var id =n.toString();
+var checkBox = document.getElementById('done_'+id);
+var label = document.getElementById('label_'+id);
+
+  if (checkBox.checked == true){
+    label.style.textDecoration = "line-through";
+  } else {
+    label.style.textDecoration = "none";
+  }
+};
+var weeknums=document.getElementsByClassName("weeknum");
+    var weekdays = document.getElementsByClassName("weekday");
+    var subjects = document.getElementsByClassName("write_weekday");
+    for (s=0;s<subjects.length;s++){
+    var weekday=weekdays[weeknums[s].value].value;
+    subjects[s].innerHTML=weekday;};
+function DeleteObject(s){
+var sure=confirm('Ты точно хочешь удалить этот предмет?');
+if (sure){
+window.open('/subject_edit/'+s+'/delete', '_self');}
+};
+    </script>
+</html>

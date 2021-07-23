@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<head>
+    {% if exam %}
+     <title>Редактировать экзамен | Пара планер</title>
+    {% else %}
+    <title>Добавить экзамен | Пара планер</title>
+    {% endif %}
+    <link rel="shortcut icon" href="/static/images/logo.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+    <style>
+    .selected {display:inline;
+     background-color:{{ settings.theme }};}
+     button {background-color:{{ settings.theme }};}
+     .dropdown-content a:hover {background-color:{{settings.sub_color}};}
+     .task{border-radius:35px;
+margin-top:20px;
+left:30px;
+width:700px;
+height:100px;
+}
+.task-name{font-size:28px; font-weight:bold; position:absolute; left:50px;margin-top:0;width:500px;}
+.deadline{font-size:20px; position:absolute;text-align:center;left:600px;vertical-align:middle;}
+.task-subject{font-size:20px;text-align:center;position:absolute;left:30px;margin-top:50px;}
+.done {position:absolute;}
+#toggle:checked + .slider {
+  background-color: {{settings.theme}}}};
+}
+    </style>
+
+</head>
+<body>
+<ul id="menu">
+    <div style="float:left;">
+    <li class="dropdown"><a href="{% url 'timetable' pk=today.pk %}" >Расписание</a>
+        <div class="dropdown-content">
+            <a href="{% url 'timetable' pk=today.pk %}">На день</a>
+             {% if today.date >= settings.start_date and today.date <= settings.end_date %} <a href="{% url 'timetable_week' pk=today.pk %}">На неделю</a>
+            {% elif today.date < settings.start_date  %} <a href="{% url 'timetable_week' pk=start_date.pk %}">На неделю</a>
+            {% elif today.date > settings.start_date  %} <a href="{% url 'timetable_week' pk=end_date.pk %}">На неделю</a>
+            {% endif %}
+            {% if today.date >= settings.start_date and today.date <= settings.end_date %} <a href="{% url 'timetable_month' pk=today.pk %}">На месяц</a>
+            {% elif today.date < settings.start_date  %} <a href="{% url 'timetable_month' pk=start_date.pk %}">На месяц</a>
+            {% elif today.date > settings.start_date  %} <a href="{% url 'timetable_month' pk=end_date.pk %}">На месяц</a>
+            {% endif %}
+        </div>
+    </li>
+    <li><a href="/tasks">Задания</a></li>
+    <li><a href="/exams" class="selected">Экзамены</a></li>
+    <li><a href="/subjects">Предметы</a></li>
+        </div>
+    <li class="dropdown" style="float:right;padding-right:20px;text-align:center;"><a>{% if user.first_name%}{{user.first_name}}{% else %}Твой профиль{% endif %}</a>
+    <div class="dropdown-content" style="position:fixed;right:20px;">
+        <a href="/settings">Настройки</a>
+        <a href="/accounts/login">Выйти</a>
+        </div>
+    </li>
+</ul>
+<h1 style="position:absolute;left:60px;top:50px; font-size:48;">{% if examination == False %}Добавить контрольную {% else %}Добавить экзамен{% endif %}</h1>
+
+{% block content %}
+    <form method="POST" class="exam-form" id='exam-form' style='position:absolute;top:160px;left:60px;font-size:20px;'>{% csrf_token %}
+        <br>
+        {% if examination == None %}
+        {% with 'False' as examination %}
+        <input type="checkbox" class="examination" id="check" onchange="Examination()">
+        <label for="examination">Экзамен или зачёт</label>
+        <input type="hidden" value="False" id="examination" name="examination">
+        <br>
+        {% endwith %}
+        {% endif %}
+        <label style="color:595959;" for=deadline_date >Дата:</label>
+        <input class="deadline_date" type="date" name=deadline_date id="deadline_date"  value={{exam.date|date:'Y-m-d'}}>
+        <br>
+        <label style="color:595959;" for=deadline_subject >Предмет:</label>
+        <select class="deadline_subject" name=deadline_subject id="deadline_subject" default="{{exam.select_subject}">
+            <option value="" disabled selected>---------</option>
+            {% for subject in subjects %}
+            {% if exam.select_subject == subject %}
+            <option selected value={{subject.pk}}>{{subject}}</option>
+            {% else %}
+            <option value={{subject.pk}}>{{subject}}</option>
+            {% endif %}
+            {% endfor %}
+        </select>
+        {{form.as_p}}
+        <button type="submit" class="save btn btn-default">Сохранить</button>
+        {% if pk %}
+        <button><a href="{% url 'exam_delete' pk=pk %}" style="text-decoration:none;color:black;">Удалить</a></button>
+        {% endif %}
+    </form>
+{% endblock %}
+</head>
+</body>
+<script>
+    function Examination(){
+    examination = document.getElementById('examination');
+    check = document.getElementById('check');
+    if (check.checked == true){
+    examination.value="True";}
+    else{
+    examination.value="False";}}
+</script>
+</html>
