@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Задания | Пара планер</title>
+    <link rel="shortcut icon" href="/static/images/logo.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <style>
+        body {background-color:#F6F5F5; font-family: 'Montserrat', sans-serif; font-weight:light; color:black; }
+        .subject {box-sizing: content-box;}
+        .nav-pills .nav-link.active {background-color:{{settings.theme}};color:black;}
+        .nav-pills .nav-link.active:hover {color:black;}
+        .nav-pills .nav-link{color:black;}
+        .nav-pills .nav-link:hover {color:{{settings.theme}};}
+        .nav-pills .nav-item:hover  .dropdown-menu{display:block;}
+        .dropdown-item:hover {background-color:{{settings.sub_color}};}
+        #menu {position:fixed;width:100%;background-color:#F6F5F5;padding-bottom:0px;};
+        #menu .logo {display:none;right:10px;}
+
+        .navbar{z-index:103;width:100%;position:fixed;background-color:#F6F5F5;}
+        #menu-mobile {z-index:102;height:100%;background-color:#F6F5F5;display:none;box-shadow: 0px 0.5px 0.5px 0px;width:60%;padding-top:60px;position:fixed;top:0px;}
+        #menu-mobile .nav-link{background-color:white;margin:5px;}
+        #menu-mobile .active{background-color:{{settings.theme}};}
+        #menu-mobile .nav-link.pseudo-dropdown {font-size:90%;color:#595959;height:35px;vertical-align:middle;background-color:#F6F5F5;}
+        #menu-mobile .nav-link.pseudo-dropdown.pseudo-active {color:{{settings.theme}};font-weight:bold;}
+        #back-shadow {display:none;z-index:101;background-color:black;opacity:0.3;height:1000%;position:absolute;width:100%;opacity:0.3;top:0px;left:0px;}
+        #side-menu {position:fixed;border-radius-bottom:10px;height:100%;width:100%;}
+        .navbar-toggler {z-index:1000;}
+        .logo {font-weight:bold;}
+        .navbar .logo {position:fixed;z-index:-2;width:100%;text-align:center;}
+
+        .content{position:absolute;width:90%;top:10%;left:2%;z-index:-1;}
+        .pagename {font-weight:bold;top:10%;}
+        .badge-add {background-color:{{settings.theme}};text-decoration:none;}
+
+        .block-list {width:100%;max-width:600px;position:absolute;margin-top:30px;}
+        .color-block {border-radius:20px;margin-bottom:3%;display:grid;grid-template-columns:10% 58% 30%;grid-template-rows:29.5% 34.5% 34.5%;grid-row-gap:1.5%;grid-column-gap:1%;min-height:100px;}
+        .name {grid-column-start: 1;grid-column-end:3;grid-row-start: 1;grid-row-end: 2;}
+        .name label {font-weight:bold; text-overflow:ellipsis;}
+        .subtitle {grid-column-start: 1;grid-column-end: 3;grid-row-start: 2;grid-row-end:3;vertical-align:top;padding:0px;margin:0px;}
+        .done {vertical-align:baseline;}
+        .buttons{grid-column-start: 3;grid-column-end: 4;grid-row-start: 1;grid-row-end: 4;text-align:center;}
+        .buttons p{margin:0px;}
+        .color-block.mobile {grid-template-columns:15% 50% 35%;grid-template-rows:40% 29.5% 29.5%;}
+
+        .btn {background-color:{{settings.theme}};border:none;color:black;}
+        .btn:hover {background-color:{{settings.sub_color}};}
+    </style>
+</head>
+<body>
+{% if mobile %}
+
+ <nav class="navbar navbar-light" >
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon" onclick="ShowMobileMenu()"></span>
+    </button>
+     <span class="logo"><img src="/static/images/logo.svg" style="width:50px;margin-left:10px;">пара.планер</span>
+  </nav>
+    <div id="back-shadow"></div>
+
+ <ul id="menu-mobile" class="nav flex-column nav-pills" aria-orientation="vertical">
+  <a class="nav-link"  href="{% url 'timetable' pk=today.pk %}" aria-selected="true" >Расписание</a>
+  <a class="nav-link pseudo-dropdown"   href="{% url 'timetable' pk=today.pk %}" aria-selected="true">на день</a>
+  {% if today.date >= settings.start_date and today.date <= settings.end_date %} <a class="nav-link pseudo-dropdown"   aria-selected="false" href="{% url 'timetable_week' pk=today.pk %}">На неделю</a>
+  {% elif today.date < settings.start_date  %} <a class="nav-link pseudo-dropdown"   aria-selected="false" href="{% url 'timetable_week' pk=start_date.pk %}">На неделю</a>
+  {% elif today.date > settings.start_date  %} <a class="nav-link pseudo-dropdown"   aria-selected="false" href="{% url 'timetable_week' pk=end_date.pk %}">На неделю</a>
+  {% endif %}
+  {% if today.date >= settings.start_date and today.date <= settings.end_date %} <a class="nav-link pseudo-dropdown"   aria-selected="false" href="{% url 'timetable_month' pk=today.pk %}">На месяц</a>
+  {% elif today.date < settings.start_date  %} <a class="nav-link pseudo-dropdown"   aria-selected="false" href="{% url 'timetable_month' pk=start_date.pk %}">На месяц</a>
+  {% elif today.date > settings.start_date  %} <a class="nav-link pseudo-dropdown"   aria-selected="false" href="{% url 'timetable_month' pk=end_date.pk %}">На месяц</a>
+  {% endif %}
+  <a class="nav-link active"   href="/tasks"    aria-selected="false">Задания</a>
+  <a class="nav-link"   href="/exams"    aria-selected="false">Экзамены</a>
+  <a class="nav-link"   href="/subjects" aria-selected="false">Предметы</a>
+  <a class="nav-link"   href="/settings" aria-selected="false">Настройки</a>
+</ul>
+
+
+
+{% else %}
+<ul id="menu" class="nav nav-pills " aria-orientation="horizontal">
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{% url 'timetable' pk=today.pk %}"  role="button">Расписание</a>
+        <div class="dropdown-menu" style="position:fixed;">
+            <a class="dropdown-item" href="{% url 'timetable' pk=today.pk %}" >На день</a>
+            {% if today.date >= settings.start_date and today.date <= settings.end_date %} <a class="dropdown-item" href="{% url 'timetable_week' pk=today.pk %}">На неделю</a>
+            {% elif today.date < settings.start_date  %} <a class="dropdown-item" href="{% url 'timetable_week' pk=start_date.pk %}">На неделю</a>
+            {% elif today.date > settings.start_date  %} <a class="dropdown-item" href="{% url 'timetable_week' pk=end_date.pk %}">На неделю</a>
+            {% endif %}
+            {% if today.date >= settings.start_date and today.date <= settings.end_date %} <a class="dropdown-item" href="{% url 'timetable_month' pk=today.pk %}">На месяц</a>
+            {% elif today.date < settings.start_date  %} <a class="dropdown-item" href="{% url 'timetable_month' pk=start_date.pk %}">На месяц</a>
+            {% elif today.date > settings.start_date  %} <a class="dropdown-item" href="{% url 'timetable_month' pk=end_date.pk %}">На месяц</a>
+            {% endif %}
+        </div>
+    </li>
+    <li class="nav-item"><a class="nav-link active" href="/tasks">Задания</a></li>
+    <li class="nav-item"><a class="nav-link" href="/exams">Экзамены</a></li>
+    <li class="nav-item"><a class="nav-link" href="/subjects">Предметы</a></li>
+
+    <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="/settings">Настройки</a>
+    <div class="dropdown-menu" style="position:fixed;">
+        <a class="dropdown-item" href="{% url 'settings' unit='dates' %}">Календарь</a>
+        <a class="dropdown-item" href="{% url 'settings' unit='schedule' %}">Звонки</a>
+        <a class="dropdown-item" href="{% url 'settings' unit='misc' %}">Другое</a>
+        <a class="dropdown-item" href='' onclick="Logout()">Выйти</a>
+        </div>
+    </li>
+    <span class="logo"><img src="/static/images/logo.svg" style="width:50px;margin-left:10px;">пара.планер</span>
+</ul>
+{% endif %}
+
+<div class="content">
+    <p class="h1 pagename">Задания({{tasks|length}}) <a href="/task_new" class="badge badge-pill badge-secondary badge-add">+</a></p>
+
+{% for weekday in weekdays %}
+<input type="hidden" class="weekday" value={{weekday}}>
+{% endfor %}
+
+<div class="block-list">
+{% for task in tasks %}
+        <div class="color-block container-fluid" style="background-color:{{ task.select_subject.color }};">
+            <input type="hidden" class="weeknum" value={{subject.weekday}}>
+            <input type="hidden" class="deadline_weeknum" value={{task.weekday}}>
+        <input type="hidden" class="deadline_date" value={{task.date}}>
+            <div class="box name">
+            <form id="form_{{task.pk}}">
+            <input type="checkbox" name="check_{{task.pk}}" id="check_{{task.pk}}" class="done" style="" value={{ task.done }} onchange="Done('{{task.pk}}')" >
+            <label for="check_{{task.pk}}"  id="label_{{task.pk}}" class="task-name h3"  > {{ task.hometask }} </label>
+            <input type="hidden" name="done_{{task.pk}}" id="done_{{task.pk}}" value="False">
+            </form>
+            </div>
+            <div class="box buttons">
+                <div>
+         {% if subject.link %}
+            <a class="link" href={{ subject.link }} target="_blank" data-toggle="tooltip" data-placement="left" title="{{ subject.link }}"><img alt="Ссылка" src="/static/images/link.svg" width="20px"></a>
+                {% else %}
+                <a class="link" href=""><img alt="Ссылка" src="/static/images/link_disabled.svg" width="20px"></a>
+                {% endif %}
+            <a  {% if task.pk %}href="{% url 'task_edit' pk=task.pk %}" {% endif %} data-toggle="tooltip" data-placement="top" title="Редактировать"><img alt="Редактировать" src="/static/images/edit.svg" class="edit" width="22px"></a>
+            <a onclick="DeleteObject('{{task.pk}}')" data-toggle="tooltip" data-placement="top" title="Удалить"> <img alt="Удалить" src="/static/images/delete.svg" class="delete" width="22px"></a>
+            </div>
+       <p class="deadline">
+        {% if today.date == task.lesson.date or today.date == task.date %}
+        сегодня
+        {% elif tomorrow.date == task.lesson.date or tomorrow.date == task.date %}
+        завтра
+        {% else %}
+        <span class="deadline_weekday"></span>{{ task.date|date:"d.m"}}
+        <br>{{task.lesson.start_time}}</p>
+        {% endif %}
+
+            </div>
+            <div class="subtitle">{{task.select_subject.title}}</div>
+        </div>
+        {% endfor %}
+    {% if tasks %}
+       <form><button type='submit' name='delete_done' class="btn btn-primary" style="background-color:{{settings.theme}};">удалить выполненное</button></form>
+    {% endif %}
+</div>
+</div>
+</body>
+<script>
+var weeknums=document.getElementsByClassName("deadline_weeknum");
+    var dates=document.getElementsByClassName("deadline_date");
+    var weekdays = document.getElementsByClassName("weekday");
+    var deadlines = document.getElementsByClassName("deadline_weekday");
+    write_deadlines=document.getElementsByClassName("deadline");
+
+    for (d=0;d<deadlines.length;d++){
+    if (dates[d].value!='None'){
+    deadlines[d].innerHTML=weekdays[weeknums[d].value].value+', ';};};
+    var tasks=document.getElementsByClassName("done");
+    var labels=document.getElementsByClassName("task-name");
+    for (t=0;t<tasks.length;t++){
+    var task=tasks[t];
+    if (task.value == "True")
+    {task.checked=true;
+    labels[t].style.textDecoration="line-through";}
+    else
+    { task.checked=false;};};
+
+    function Done(id){
+    var check=document.getElementById('check_'+id);
+    var label=document.getElementById('label_'+id);
+    var done=document.getElementById('done_'+id);
+    if (check.checked == true)
+    {done.value="True";
+    label.style.textDecoration="line-through";}
+    else
+    {done.value="False";
+    label.style.textDecoration="none";};
+    document.getElementById('form_'+id).submit();}
+
+
+
+function Notes(pk){
+var notes=document.getElementById('notes'+'_'+pk);
+var close=document.getElementById('close'+'_'+pk);
+var back=document.getElementById('background');
+document.body.style.overflow='hidden';
+back.style.display='block';
+notes.style.display='block';
+close.style.display='block';
+};
+
+function Close(pk){
+var notes=document.getElementById('notes'+'_'+pk);
+var close=document.getElementById('close'+'_'+pk);
+var back=document.getElementById('background');
+document.body.style.overflow='scroll';
+notes.style.display='none';
+back.style.display='none';
+close.style.display='none';
+}
+function DeleteObject(s){
+var sure=confirm('Ты точно хочешь удалить это задание?');
+if (sure){
+window.open('/task_edit/'+s+'/delete', '_self');}
+};
+function Logout(){
+var sure=confirm('Ты точно хочешь выйти?');
+if (sure){
+window.open('/accounts/login', "_self");}
+};
+if ("{{mobile}}"=="True"){
+classnames=['time','subtitle','color-block','name','buttons','info']
+classnames.forEach(Mobile);}
+else{
+list=document.getElementsByClassName('time');
+for (i=0; i<list.length; i++){
+list[i].className+=" h5"};};
+
+function Mobile(name){
+list=document.getElementsByClassName(name);
+for (i=0; i<list.length; i++){
+list[i].className+=" mobile";};};
+
+
+function ShowMobileMenu(){
+menu=document.getElementById('menu-mobile');
+back=document.getElementById('back-shadow');
+logo=document.getElementById('logo');
+if (menu.style.display =='none'){
+menu.style.display='block';
+back.style.display='block';
+}
+else {
+menu.style.display='none';
+back.style.display='none';};
+};
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+});
+
+</script>
+</html>

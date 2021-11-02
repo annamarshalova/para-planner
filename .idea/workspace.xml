@@ -1,30 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="72da8ece-e22a-44b2-a99c-83318c3eb1a1" name="Default Changelist" comment="">
+    <list default="true" id="72da8ece-e22a-44b2-a99c-83318c3eb1a1" name="Default Changelist" comment="bootstrap added">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MSP/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/forms.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/exam_edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/exam_edit.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/exams.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/exams.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/lesson_edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/lesson_edit.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/plan_edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/plan_edit.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/plans.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/plans.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/settings.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/settings.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/subject_edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/subject_edit.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/subjects.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/subjects.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/task_edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/task_edit.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/task_edit_lesson.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/task_edit_lesson.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/tasks.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/tasks.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/timetable.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/timetable.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/timetable_month.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/timetable_month.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/timetable_week.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/timetable_week.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MSP/templates/extra.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/extra.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MSP/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MSP/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mysite/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/mysite/settings.py" afterDir="false" />
     </list>
-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -60,18 +39,6 @@
       <recent name="C:\Users\Анна\PycharmProjects\modern_student_planner\MSP\static\images" />
     </key>
   </component>
-  <component name="RunDashboard">
-    <option name="ruleStates">
-      <list>
-        <RuleState>
-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
-        </RuleState>
-        <RuleState>
-          <option name="name" value="StatusDashboardGroupingRule" />
-        </RuleState>
-      </list>
-    </option>
-  </component>
   <component name="RunManager" selected="Python.sort">
     <configuration name="nsu_timetable (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <module name="modern_student_planner" />
@@ -85,6 +52,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/MSP/nsu_timetable.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
@@ -106,6 +74,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/MSP/nsu_timetable_parser.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
@@ -127,6 +96,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/myvenv/Lib/site-packages/django/core/management/commands/runserver.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
@@ -148,6 +118,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/MSP/sort.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
@@ -169,6 +140,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/MSP/syllables.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
@@ -190,6 +162,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/MSP/universities_names_parser.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
@@ -230,13 +203,12 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="COLUMN_ORDER" />
-            </State>
+            <State />
           </value>
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

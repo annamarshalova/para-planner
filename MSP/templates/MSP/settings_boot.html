@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Настройки | Пара планер</title>
+    <link rel="shortcut icon" href="/static/images/logo.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <style>
+        body {background-color:#F6F5F5; font-family: 'Montserrat', sans-serif; font-weight:light; color:black; }
+        .subject {box-sizing: content-box;}
+        .nav-pills .nav-link.active {background-color:{{settings.theme}};color:black;}
+        .nav-pills .nav-link.active:hover {color:black;}
+        .nav-pills .nav-link{color:black;}
+        .nav-pills .nav-link:hover {color:{{settings.theme}};}
+        .nav-pills .nav-item:hover  .dropdown-menu{display:block;}
+        .dropdown-item:hover {background-color:{{settings.sub_color}};}
+        #menu {position:fixed;width:100%;background-color:#F6F5F5;padding-bottom:0px;};
+        #menu .logo {display:none;right:10px;}
+
+        .navbar{z-index:103;width:100%;position:fixed;background-color:#F6F5F5;}
+        #menu-mobile {z-index:102;height:100%;background-color:#F6F5F5;display:none;box-shadow: 0px 0.5px 0.5px 0px;width:60%;padding-top:60px;position:fixed;top:0px;}
+        #menu-mobile .nav-link{background-color:white;margin:5px;}
+        #menu-mobile .active{background-color:{{settings.theme}};}
+        #menu-mobile .nav-link.pseudo-dropdown {font-size:90%;color:#595959;height:35px;vertical-align:middle;background-color:#F6F5F5;}
+        #menu-mobile .nav-link.pseudo-dropdown.pseudo-active {color:{{settings.theme}};font-weight:bold;}
+        #back-shadow {display:none;z-index:101;background-color:black;opacity:0.3;height:1000%;position:absolute;width:100%;opacity:0.3;top:0px;left:0px;}
+        #side-menu {position:fixed;border-radius-bottom:10px;height:100%;width:100%;}
+        .navbar-toggler {z-index:1000;}
+        .logo {font-weight:bold;}
+        .navbar .logo {position:fixed;z-index:-2;width:100%;text-align:center;}
+
+
+        .content{position:absolute;top:10%;left:2%;z-index:-1;}
+        .pagename {font-weight:bold;top:10%;}
+
+        .settings-block{display:none;float:left}
+
+        .tooltiptext{display:none;}
+        button {background-color:{{settings.theme}};}
+
+</style>
+</head>
+<body>
+{% if mobile %}
+<nav class="navbar navbar-light" >
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon" onclick="ShowMobileMenu()"></span>
+    </button>
+     <span class="logo"><img src="/static/images/logo.svg" style="width:50px;margin-left:10px;">пара.планер</span>
+  </nav>
+    <div id="back-shadow"></div>
+
+ <ul id="menu-mobile" class="nav flex-column nav-pills" aria-orientation="vertical">
+  <a class="nav-link"  href="{% url 'timetable' pk=today.pk %}" aria-selected="true" >Расписание</a>
+  <a class="nav-link pseudo-dropdown"   href="{% url 'timetable' pk=today.pk %}" aria-selected="true">на день</a>
+  {% if today.date >= settings.start_date and today.date <= settings.end_date %} <a class="nav-link pseudo-dropdown"   aria-selected="false" href="{% url 'timetable_week' pk=today.pk %}">На неделю</a>
+  {% elif today.date < settings.start_date  %} <a class="nav-link pseudo-dropdown"   aria-selected="false" href="{% url 'timetable_week' pk=start_date.pk %}">На неделю</a>
+  {% elif today.date > settings.start_date  %} <a class="nav-link pseudo-dropdown"   aria-selected="false" href="{% url 'timetable_week' pk=end_date.pk %}">На неделю</a>
+  {% endif %}
+  {% if today.date >= settings.start_date and today.date <= settings.end_date %} <a class="nav-link pseudo-dropdown"   aria-selected="false" href="{% url 'timetable_month' pk=today.pk %}">На месяц</a>
+  {% elif today.date < settings.start_date  %} <a class="nav-link pseudo-dropdown"   aria-selected="false" href="{% url 'timetable_month' pk=start_date.pk %}">На месяц</a>
+  {% elif today.date > settings.start_date  %} <a class="nav-link pseudo-dropdown"   aria-selected="false" href="{% url 'timetable_month' pk=end_date.pk %}">На месяц</a>
+  {% endif %}
+  <a class="nav-link"   href="/tasks"    aria-selected="false">Задания</a>
+  <a class="nav-link"   href="/exams"    aria-selected="false">Экзамены</a>
+  <a class="nav-link"   href="/subjects" aria-selected="false">Предметы</a>
+  <a class="nav-link active"   href="/settings" aria-selected="false">Настройки</a>
+</ul>
+
+
+
+{% else %}
+<ul id="menu" class="nav nav-pills " aria-orientation="horizontal">
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{% url 'timetable' pk=today.pk %}"  role="button">Расписание</a>
+        <div class="dropdown-menu" style="position:fixed;">
+            <a class="dropdown-item" href="{% url 'timetable' pk=today.pk %}" >На день</a>
+            {% if today.date >= settings.start_date and today.date <= settings.end_date %} <a class="dropdown-item" href="{% url 'timetable_week' pk=today.pk %}">На неделю</a>
+            {% elif today.date < settings.start_date  %} <a class="dropdown-item" href="{% url 'timetable_week' pk=start_date.pk %}">На неделю</a>
+            {% elif today.date > settings.start_date  %} <a class="dropdown-item" href="{% url 'timetable_week' pk=end_date.pk %}">На неделю</a>
+            {% endif %}
+            {% if today.date >= settings.start_date and today.date <= settings.end_date %} <a class="dropdown-item" href="{% url 'timetable_month' pk=today.pk %}">На месяц</a>
+            {% elif today.date < settings.start_date  %} <a class="dropdown-item" href="{% url 'timetable_month' pk=start_date.pk %}">На месяц</a>
+            {% elif today.date > settings.start_date  %} <a class="dropdown-item" href="{% url 'timetable_month' pk=end_date.pk %}">На месяц</a>
+            {% endif %}
+        </div>
+    </li>
+    <li class="nav-item"><a class="nav-link" href="/tasks">Задания</a></li>
+    <li class="nav-item"><a class="nav-link" href="/exams">Экзамены</a></li>
+    <li class="nav-item"><a class="nav-link" href="/subjects">Предметы</a></li>
+
+    <li class="nav-item dropdown"><a class="nav-link dropdown-toggle active" href="/settings">Настройки</a>
+    <div class="dropdown-menu" style="position:fixed;">
+        <a class="dropdown-item" href="{% url 'settings' unit='dates' %}">Календарь</a>
+        <a class="dropdown-item" href="{% url 'settings' unit='schedule' %}">Звонки</a>
+        <a class="dropdown-item" href="{% url 'settings' unit='misc' %}">Другое</a>
+        <a class="dropdown-item" href='' onclick="Logout()">Выйти</a>
+        </div>
+    </li>
+    <span class="logo"><img src="/static/images/logo.svg" style="width:50px;margin-left:10px;">пара.планер</span>
+</ul>
+{% endif %}
+
+<div class="content">
+    <p class="h1 pagename">Настройки</p>
+    <ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link" id="nav-dates" aria-current="page" href="{% url 'settings' unit='dates' %}">Календарь</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="nav-schedule" href="{% url 'settings' unit='schedule' %}">Расписание звонков</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" id="nav-misc" href="{% url 'settings' unit='misc' %}">Другие настройки</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" onclick="Logout()">Выход</a>
+  </li>
+</ul>
+
+    <div id="dates" class="settings-block">
+      <form method="POST" class="post-form" style='position:absolute;top:185px;left:60px;font-size:20px;'>{% csrf_token %}
+        <div id="semester_form_hover">{{semester_form.as_p}}
+        <span class="tooltiptext" style="top:20px;">Пожалуйста, укажи правильные даты. Иначе приложение может работать неправильно.</span>
+        </div>
+        <div id="exams_block">
+        <label for="exams_date" id="exams_date_label">Дата начала сессии:<span class="tooltiptext" style="top:110px;">
+            Обрати внимание, что дата начала сессии должна быть меньше даты окончания семестра.</span></label>
+
+        <input type="date" id="exams_date" name="exams_date" value={{settings.exams_date|date:'Y-m-d'}}>
+            <span class="close_button" onclick="NoExams()">x</span>
+            </div>
+        <p id="add_holidays2" class="add_holidays" >Каникулы<span class="plus right" onclick="n=AddHoliday()" onmouseout="RemoveTooltip()">+</span><span class="plus right" onclick="DeleteHoliday()">-</span>
+        <span class="tooltiptext" id="tooltiptext-holidays" style="top:20px;left:350px;">Ты можешь добавить не более восьми каникул.</span></p>
+     <br>
+        <div id="holidays">
+            {% for holiday in settings.holidays.all %}
+            <div>c <input type="date" class="input_start" value={{holiday.start_date|date:'Y-m-d'}}>
+            по <input type="date" class="input_end" value={{holiday.end_date|date:'Y-m-d'}}>
+            <br>
+            <br>
+            <input type="hidden" class="hidden_pk" id="hidden_pk_{{holiday.pk}}" value={{holiday.pk}}>
+            </div>{% endfor %}</div>
+        <input type="hidden" id="holidays_to_delete" name="holidays_to_delete" value="">
+        <button type="submit" id="save_dates" name="save_dates"  class="save btn btn-default">Сохранить</button>
+
+</form>
+    </div>
+</div>
+</body>
+<script>
+starts=document.getElementsByClassName('input_start');
+for (let i=0;i<starts.length;i++){
+starts[i].id='input_start'+i;
+starts[i].name='input_start'+i;};
+starts=document.getElementsByClassName('input_end');
+for (let i=0;i<starts.length;i++){
+starts[i].id='input_end'+i;
+starts[i].name='input_end'+i;};
+
+document.getElementById('nav-{{unit}}').className+=' active';
+document.getElementById('{{unit}}').style.display='block';
+    function Edit_schedule() {
+var edit_schedule=document.getElementById("edit_schedule");
+var show_schedule=document.getElementById("show_schedule");
+show_schedule.style.display="none";
+edit_schedule.style.display="block";
+  }
+function Show_schedule() {
+var edit_schedule=document.getElementById("edit_schedule");
+var show_schedule=document.getElementById("show_schedule");
+edit_schedule.style.display="none";
+show_schedule.style.display="block";
+}
+var numbers=document.getElementsByClassName('number');
+for (let i=0;i<numbers.length;i++){
+numbers[i].innerHTML=i+1};
+
+
+n={{settings.holidays.all|length}};
+function AddHoliday(){
+if (n<8){
+holidays=document.getElementById('holidays');
+var input=document.createElement("div");
+input.id= "holiday" + n;
+input.appendChild(document.createTextNode("с "));
+var input_start = document.createElement("input");
+input_start.type = "date";
+input_start.name = "holiday_start" + n;
+input_start.id= "holiday_start" + n;
+input_start.className="holiday start";
+input.appendChild(input_start);
+input.appendChild(document.createTextNode(" по "));
+var input_end = document.createElement("input");
+input_end.type = "date";
+input_end.name = "holiday_end" + n;
+input_end.id= "holiday_end" + n;
+input_start.className="holiday end";
+input.appendChild(input_end);
+input.appendChild(document.createElement("br"));
+input.appendChild(document.createElement("br"));
+holidays.appendChild(input);
+n++;
+}
+else {
+document.getElementById('tooltiptext-holidays').style.visibility='visible';};
+return n;}
+
+function DeleteHoliday(){
+holidays=document.getElementById('holidays');
+var lastch=holidays.lastChild;
+try {
+var pk=lastch.getElementsByClassName('hidden_pk')[0].value;
+document.getElementById('holidays_to_delete').value+=pk+'_';
+}
+finally {
+holidays.removeChild(lastch);
+n-=1;};};
+
+function RemoveTooltip(){
+document.getElementById('tooltiptext-holidays').style.visibility='hidden';};
+
+function Other(){
+radio=document.getElementById('other_radio');
+other=document.getElementById('other');
+if (radio.checked){other.value="True";}
+ else {other.value="False";};};
+    function Color(color){
+    button=document.getElementById('save_color');
+    button.style.backgroundColor=color;
+    };
+if (document.getElementById('Новосибирский государственный университет (НГУ)').selected) {
+document.getElementById('import_form').style.display='block';};
+
+function NoExams(){
+document.getElementById('exams_date').value='';};
+
+function ShowChange(){
+document.getElementById('change_university').style.display='block';
+document.getElementById('import_form').style.top='330px'};
+
+function Logout(){
+var sure=confirm('Ты точно хочешь выйти?');
+if (sure){
+window.open('/accounts/login', "_self");}
+};
+if ("{{mobile}}"=="True"){
+classnames=['time','tasks','color-block','name','buttons','info']
+classnames.forEach(Mobile);
+datepicker=document.getElementById('go_to_date_fake');
+datepicker.style.width='45%';}
+else{
+list=document.getElementsByClassName('time');
+for (i=0; i<list.length; i++){
+list[i].className+=" h5"};};
+
+function Mobile(name){
+list=document.getElementsByClassName(name);
+for (i=0; i<list.length; i++){
+list[i].className+=" mobile";};};
+
+
+function ShowMobileMenu(){
+menu=document.getElementById('menu-mobile');
+back=document.getElementById('back-shadow');
+logo=document.getElementById('logo');
+if (menu.style.display =='none'){
+menu.style.display='block';
+back.style.display='block';
+}
+else {
+menu.style.display='none';
+back.style.display='none';};
+};
+$(function () {
+$('[data-toggle="tooltip"]').tooltip()
+});
+</script>
+</html>

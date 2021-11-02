@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Задания | Пара планер</title>
+    <link rel="shortcut icon" href="/static/images/logo.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/styles.css">
+    <style>
+    .selected {display:inline;
+     background-color:{{ settings.theme }};}
+     button {background-color:{{ settings.theme }};}
+     .dropdown-content a:hover {background-color:{{settings.sub_color}};}
+
+     .task{border-radius:35px;
+margin-top:20px;
+left:30px;
+width:1000px;
+height:200px;
+background-color:#858585;
+}
+.task-name{font-size:70px; font-weight:bold; position:absolute; left:90px;margin-top:-5;width:800px;}
+.deadline{font-size:40px; position:absolute;text-align:center;left:800px;margin-top:30px;width:200px;}
+.task-subject{font-size:40px;text-align:center;position:absolute;left:20px;}
+.done {position:relative;top:10px;left:20px;width:50px;height:50px;}
+.notes{position:absolute;top:-12px;right:75px;background-color:transparent;padding:0px;}
+.edit{position:absolute;top:-10px;right:15px;padding:0px;}
+.delete{position:absolute;top:-10px;right:-35px;padding:0px;}
+.notes:hover .tooltiptext {
+  visibility: visible;
+}
+button:hover{cursor:pointer;}
+.notes{background-color:transparent;padding:0px;}
+#relax:hover .tooltiptext {
+  visibility: visible;
+}
+#menu-mobile {width:100%;}
+li {font-size:50px;margin:0px;padding:0px;}
+h1 {font-size:100px;}
+.relax-image img {position:absolute;top:400px;left:55px;width:1000px;}
+.add-new{font-size:50px;width:550px;text-align:left;background-color:white;left:0px;border-radius:10px;}
+button {font-size:50px;}
+
+    </style>
+
+<body>
+<div id="background" style="z-index:1;background-color:black;opacity:0.3;height:1000%;position:absolute;width:100%;display:none;margin:0px;top:0px;left:0px;">
+        </div>
+<ul id="menu-mobile">
+    <li class="dropdown"><a href="{% url 'timetable' pk=today.pk %}"   >Расписание</a>
+        <div class="dropdown-content">
+            <a href="{% url 'timetable' pk=today.pk %}">На день</a>
+             {% if today.date >= settings.start_date and today.date <= settings.end_date %} <a href="{% url 'timetable_week' pk=today.pk %}">На неделю</a>
+            {% elif today.date < settings.start_date  %} <a href="{% url 'timetable_week' pk=start_date.pk %}">На неделю</a>
+            {% elif today.date > settings.start_date  %} <a href="{% url 'timetable_week' pk=end_date.pk %}">На неделю</a>
+            {% endif %}
+            {% if today.date >= settings.start_date and today.date <= settings.end_date %} <a href="{% url 'timetable_month' pk=today.pk %}">На месяц</a>
+            {% elif today.date < settings.start_date  %} <a href="{% url 'timetable_month' pk=start_date.pk %}">На месяц</a>
+            {% elif today.date > settings.start_date  %} <a href="{% url 'timetable_month' pk=end_date.pk %}">На месяц</a>
+            {% endif %}
+        </div>
+    </li>
+    <li><a href="/tasks" class="selected">Задания</a></li>
+    <li><a href="/exams">Экзамены</a></li>
+    <li class="dropdown"><a>Другое</a>
+        <div class="dropdown-content">
+        <a href="/subjects">Предметы</a>
+        <a href="/settings">Настройки</a>
+        <a href="/accounts/login">Выйти</a>
+        </div>
+    </li>
+</ul>
+
+{% for weekday in weekdays %}
+<input type="hidden" class="weekday" value={{weekday}}>
+{% endfor %}
+<h1 style="position:absolute;left:60px;top:50px; font-size:48;">Задания({{tasks|length}})<a href="/task_new" style="text-decoration:none;color:black;">+</a></h1>
+{% if empty %}
+<p style="position:absolute;top:150px;left:60px;font-size:80px;color:#858585;">Заданий пока нет.<br>Можно отдыхать!</p>
+ <span class='relax-image' "><img alt="Заданий нет" src="/static/images/sleep.svg">
+<button style="position:absolute;left:60px;top:1240px;background-color:{{settings.theme}};" class="add-new"><a href="/task_new" style="text-decoration:none;color:black;">+ добавить задание</a></button>
+{% else %}
+<div style="position:absolute;top:250px;left:30px;">
+{% for task in tasks %}
+     <button class="close btn btn-default" id='close_{{task.pk}}' style="z-index:4;position:fixed;top:30px;left:1060px;margin-right:5px;background-color:transparent;display:none;font-size;50px'" onclick="Close({{task.pk}})">X</button>
+    <iframe src="{% url 'notes_task' pk=task.pk %}" id="notes_{{task.pk}}" style="z-index:2;position:fixed;background-color:white;display:none;height:500px;width:1000px;border-radius:20px;left:100px;top:20px;">
+      </iframe>
+    <input type="hidden" class="deadline_weeknum" value={{task.weekday}}>
+        <input type="hidden" class="deadline_date" value={{task.date}}>
+    <div class="task" style="background-color:{{ task.select_subject.color }};">
+        <form id="form_{{task.pk}}">
+            <input type="checkbox" name="check_{{task.pk}}" id="check_{{task.pk}}" class="done" style="" value={{ task.done }} onchange="Done('{{task.pk}}')" >
+            <label for=done  id="label_{{task.pk}}" class="task-name"  > {{ task.hometask }} </label>
+            <input type="hidden" name="done_{{task.pk}}" id="done_{{task.pk}}" value="False">
+            </form>
+        {% if today.date == task.lesson.date or today.date == task.date %}
+        <p class="deadline">сегодня<br>{{task.lesson.start_time}}</p>
+        {% elif tomorrow.date == task.lesson.date or tomorrow.date == task.date %}
+        <p class="deadline">завтра<br>{{task.lesson.start_time}}</p>
+        {% else %}
+        <p class="deadline"><span class="deadline_weekday"></span>{{ task.date|date:"d.m"}}<br>{{task.lesson.start_time}}</p>
+        {% endif %}
+        <p class="task-subject">{{ task.select_subject.title }}</p>
+        <div style="position:absolute;left:950px;margin-top:-30px;margin-right:0px;">
+            <button class="notes" onclick="Notes({{task.pk}})"><img alt="Заметки" src="/static/images/notes.svg" width="37px"></button>
+            {% if task.pk %} <a  href="{% url 'task_edit' pk=task.pk %}"> <img alt="Редактировать" src="/static/images/edit.svg" class="edit" width="45px"> </a>{% endif %}
+                <a  onclick="DeleteObject('{{task.pk}}')"> <img alt="Удалить" src="/static/images/delete.svg" class="delete" width="42px"> </a>
+        </div>
+    </div>
+{% endfor %}
+    <br>
+        <button style="position:absolute;font-size:50px;margin-top:10px;left:10px;background-color:{{settings.theme}};width:600px;text-align:left;" class="white"><a href="/task_new" style="text-decoration:none;color:black;">+ добавить задание </a></button>
+        <br>
+    <form><button type='submit' name='delete_done' style="position:absolute;font-size:50px;margin-top:70px;left:10px;background-color:{{settings.theme}};width:600px;" class="white">удалить выполненное</button></form>
+</div>
+{% endif %}
+</body>
+<script>
+    var weeknums=document.getElementsByClassName("deadline_weeknum");
+    var dates=document.getElementsByClassName("deadline_date");
+    var weekdays = document.getElementsByClassName("weekday");
+    var deadlines = document.getElementsByClassName("deadline_weekday");
+    write_deadlines=document.getElementsByClassName("deadline");
+
+    for (d=0;d<deadlines.length;d++){
+    if (dates[d].value!='None'){
+    deadlines[d].innerHTML=weekdays[weeknums[d].value].value+', ';};};
+    var tasks=document.getElementsByClassName("done");
+    var labels=document.getElementsByClassName("task-name");
+    for (t=0;t<tasks.length;t++){
+    var task=tasks[t];
+    if (task.value == "True")
+    {task.checked=true;
+    labels[t].style.textDecoration="line-through";}
+    else
+    { task.checked=false;};};
+
+    function Done(id){
+    var check=document.getElementById('check_'+id);
+    var label=document.getElementById('label_'+id);
+    var done=document.getElementById('done_'+id);
+    if (check.checked == true)
+    {done.value="True";
+    label.style.textDecoration="line-through";}
+    else
+    {done.value="False";
+    label.style.textDecoration="none";};
+    document.getElementById('form_'+id).submit();}
+
+
+
+function Notes(pk){
+var notes=document.getElementById('notes'+'_'+pk);
+var close=document.getElementById('close'+'_'+pk);
+var back=document.getElementById('background');
+document.body.style.overflow='hidden';
+back.style.display='block';
+notes.style.display='block';
+close.style.display='block';
+};
+
+function Close(pk){
+var notes=document.getElementById('notes'+'_'+pk);
+var close=document.getElementById('close'+'_'+pk);
+var back=document.getElementById('background');
+document.body.style.overflow='scroll';
+notes.style.display='none';
+back.style.display='none';
+close.style.display='none';
+}
+function DeleteObject(s){
+var sure=confirm('Ты точно хочешь удалить это задание?');
+if (sure){
+window.open('/task_edit/'+s+'/delete', '_self');}
+};
+</script>
+</html>

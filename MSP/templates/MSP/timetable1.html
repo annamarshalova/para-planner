@@ -1,0 +1,379 @@
+<html>
+<head>
+
+    <title>Расписание | Пара планер</title>
+    <link rel="shortcut icon" href="/static/images/logo.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/styles.css?v2" type="text/css">
+    <style>
+    html{height:100%;}
+    body{height:100%;}
+    .selected {display:inline;
+     background-color:{{ settings.theme }};}
+     button {background-color:{{ settings.theme }};}
+     .selected-link{padding:2px;border-radius:7px;background-color:{{settings.sub_color}};
+     font-weight:bold;}
+     .dropdown-content a:hover {background-color:{{settings.sub_color}};}
+
+#toggle:checked + .slider {
+  background-color: {{settings.theme}};}
+
+.hometask{position:relative;top:-22px;}
+.done{position:relative;top:20px;}
+.tooltiptext {
+  visibility: hidden;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 10px;
+  position: absolute;
+  z-index: 1;
+  font-size:20px;
+}
+.exam:hover .tooltiptext {
+  visibility: visible;
+}
+.switch {position:absolute;top:200;left:60px;}
+.switch-text{position:absolute;left:80px;top:-10px;width:300px;}
+.buttons {position:relative;width:200px;left:490px;top:-60px;vertical-align:middle;text-align:center;}
+.relax {left:95px;}
+.add-hometask{position:relative;left:100px;text-decoration:none;color:595959;top:30px;}
+.tasks{position:relative;height:20px;top:-20px;width:600px;}
+.link{position:absolute;top:5px;right:135px;padding:0px;}
+.notes{position:absolute;top:5px;right:110px;background-color:transparent;padding:0px;}
+.edit{position:absolute;top:4px;right:75px;padding:0px;}
+.delete{position:absolute;top:4px;right:48px;padding:0px;}
+.relax-draw {}
+.relax-image img {position:absolute;top:210px;left:55px;width:450px;}
+::-webkit-datetime{background-color:transparent;
+    border:none;}
+::-webkit-datetime-edit {display:none;-webkit-appearance: none;}
+
+input[type=date]::-webkit-calendar-picker-indicator {
+    background-image:url('/static/images/calendar.svg');
+    width:30px;
+    height:30px;
+    margin:0px;
+}
+.time {text-align:center;position:absolute; left:10px; top:20px;border-right:solid;}
+.subject-name {position:absolute; left:20px;margin-top:0;}
+.side {right:200px;}
+.add-hometask:hover .tooltiptext {
+  visibility: visible;
+}
+subject {box-shadow: 0px 4px 12px 0px #0d234308;}
+    </style>
+
+</head>
+
+<body>
+ <div id="background">
+        </div>
+<ul id="menu">
+    <div style="float:left;">
+    <li class="dropdown"><a href="{% url 'timetable' pk=today.pk %}"  class="selected" >Расписание</a>
+        <div class="dropdown-content">
+            <a href="{% url 'timetable' pk=today.pk %}">На день</a>
+             {% if today.date >= settings.start_date and today.date <= settings.end_date %} <a href="{% url 'timetable_week' pk=today.pk %}">На неделю</a>
+            {% elif today.date < settings.start_date  %} <a href="{% url 'timetable_week' pk=start_date.pk %}">На неделю</a>
+            {% elif today.date > settings.start_date  %} <a href="{% url 'timetable_week' pk=end_date.pk %}">На неделю</a>
+            {% endif %}
+            {% if today.date >= settings.start_date and today.date <= settings.end_date %} <a href="{% url 'timetable_month' pk=today.pk %}">На месяц</a>
+            {% elif today.date < settings.start_date  %} <a href="{% url 'timetable_month' pk=start_date.pk %}">На месяц</a>
+            {% elif today.date > settings.start_date  %} <a href="{% url 'timetable_month' pk=end_date.pk %}">На месяц</a>
+            {% endif %}
+        </div>
+    </li>
+    <li><a href="/tasks">Задания</a></li>
+    <li><a href="/exams">Экзамены</a></li>
+    <li><a href="/subjects">Предметы</a></li>
+        </div>
+    <li class="dropdown" style="float:right;padding-right:20px;text-align:center;"><a>{% if user.first_name%}{{user.first_name}}{% else %}Твой профиль{% endif %}</a>
+    <div class="dropdown-content" style="position:fixed;right:20px;">
+        <a href="/settings">Настройки</a>
+        <a href="/accounts/login">Выйти</a>
+        </div>
+    </li>
+</ul>
+
+<h1 style="">Расписание</h1>
+<p id="day-week-month"><a class="selected-link" href="">На день</a>
+    / <a href="{% url 'timetable_week' pk=pk %}">На неделю</a> / <a href="{% url 'timetable_month' pk=today.pk %}">На месяц</a> /</p>
+<p id='date' style="">
+    {% if yesterday %}
+    <span class="arrow" id="previous"><a href="{% url 'timetable' pk=day.pk|add:'-1' %}"><</a></span>
+    {% endif %}
+{{ weekday }}, {{ day.date }}
+    {% if tomorrow %}
+ <span class="arrow" id="next"><a href="{% url 'timetable' pk=day.pk|add:'1' %}">></a></span>
+    {% endif %}
+
+    <input type="date" value={{day.date|date:'Y-m-d'}} id="go_to_date_fake" onchange="SubmitDate()" style="border:none;background-color:transparent;padding:0px;">
+    <form method="POST">{% csrf_token %}
+     <input type="date" id="go_to_date_real" name="go_to_date_real" value={{day.date|date:'Y-m-d'}} style="display:none;">
+     <input type="submit" name="pick_date" id="pick_date_submit" style="display:none;">
+ </form>
+    </p>
+ {% if lessons|length > 0 %}
+<label class="switch">
+  <input type="checkbox" id="toggle" onchange="Toggle()">
+  <span class="slider round"></span>
+    <span class="switch-text" >Показывать окна </span>
+</label>
+<div id='no_windows' style="position:absolute;top:230px;margin-left:30px;display:none;" >
+    {% for lesson in lessons %}
+    <button class="close" id='close_{{lesson.pk}}_0'  onclick="Close({{lesson.pk}},'_0')">X</button>
+      <iframe src="{% url 'info' pk=lesson.pk %}" id="info_{{lesson.pk}}_0" >
+    </iframe>
+    <iframe src="{% url 'notes_lesson' pk=lesson.pk %}" id="notes_{{lesson.pk}}_0" >
+      </iframe>
+    <div id='subject_{{lesson.pk}}_0' class='subject' style="background-color:{{ lesson.color }};">
+        <div style="position:absolute;">
+        <p class="time">{{ lesson.start_time }} <br> {% if lesson.end_time %}{{ lesson.end_time }} {% endif %}</p>
+        </div>
+        <div>
+            {% if lesson.date == today.date and lesson.start_time < time_now and lesson.end_time > time_now %}
+            <p class="subject-name" onclick="Info({{lesson.pk}},'_0')">{% if lesson.title|length < 28 %}{{ lesson.title }}{% else %}{{ lesson.title_short }}{% endif %}<span class="now" style="">⠀сейчас</span></p>
+            {% else %}
+            <p class="subject-name" onclick="Info({{lesson.pk}},'_0')">{% if lesson.title|length < 28 %}{{ lesson.title }}{% else %}{{ lesson.title_short }}{% endif %}</p>
+            {% endif %}
+            <a class="add-hometask" href="{% url 'task_new_lesson' lesson=lesson.title date=lesson.date time=lesson.start_time menu='1' info=0 %}">+ <span class="tooltiptext">добавить задание</span></a>
+             <div class="tasks">
+            {% for hometask in hometasks %}
+            {% if hometask.lesson == lesson %}
+             <form id="form_{{hometask.pk}}_0">
+                <input type="checkbox" class="done" id='check_{{ hometask.pk }}_0' onchange="Hometask({{ hometask.pk }},'_0')" name="check_{{ hometask.pk }}_0" value={{hometask.done}}>
+                <p class="hometask" id='label_{{ hometask.pk }}_0'>{{ hometask.hometask }}</p>
+                 <br>
+                     <input type="hidden" name="done_{{hometask.pk}}_0" id="done_{{hometask.pk}}_0" value="False">
+                 </form>
+            {% endif %}
+            {% endfor %}
+             </div>
+            <div style="position:relative;top:-70px;">
+            {% for exam in exams %}
+            {% if exam.lesson == lesson %}
+            <p class="exam">{{exam.type}}{% if exam.topic %}<span class="tooltiptext">{{ exam.topic}}</span>{% endif %}</p>
+            {% endif %}
+            {% endfor %}
+        </div>
+        </div>
+        <div class="buttons"style="">
+            <div>
+            {% if lesson.link %}
+            <a class="link" href={{ subject.link }} target="_blank"><img alt="Ссылка" src="/static/images/link.svg" width="20px">
+                <span class="tooltiptext" style="font-size:10px;">{{ lesson.link }}</span> </a>
+                {% else %}
+                <a class="link" href=""><img alt="Ссылка" src="/static/images/link_disabled.svg" width="20px"></a>
+                {% endif %}
+            <button class="notes" onclick="Notes({{lesson.pk}},'_1')"><img alt="Заметки" src="/static/images/notes.svg" width="20px"></button>
+            <a  href="{% url 'lesson_edit' pk=lesson.pk page='timetable' fix_day=day.pk %}"  onclick="Close()"> <img alt="Редактировать" src="/static/images/edit.svg" class="edit" width="25px"> </a>
+            <a  onclick="DeleteObject('{{lesson.pk}}')"> <img alt="Удалить" src="/static/images/delete.svg" class="delete" width="22px"> </a>
+            </div>
+            <p class="type">{{ lesson.type }}</p>
+            <p class="classroom">{{ lesson.classroom }}</p>
+            <p class="teacher">{{ lesson.teachershort }}<span class="tooltiptext">{{ lesson.teacher }}</span></p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<div id='show_windows' style="position:absolute;top:230px;margin-left:30px;" >
+    {% for key,value in show_windows.items %}
+    {% if value|length > 0 %}
+    {% for lesson in value %}
+      <button class="close" id='close_{{lesson.pk}}_1' onclick="Close({{lesson.pk}},'_1')">X</button>
+      <iframe src="{% url 'info' pk=lesson.pk %}" id="info_{{lesson.pk}}_1">
+      </iframe>
+    <iframe src="{% url 'notes_lesson' pk=lesson.pk %}" id="notes_{{lesson.pk}}_1">
+      </iframe>
+    <div id='subject_{{lesson.pk}}_1'class='subject' style="background-color:{{ lesson.color }};">
+        <div style="position:absolute;">
+        <p class="time">{{ lesson.start_time }} <br> {% if lesson.end_time %}{{ lesson.end_time }} {% endif %}</p>
+        </div>
+        <div>
+            {% if lesson.date == today.date and lesson.start_time < time_now and lesson.end_time > time_now %}
+            <p class="subject-name" onclick="Info({{lesson.pk}},'_1')">{% if lesson.title|length < 28 %}{{ lesson.title }}{% else %}{{ lesson.title_short }}{% endif %}<span class="now">⠀сейчас</span></p>
+            {% else %}
+            <p class="subject-name" onclick="Info({{lesson.pk}},'_1')">{% if lesson.title|length < 28 %}{{ lesson.title }}{% else %}{{ lesson.title_short }}{% endif %}</p>
+            {% endif %}
+             <a class="add-hometask" href="{% url 'task_new_lesson' lesson=lesson.title date=lesson.date time=lesson.start_time menu='1' info=0 %}">+ <span class="tooltiptext">добавить задание</span></a>
+             <div class="tasks">
+            {% for hometask in hometasks %}
+            {% if hometask.lesson == lesson %}
+                 <form id="form_{{hometask.pk}}_1">
+                <input type="checkbox" class="done" id='check_{{ hometask.pk }}_1' onchange="Hometask({{ hometask.pk }},'_1')" name="check_{{ hometask.pk }}_1" value={{hometask.done}}>
+                     <p class="hometask" id='label_{{ hometask.pk }}_1' style="text-decoration:none;">{{ hometask.hometask }}</p>⠀
+                     <br>
+                     <input type="hidden" name="done_{{hometask.pk}}_1" id="done_{{hometask.pk}}_1" value="False">
+                 </form>
+             {% endif %}
+            {% endfor %}
+                 </div>
+            <div style="position:relative;top:-70px;">
+                {% for exam in exams %}
+            {% if exam.lesson == lesson %}
+            <p class="exam">{{exam.type}}{% if exam.topic %}<span class="tooltiptext">{{ exam.topic }}</span>{% endif %}</p>
+            {% endif %}
+            {% endfor %}
+                </div>
+        </div>
+         <div class="buttons">
+            <div>
+            {% if lesson.link %}
+            <a class="link" href={{ subject.link }} target="_blank"><img alt="Ссылка" src="/static/images/link.svg" width="20px">
+                <span class="tooltiptext" style="font-size:10px;">{{ lesson.link }}</span> </a>
+                {% else %}
+                <a class="link" href=""><img alt="Ссылка" src="/static/images/link_disabled.svg" width="20px"></a>
+                {% endif %}
+            <button class="notes" onclick="Notes({{lesson.pk}},'_1')"><img alt="Заметки" src="/static/images/notes.svg" width="20px"></button>
+            <a  href="{% url 'lesson_edit' pk=lesson.pk page='timetable' fix_day=day.pk %}"  onclick="Close()"> <img alt="Редактировать" src="/static/images/edit.svg" class="edit" width="25px"> </a>
+            <a  onclick="DeleteObject('{{lesson.pk}}')"> <img alt="Удалить" src="/static/images/delete.svg" class="delete" width="22px"> </a>
+            </div>
+            <p class="type">{{ lesson.type }}</p>
+            <p class="classroom">{{ lesson.classroom }}</p>
+            <p class="teacher">{{ lesson.teachershort }}<span class="tooltiptext">{{ lesson.teacher }}</span></p>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class='window'>
+        <div style="position:absolute;">
+            {% for time in times %}
+        {% if time.number == key %}
+        <p class="time" >{{ time.start_time }} <br> {{ time.end_time }}</p>
+            {% endif %}
+        {% endfor %}
+            </div>
+        <p class="subject-name">Свободное время</p>
+        <div style="position:absolute;">
+            {% if key < first_lesson_today %}
+            <p class="relax">можно подольше поспать</p>
+            {% else %}
+            <p class="relax">можно заняться чем-то полезным</p>
+             {% endif %}
+            </div>
+    </div>
+{% endif %}
+    {% endfor %}
+</div>
+ {% elif day.date <= settings.end_date and day.date >= settings.exams_date %}
+ <p id='exam-session-text' class="relax-text">Удачи на экзаменах!</p>
+ <span class='relax-image'><img style="width:400px;margin-top:25px;" alt="У тебя сейчас сессия. Удачи на экзаменах!" src="/static/images/relax.svg">
+ {% elif day.date < settings.start_date or day.date > settings.end_date or holiday %}
+ <p id='holiday-text1' class="relax-text">Приятного отдыха на каникулах!</p>
+ <span class='relax-image'><img style="width:400px;margin-top:25px;" id="summer_image" alt="Похоже, у тебя сейчас каникулы. Приятного отдыха!" src="/static/images/relax.svg">
+ {% elif weekend %}
+ <p id='weekend-text' class="relax-text">Ура! Сегодня выходной.</p>
+ <span class='relax-image'><img id="sleep_image" style="" alt="Ура! Сегодня выходной" src="/static/images/relax.svg">
+{% endif %}
+<div style="position:absolute;top:50px;left:900px;width:300px;text-align:left;">
+<h4 style="position:absolute;top:0px;width:222px;font-size:40px;">Добавить</h4>
+<button style="top:120px;" class="add-new"><a href="{% url 'lesson_new' fix_day=day.pk %}" style="" >+ добавить занятие </a></button>
+<button style="top:160px;" class="add-new"><a href="/subject_new" style="" >+ добавить предмет</a></button>
+<button style="top:200px;" class="add-new"><a href="/task_new" style="">+ добавить задание</a></button>
+<button style="top:240px;" class="add-new"><a href="/exam_new" style="">+ добавить экзамен</a></button>
+<button style="top:280px;" class="add-new"><a href="/plan_new" style="text-align:left;margin-left:0px;">+ добавить план</a></button>
+</div>
+</body>
+    <script type="text/javascript">
+    function SubmitDate(){
+    real=document.getElementById('go_to_date_real');
+    fake=document.getElementById('go_to_date_fake');
+    submit=document.getElementById('pick_date_submit');
+    real.value=fake.value;
+    submit.click();
+};
+
+
+
+ if ("{{weekend}}"!= "True"){
+ toggle=document.getElementById('toggle');
+ toggle.checked={{toggle}};
+
+ if (toggle.checked) {show_windows.style.display='block';
+    no_windows.style.display='none';}
+    else {
+    show_windows.style.display='none';
+    no_windows.style.display='block';};
+
+  };
+
+function Hometask(id,num) {
+var check=document.getElementById('check_'+id+num);
+    var label=document.getElementById('label_'+id+num);
+    var done=document.getElementById('done_'+id+num);
+    if (check.checked == true)
+    {done.value="True";
+    label.style.textDecoration="line-through";}
+    else
+    {done.value="False";
+    label.style.textDecoration="none";};
+    document.getElementById('form_'+id+num).submit();}
+
+function Toggle() {
+    var toggle=document.getElementById('toggle');
+    var show_windows=document.getElementById('show_windows');
+    var no_windows=document.getElementById('no_windows');
+    if (toggle.checked) {show_windows.style.display='block';
+    no_windows.style.display='none';}
+    else {
+    show_windows.style.display='none';
+    no_windows.style.display='block';};};
+
+function Info(pk,num){
+var info=document.getElementById('info'+'_'+pk+num);
+var close=document.getElementById('close'+'_'+pk+num);
+var back=document.getElementById('background');
+document.body.style.overflow='hidden';
+back.style.display='block';
+info.style.display='block';
+close.style.display='block';
+};
+function Notes(pk,num){
+var notes=document.getElementById('notes'+'_'+pk+num);
+var close=document.getElementById('close'+'_'+pk+num);
+var back=document.getElementById('background');
+document.body.style.overflow='hidden';
+back.style.display='block';
+notes.style.display='block';
+close.style.display='block';
+};
+
+function Close(pk,num){
+var notes=document.getElementById('notes'+'_'+pk+num);
+var info=document.getElementById('info'+'_'+pk+num);
+var close=document.getElementById('close'+'_'+pk+num);
+var back=document.getElementById('background');
+document.body.style.overflow='scroll';
+notes.style.display='none';
+info.style.display='none';
+back.style.display='none';
+close.style.display='none';
+}
+var tasks=document.getElementsByClassName("done");
+    var labels=document.getElementsByClassName("hometask");
+    for (t=0;t<tasks.length;t++){
+    var task=tasks[t];
+    if (task.value == "True")
+    {task.checked=true;
+    labels[t].style.textDecoration="line-through";}
+    else
+    { task.checked=false;};};
+{% for lesson in lessons %}
+{% if lesson.date == today.date and lesson.start_time < time_now and lesson.end_time > time_now %}
+document.getElementById("subject_{{lesson.pk}}_1").style.border='solid';
+document.getElementById("subject_{{lesson.pk}}_0").style.border='solid';
+{% endif %}
+{% endfor %}
+{% if yesterday|length == 0 %}
+document.getElementById('date').style.left='60px';
+{% endif %}
+function DeleteObject(s){
+var sure=confirm('Ты точно хочешь удалить это занятие?');
+if (sure){
+window.open('/timetable/'+{{day.pk}}+'/lesson_edit/'+s+'/delete', '_self');}
+};
+    </script>
+</html>
