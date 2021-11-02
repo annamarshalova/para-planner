@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
 <head>
-    {% if exam %}
-     <title>Редактировать предмет | Пара планер</title>
+    {% if task %}
+     <title>Редактировать задание | Пара планер</title>
     {% else %}
-    <title>Добавить предмет | Пара планер</title>
+    <title>Добавить задание | Пара планер</title>
     {% endif %}
     <link rel="shortcut icon" href="/static/images/logo.ico" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -53,10 +53,12 @@ height:100px;
     <li><a href="/exams">Экзамены</a></li>
     <li><a href="/subjects">Предметы</a></li>
         </div>
-    <li class="dropdown" style="float:right;padding-right:20px;text-align:center;"><a>{% if user.first_name%}{{user.first_name}}{% else %}Твой профиль{% endif %}</a>
+    <li class="dropdown" style="float:right;padding-right:20px;text-align:center;"><a href="/settings">Настройки
     <div class="dropdown-content" style="position:fixed;right:20px;">
-        <a href="/settings">Настройки</a>
-        <a href="/accounts/login">Выйти</a>
+        <a href="{% url 'settings' unit='dates' %}">Календарь</a>
+        <a href="{% url 'settings' unit='schedule' %}">Звонки</a>
+        <a href="{% url 'settings' unit='misc' %}">Другое</a>
+        <a href='' onclick="Logout()">Выйти</a>
         </div>
     </li>
 </ul>
@@ -105,6 +107,10 @@ height:100px;
     else {deadline_date.disabled=true;
     deadline_subject.disabled=true;
     form.lesson.disabled=false};};
-
+function Logout(){
+var sure=confirm('Ты точно хочешь выйти?');
+if (sure){
+window.open('/accounts/login', "_self");}
+};
 </script>
 </html>

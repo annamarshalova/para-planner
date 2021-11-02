@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
 from .models import Lesson, Hometask, Exam, Settings, Time, Image, Day, Subject, Plan, Holiday
-from .forms import SubjectForm, LessonForm, SettingsForm, TimeForm, TaskForm, SemesterForm, ExamForm, PlanForm,SignUpForm,LogInForm
+from .forms import SubjectForm, LessonForm, SettingsForm, TimeForm, TaskForm, SemesterForm, ExamForm, PlanForm,SignUpForm,LogInForm,TaskMobileForm
 from datetime import datetime, date, timedelta, time
 from .syllables import syllables,shorten
 from django.contrib.auth import login, authenticate
@@ -38,13 +38,13 @@ def shorten_title(t):
 def create_lessons(subject, lesson):
     if not lesson.teacher:
         lesson.teacher = subject.teacher
-    if not lesson.teacher:
+    if not lesson.teachershort:
         lesson.teachershort = subject.teachershort
-    if not lesson.teacher:
+    if not lesson.classroom:
         lesson.classroom = subject.classroom
-    if not lesson.teacher:
+    if not lesson.image:
         lesson.image = subject.image
-    if not lesson.teacher:
+    if not lesson.title_short:
         lesson.title_short = subject.title_short
     lesson.weekday = subject.weekday
     lesson.color = subject.color
@@ -86,11 +86,10 @@ def create_times(settings,user):
         time.owner = user
         time.save()
 
-from icalendar import Calendar
-import re
-from django.contrib.staticfiles.storage import staticfiles_storage
-
 def load_subjects_ics(link):
+    from icalendar import Calendar
+    import re
+    from django.contrib.staticfiles.storage import staticfiles_storage
     with open(staticfiles_storage.url(f'calendars/{link}'), 'r', encoding='utf-8') as g:
         gcal = Calendar.from_ical(g.read())
         for component in gcal.walk():
@@ -108,9 +107,10 @@ def load_subjects_ics(link):
                     subject.classroom = re.findall('[а-я]?\d+[а-я]?', str(component.get('location')))[0]
                 except:
                     subject.classroom = str(component.get('location'))
-import requests
-from bs4 import BeautifulSoup
+
 def load_subjects_html(group,user,settings):
+    import requests
+    from bs4 import BeautifulSoup
     if len(Time.objects.filter(owner=user))==0:
         settings.first_lesson_start=datetime.strptime('09:00', '%H:%M').time()
         settings.lesson_length=95
@@ -230,6 +230,8 @@ def start(request):
     step = "dates"
     if request.user.is_authenticated:
         user = request.user
+    else:
+        return redirect('login')
     settings = get_object_or_404(Settings, owner=user)
     settings_form = SettingsForm(instance=settings)
     semester_form = SemesterForm(instance=settings)
@@ -256,8 +258,12 @@ def start(request):
                 settings.end_date = semester.end_date
                 settings.save()
                 Day.objects.filter(owner=user).delete()
-                start_date = int(datetime.combine(settings.start_date, datetime.now().time()).timestamp())
-                end_date = int(datetime.combine(settings.end_date, datetime.now().time()).timestamp())
+                gap = settings.start_date.weekday()
+                start_monday = settings.start_date - timedelta(days=gap)
+                gap = 7 - settings.end_date.weekday()
+                end_sunday = settings.end_date + timedelta(days=gap)
+                start_date = int(datetime.combine(start_monday, datetime.now().time()).timestamp())
+                end_date = int(datetime.combine(end_sunday, datetime.now().time()).timestamp())
                 d = start_date
                 week = 1
                 while d <= end_date:
@@ -314,7 +320,7 @@ def start(request):
             if request.POST["other"]=="True":
                 settings.university = request.POST["other_university"]
             settings.save()
-            if settings.university=='НГУ':
+            if settings.university=='Новосибирский государственный университет (НГУ)':
                 step="import"
             else:
                 step="schedule"
@@ -329,6 +335,7 @@ def start(request):
     else:
         start_date = Day.objects.get(date=settings.start_date,owner=user)
         end_date = Day.objects.get(date=settings.end_date,owner=user)
+    return redirect (settings)
     return render(request,'MSP/start.html',{'semester_form':semester_form,'step':step,'schedule':schedule,'schedule_forms':schedule_forms,'settings':settings,'settings_form':settings_form,'nsu':nsu,'colors':colors,'nsu_import':nsu_import,'universities':universities,'compliment_colors':palette})
 
 def dashboard(request):
@@ -341,11 +348,13 @@ def dashboard(request):
         else:
             return redirect(settings.homepage)
     else:
-        return redirect('login')
+        return redirect('dashboard')
 
 def info(request, pk):
     if request.user.is_authenticated:
         user = request.user
+    else:
+        return redirect('login')
     lesson = get_object_or_404(Lesson, pk=pk)
     hometasks = Hometask.objects.filter(lesson=lesson)
     exams = Exam.objects.filter(lesson=lesson)
@@ -364,6 +373,8 @@ def info(request, pk):
 def notes_lesson(request, pk):
     if request.user.is_authenticated:
         user = request.user
+    else:
+        return redirect('login')
     settings = Settings.objects.get(owner=user)
     lesson = get_object_or_404(Lesson, pk=pk)
     if request.method == "POST":
@@ -380,6 +391,8 @@ def notes_lesson(request, pk):
 def notes_task(request, pk):
     if request.user.is_authenticated:
         user = request.user
+    else:
+        return redirect('login')
     settings = Settings.objects.get(owner=user)
     task = get_object_or_404(Hometask, pk=pk)
     if request.method == "POST":
@@ -397,6 +410,8 @@ def notes_task(request, pk):
 def notes_exam(request, pk):
     if request.user.is_authenticated:
         user = request.user
+    else:
+        return redirect('login')
     settings = Settings.objects.get(owner=user)
     exam = get_object_or_404(Exam, pk=pk)
     if request.method == "POST":
@@ -414,6 +429,8 @@ def notes_exam(request, pk):
 def notes_plan(request, pk):
     if request.user.is_authenticated:
         user = request.user
+    else:
+        return redirect('login')
     settings = Settings.objects.get(owner=user)
     plan = get_object_or_404(Plan, pk=pk)
     if request.method == "POST":
@@ -430,6 +447,8 @@ def notes_plan(request, pk):
 def import_timetable(request):
     if request.user.is_authenticated:
         user = request.user
+    else:
+        return redirect('login')
     settings = Settings.objects.get(owner=user)
     today = Day.objects.get(date=datetime.today(), owner=user)
     if request.method == "POST":
@@ -443,6 +462,8 @@ def import_timetable(request):
 def timetable(request, pk):
     if request.user.is_authenticated:
         user = request.user
+    else:
+        return redirect('login')
     settings = Settings.objects.get(owner=user)
     times = Time.objects.filter(owner=user)
     days = Day.objects.filter(owner=user).order_by('date')
@@ -519,30 +540,45 @@ def timetable(request, pk):
     for h in settings.holidays.all():
         if h.start_date <= day.date <= h.end_date:
             holiday=True
-    return render(request, 'MSP/timetable.html',
-                  {'lessons': lessons, 'hometasks': hometasks, 'exams': exams, 'date': date, 'weekday': weekday,
+    user_agent = request.META['HTTP_USER_AGENT']
+    template = 'MSP/timetable_boot.html'
+    mobile=True
+    if 'Mobile' in user_agent:
+        mobile=True
+        #template='MSP/timetable_mobile.html'
+    return render(request,template,
+                  {'mobile':mobile,'lessons': lessons, 'hometasks': hometasks, 'exams': exams, 'date': date, 'weekday': weekday,
                    'weeknum': weeknum, 'settings': settings, 'day': day, 'pk': day.pk, 'today': today,
                    'show_windows': show_windows, 'times': times, 'first_lesson_today': key, 'time_now': time_now,
                    'weekend': weekend, 'toggle': toggle, 'days': days,'yesterday':yesterday,'tomorrow':tomorrow,'start_date':start_date,'end_date':end_date,'holiday':holiday})
 
 
-def lesson_new(request):
+def lesson_new(request,fix_day):
     if request.user.is_authenticated:
         user = request.user
+    else:
+        return redirect('login')
     subjects = Subject.objects.filter(owner=user)
     today = Day.objects.get(date=datetime.today(), owner=user)
-    images = Image.objects.all()
     settings = Settings.objects.get(owner=user)
     if request.method == "POST":
         form = LessonForm(request.POST)
+        object_fields = {}
+        form_filednames = [field for field in form.fields]
         if form.is_valid():
             lesson = form.save(commit=False)
+            for field in Lesson._meta.fields:
+                if field.name in form_filednames and field.name != 'select_subject':
+                    object_fields.update({field.name: field})
             try:
                 lesson.date = request.POST["date"]
             except:
                 pass
-            color = request.POST["color"]
-            lesson.color = color
+            for field in object_fields:
+                 var= request.POST[field]
+                 object_fields[field]=var
+            subject_pk = request.POST["subject"]
+            lesson.select_subject = subjects.get(pk=subject_pk)
             try:
                 lesson_time = Time.objects.get(number=lesson.time, owner=user)
                 if not lesson.start_time and lesson_time:
@@ -556,11 +592,6 @@ def lesson_new(request):
                     lesson.end_time = (datetime.combine(date.today(), lesson.start_time) + lesson_delta).time()
             except:
                 pass
-            select_image = request.POST["select-image"]
-            lesson.image = select_image
-            select_image_link = request.POST["select-image-link"]
-            if select_image_link:
-                lesson.image = select_image_link
             subject = lesson.select_subject
             if subject:
                 lesson.title = lesson.select_subject.title
@@ -585,22 +616,32 @@ def lesson_new(request):
             lesson.weekday = lesson.date.weekday()
             lesson.owner = user
             lesson.save()
-            return redirect('timetable', pk=today.pk)
+            return redirect('timetable', pk=fix_day)
     else:
+        try:
+            fix_day=Day.objects.get(pk=fix_day).date
+        except:
+            fix_day=None
         form = LessonForm({"user": user})
     start_date = Day.objects.get(date=settings.start_date,owner=user)
     end_date = Day.objects.get(date=settings.end_date,owner=user)
-    return render(request, 'MSP/lesson_edit.html',
-                  {'form': form, 'colors': colors, 'settings': settings, 'images': images, 'today': today,
-                   'subjects': subjects,'start_date':start_date,'end_date':end_date})
+    template = 'MSP/lesson_edit_boot.html'
+    user_agent = request.META['HTTP_USER_AGENT']
+    mobile = True
+    if 'Mobile' in user_agent:
+        mobile = True
+    return render(request, template,
+                  {'form': form, 'colors': colors, 'settings': settings,  'today': today,
+                   'subjects': subjects,'start_date':start_date,'end_date':end_date,'date':fix_day,'mobile':mobile})
 
 
 def lesson_edit(request, pk,page,fix_day):
     if request.user.is_authenticated:
         user = request.user
+    else:
+        return redirect('login')
     subjects = Subject.objects.filter(owner=user)
     today = Day.objects.get(date=datetime.today(), owner=user)
-    images = Image.objects.all()
     settings = Settings.objects.get(owner=user)
     lesson = get_object_or_404(Lesson, pk=pk)
     title_initial=lesson.title
@@ -610,11 +651,16 @@ def lesson_edit(request, pk,page,fix_day):
     color_initial=lesson.color
     teacher_initial= lesson.teacher
     classroom_initial= lesson.classroom
-    image_initial=lesson.image
     if request.method == "POST":
         form = LessonForm(request.POST, instance=lesson)
+        object_fields={}
+        form_filednames=[field for field in form.fields]
         if form.is_valid():
             lesson = form.save(commit=False)
+            lesson.save()
+            for field in lesson._meta.fields:
+                if field.name in form_filednames and field.name != 'select_subject':
+                    object_fields.update({field.name: field})
             try:
                 lesson.date = request.POST["date"]
             except:
@@ -627,63 +673,73 @@ def lesson_edit(request, pk,page,fix_day):
                     pass
             else:
                 lesson.teachershort = ''
-            color = request.POST["color"]
-            lesson.color = color
+            for field in object_fields:
+                 var= request.POST[field]
+                 object_fields[field]=var
+            lesson.save()
             lesson.date = datetime.strptime(lesson.date, '%Y-%m-%d')
             lesson.weekday = lesson.date.weekday()
-            if form['select_subject']!=subject_initial:
-                subject=lesson.select_subject
-                lesson.select_subject = subject
-                if lesson.title == title_initial:
-                    lesson.title = subject.title
-                    lesson.title_short = subject.title_short
-                if lesson.type == type_initial:
-                    lesson.type = subject.type
-                if lesson.color == color_initial:
-                    lesson.color=subject.color
-                if lesson.teacher == teacher_initial:
-                    lesson.teacher = subject.teacher
-                    lesson.teachershort = subject.teachershort
-                if lesson.classroom == classroom_initial:
-                    lesson.classroom = subject.classroom
-                if lesson.image == image_initial:
-                    lesson.image = subject.image
+            lesson.save()
 
             try:
                 lesson_time = Time.objects.get(number=lesson.time, owner=user)
                 if lesson_time:
                     lesson.start_time = lesson_time.start_time
                     lesson.end_time = lesson_time.end_time
+                    lesson.save()
             except:
                 pass
             try:
                 if not lesson.end_time and lesson_time:
                     lesson_delta = timedelta(minutes=settings.lesson_length)
                     lesson.end_time = (datetime.combine(date.today(), lesson.start_time) + lesson_delta).time()
+                    lesson.save()
             except:
                 pass
-            select_image = request.POST["select-image"]
-            lesson.image = select_image
-            select_image_link = request.POST["select-image-link"]
-            if select_image_link:
-                lesson.image = select_image_link
-            lesson.save()
-            if not lesson.title or lesson.title!=title_initial:
+
+            if lesson.title and lesson.title != title_initial:
                 lesson.title_short = shorten_title(lesson.title)
                 lesson.save()
+            try:
+                subject_pk = request.POST["subject"]
+                subject=subjects.get(pk=subject_pk)
+                if subject != subject_initial:
+                    lesson.select_subject = subject
+                    if lesson.title == title_initial:
+                        lesson.title = subject.title
+                        lesson.title_short = subject.title_short
+                    if lesson.type == type_initial:
+                        lesson.type = subject.type
+                    if lesson.color == color_initial:
+                        lesson.color = subject.color
+                    if lesson.teacher == teacher_initial:
+                        lesson.teacher = subject.teacher
+                        lesson.teachershort = subject.teachershort
+                    if lesson.classroom == classroom_initial:
+                        lesson.classroom = subject.classroom
+                    lesson.save()
+            except:
+                pass
+
             return redirect(page, pk=fix_day)
     else:
         form = LessonForm(instance=lesson, initial={"user": user})
         start_date = Day.objects.get(date=settings.start_date,owner=user)
         end_date = Day.objects.get(date=settings.end_date,owner=user)
-    return render(request, 'MSP/lesson_edit.html',
-                  {'pk': lesson.pk, 'form': form, 'colors': colors, 'lesson': lesson, 'settings': settings,
-                   'images': images, 'today': today, 'subjects': subjects,'page':page,'fix_day':fix_day,'start_date':start_date,'end_date':end_date})
+    template = 'MSP/lesson_edit_boot.html'
+    user_agent = request.META['HTTP_USER_AGENT']
+    mobile = True
+    if 'Mobile' in user_agent:
+        mobile = True
+    return render(request, template,
+                  {'pk': lesson.pk, 'form': form, 'colors': colors, 'lesson': lesson, 'settings': settings, 'today': today, 'subjects': subjects,'page':page,'fix_day':fix_day,'start_date':start_date,'end_date':end_date,'mobile':mobile})
 
 
 def lesson_delete(request, pk, page,fix_day):
     if request.user.is_authenticated:
         user = request.user
+    else:
+        return redirect('login')
     today = Day.objects.get(date=datetime.today(), owner=user)
     lesson = get_object_or_404(Lesson, pk=pk)
     lesson.delete()
@@ -694,6 +750,8 @@ def settings(request,unit='dates'):
         universities = json.load(js)
     if request.user.is_authenticated:
         user = request.user
+    else:
+        return redirect('login')
     schedule = Time.objects.filter(owner=user)
     settings = get_object_or_404(Settings, owner=user)
     if request.method == "POST":
@@ -713,8 +771,12 @@ def settings(request,unit='dates'):
                 settings.end_date = semester.end_date
                 settings.save()
                 Day.objects.filter(owner=user).delete()
-                start_date = int(datetime.combine(settings.start_date, datetime.now().time()).timestamp())
-                end_date = int(datetime.combine(settings.end_date, datetime.now().time()).timestamp())
+                gap=settings.start_date.weekday()
+                start_monday=settings.start_date-timedelta(days=gap)
+                gap = 7- settings.end_date.weekday()
+                end_sunday = settings.end_date + timedelta(days=gap)
+                start_date = int(datetime.combine(start_monday, datetime.now().time()).timestamp())
+                end_date = int(datetime.combine(end_sunday, datetime.now().time()).timestamp())
                 d = start_date
                 week = 1
                 while d <= end_date:
@@ -796,14 +858,21 @@ def settings(request,unit='dates'):
             schedule_forms.append(TimeForm(request.POST, instance=time))
         start_date = Day.objects.get(date=settings.start_date,owner=user)
         end_date = Day.objects.get(date=settings.end_date,owner=user)
-        return render(request, 'MSP/settings.html',
+        template='MSP/settings_boot.html'
+        user_agent = request.META['HTTP_USER_AGENT']
+        mobile = True
+        if 'Mobile' in user_agent:
+            mobile = True
+        return render(request, template,
                       {'settings_form': settings_form, 'colors': colors, 'settings': settings, 'schedule': schedule,
-                       'schedule_forms': schedule_forms, 'semester_form': semester_form, 'today': today, 'user': user,'start_date':start_date,'end_date':end_date,'unit':unit,'universities':universities})
+                       'schedule_forms': schedule_forms, 'semester_form': semester_form, 'today': today, 'user': user,'start_date':start_date,'end_date':end_date,'unit':unit,'universities':universities,'mobile':mobile})
 
 
 def tasks(request):
     if request.user.is_authenticated:
         user = request.user
+    else:
+        return redirect('login')
     settings = Settings.objects.get(owner=user)
     today = get_today(user)
     tomorrow=get_tomorrow(user)
@@ -813,14 +882,18 @@ def tasks(request):
     else:
         empty = False
     for task in tuple(tasks):
-        if task.done == True and task.date + timedelta(days=7) < today.date:
-            task.delete()
+        try:
+            week_passed=task.date + timedelta(days=7) < today.date
+            if task.done == True and week_passed:
+                task.delete()
+        except:
+            pass
     if request.method == "GET":
         if 'delete_done' in request.GET:
             for task in tuple(tasks):
                 if task.done:
                     task.delete()
-                    return redirect('tasks')
+            return redirect('tasks')
         else:
             for task in tasks:
                 if ('done_' + str(task.pk)) in request.GET:
@@ -829,9 +902,14 @@ def tasks(request):
                     task.save()
     start_date = Day.objects.get(date=settings.start_date,owner=user)
     end_date = Day.objects.get(date=settings.end_date,owner=user)
-    return render(request, 'MSP/tasks.html',
+    template='MSP/tasks_boot.html'
+    user_agent = request.META['HTTP_USER_AGENT']
+    mobile=False
+    if 'Mobile' in user_agent:
+        mobile=True
+    return render(request, template,
                   {'today': today, 'tomorrow': tomorrow, 'settings': settings, 'tasks': tasks,
-                   'weekdays': weekdays_short, 'empty': empty,'start_date':start_date,'end_date':end_date})
+                   'weekdays': weekdays_short, 'empty': empty,'start_date':start_date,'end_date':end_date,'mobile':mobile})
 
 
 def task_new(request):
@@ -878,10 +956,12 @@ def task_new(request):
     else:
         try:
             time_now = datetime.now()
-            now_lesson = Lesson.objects.get(date=time_now.date(), start_time__lte=time_now.time(),
-                                            end_time__gte=time_now.time())
-            now_subject = list(
-                Lesson.objects.filter(select_subject__title=now_lesson.title,select_subject__type=now_lesson.type))
+            now_lesson = Lesson.objects.filter(date=time_now.date(), start_time__lte=time_now.time(),
+                                            end_time__gte=time_now.time())[0]
+            if now_lesson.type:
+                now_subject = list(Lesson.objects.filter(select_subject__title=now_lesson.title,select_subject__type=now_lesson.type).order_by('date'))
+            else:
+                now_subject = list(Lesson.objects.filter(select_subject__title=now_lesson.title).order_by('date'))
             now_index = now_subject.index(now_lesson)
             next = now_subject[now_index + 1]
             next_subject=next.select_subject
@@ -892,13 +972,21 @@ def task_new(request):
         form = TaskForm(initial={'lesson':next})
     start_date = Day.objects.get(date=settings.start_date,owner=user)
     end_date = Day.objects.get(date=settings.end_date,owner=user)
-    return render(request, 'MSP/task_edit.html',
-                  {'subjects': subjects, 'form': form, 'settings': settings, 'today': today,'start_date':start_date,'end_date':end_date,'next':next_subject})
+    template = 'MSP/task_edit_boot.html'
+    user_agent = request.META['HTTP_USER_AGENT']
+    mobile=True
+    if 'Mobile' in user_agent:
+        #form = TaskMobileForm(initial={'lesson': next})
+        mobile=True
+    return render(request, template,
+                  {'subjects': subjects, 'form': form, 'settings': settings, 'today': today,'start_date':start_date,'end_date':end_date,'next':next_subject,'mobile':mobile})
 
 
 def task_edit(request, pk):
     if request.user.is_authenticated:
         user = request.user
+    else:
+        return redirect('login')
     subjects = Subject.objects.filter(owner=user)
     today = get_today(user)
     settings = Settings.objects.get(owner=user)
@@ -938,14 +1026,22 @@ def task_edit(request, pk):
         form = TaskForm(instance=task)
     start_date = Day.objects.get(date=settings.start_date,owner=user)
     end_date = Day.objects.get(date=settings.end_date,owner=user)
-    return render(request, 'MSP/task_edit.html',
+    template = 'MSP/task_edit_boot.html'
+    mobile=False
+    user_agent = request.META['HTTP_USER_AGENT']
+    if 'Mobile' in user_agent:
+        #form = TaskMobileForm(instance=task)
+        mobile=True
+    return render(request, template,
                   {'subjects': subjects, 'pk': task.pk, 'form': form, 'task': task, 'settings': settings,
-                   'today': today,'start_date':start_date,'end_date':end_date})
+                   'today': today,'start_date':start_date,'end_date':end_date,'mobile':mobile})
 
 
 def task_delete(request, pk):
     if request.user.is_authenticated:
         user = request.user
+    else:
+        return redirect('login')
     today = get_today(user)
     task = get_object_or_404(Hometask, pk=pk)
     task.delete()
@@ -982,6 +1078,8 @@ def subject_double(request,pk):
 def subject_new(request):
     if request.user.is_authenticated:
         user = request.user
+    else:
+        return redirect('login')
     days = Day.objects.filter(owner=user)
     today=get_today(user)
     images = Image.objects.all()
@@ -1059,6 +1157,8 @@ def subject_new(request):
 def task_new_lesson(request, lesson, date, time, menu, info):
     if request.user.is_authenticated:
         user = request.user
+    else:
+        return redirect('login')
     subjects = Subject.objects.filter(owner=user)
     lessons = Lesson.objects.filter(owner=user)
     today=get_today(user)
@@ -1070,13 +1170,20 @@ def task_new_lesson(request, lesson, date, time, menu, info):
             this_lesson = lessons.get(title=lesson, date=date, start_time=time, owner=user)
             deadline_subject = this_lesson.select_subject
             this_or_next = request.POST["this_or_next"]
-            deadline_date = request.POST["deadline_date"]
+            try:
+                deadline_date = request.POST["deadline_date"]
+            except:
+                pass
             if this_or_next == 'this':
                 task.lesson = this_lesson
             elif this_or_next == 'next':
-                lessons = list(lessons)
-                n = lessons.index(this_lesson)
-                next_lesson = lessons[n + 1]
+                if this_lesson.type:
+                    this_subject = list(Lesson.objects.filter(select_subject__title=this_lesson.title,
+                                                             select_subject__type=this_lesson.type).order_by('date'))
+                else:
+                    this_subject = list(Lesson.objects.filter(select_subject__title=this_lesson.title).order_by('date'))
+                this_index = this_subject.index(this_lesson)
+                next_lesson = this_subject[this_index + 1]
                 task.lesson = next_lesson
             if task.lesson:
                 task.select_subject = task.lesson.select_subject
@@ -1097,13 +1204,21 @@ def task_new_lesson(request, lesson, date, time, menu, info):
         form = TaskForm()
     start_date = Day.objects.get(date=settings.start_date,owner=user)
     end_date = Day.objects.get(date=settings.end_date,owner=user)
-    return render(request, 'MSP/task_edit_lesson.html',
-                  {'subjects': subjects, 'form': form, 'settings': settings, 'today': today, 'menu': menu,'start_date':start_date,'end_date':end_date})
+    template = 'MSP/task_edit_lesson_boot.html'
+    user_agent = request.META['HTTP_USER_AGENT']
+    mobile=True
+    if 'Mobile' in user_agent:
+        form = TaskMobileForm()
+        mobile=True
+    return render(request, template,
+                  {'subjects': subjects, 'form': form, 'settings': settings, 'today': today, 'menu': menu,'start_date':start_date,'end_date':end_date,'mobile':mobile})
 
 
 def subjects(request):
     if request.user.is_authenticated:
         user = request.user
+    else:
+        return redirect('login')
     subjects = Subject.objects.filter(owner=user).order_by('weekday', 'start_time','end_time','title',)
     today=get_today(user)
     settings = Settings.objects.get(owner=user)
@@ -1111,13 +1226,21 @@ def subjects(request):
     end_date = Day.objects.get(date=settings.end_date,owner=user)
     start_date = Day.objects.get(date=settings.start_date,owner=user)
     end_date = Day.objects.get(date=settings.end_date,owner=user)
-    return render(request, 'MSP/subjects.html',
-                  {'subjects': subjects, 'settings': settings, 'today': today, 'weekdays': weekdays,'start_date':start_date,'end_date':end_date,'start_date':start_date,'end_date':end_date})
+    user_agent = request.META['HTTP_USER_AGENT']
+    template = 'MSP/subjects_boot.html'
+    mobile = False
+    if 'Mobile' in user_agent:
+        mobile = True
+        # template='MSP/subjects_mobile.html'
+    return render(request, template,
+                  {'subjects': subjects, 'settings': settings, 'today': today, 'weekdays': weekdays,'start_date':start_date,'end_date':end_date,'start_date':start_date,'end_date':end_date,'mobile':mobile})
 
 
 def subject_edit(request, pk):
     if request.user.is_authenticated:
         user = request.user
+    else:
+        return redirect('login')
     days = Day.objects.filter(owner=user)
     settings = Settings.objects.get(owner=user)
     today=get_today(user)
@@ -1201,6 +1324,14 @@ def subject_edit(request, pk):
                         lesson.start_time = subject.start_time
                         lesson.end_time = subject.end_time
                         lesson.save()
+            same_subject = Subject.objects.filter(title=subject.title)
+            for s in same_subject:
+                s.color = subject.color
+                s.save()
+                s_lessons = Lesson.objects.filter(select_subject=s)
+                for sl in s_lessons:
+                    sl.color = subject.color
+                    sl.save()
             return redirect('subjects')
     else:
         form = SubjectForm(instance=subject)
@@ -1214,6 +1345,8 @@ def subject_edit(request, pk):
 def subject_delete(request, pk):
     if request.user.is_authenticated:
         user = request.user
+    else:
+        return redirect('login')
     subject = get_object_or_404(Subject, pk=pk)
     subject.delete()
     return redirect('subjects')
@@ -1222,6 +1355,8 @@ def subject_delete(request, pk):
 def exams(request):
     if request.user.is_authenticated:
         user = request.user
+    else:
+        return redirect('login')
     settings=Settings.objects.get(owner=user)
     today = get_today(user)
     tomorrow=get_tomorrow(user)
@@ -1246,13 +1381,13 @@ def exams(request):
         days_left = int((first_exam - now) // (60 * 60 * 24))
         if days_left % 10 == 1 and days_left % 100 != 11:
             meta = 1
-        elif days_left % 10 in [2, 3, 4] and days_left % 100 in [12, 13, 14]:
+        elif days_left % 10 in [2, 3, 4] and days_left % 100 not in [12, 13, 14]:
             meta = 2
         else:
             meta = 0
         start_date = datetime.combine(settings.start_date, datetime.now().time()).timestamp()
         end_date = datetime.combine(settings.end_date, datetime.now().time()).timestamp()
-        semester = int((end_date - start_date) // (60 * 60 * 24))
+        semester = int((first_exam - start_date) // (60 * 60 * 24))
         passed = int((now - start_date) // (60 * 60 * 24))
     start_date = Day.objects.get(date=settings.start_date,owner=user)
     end_date = Day.objects.get(date=settings.end_date,owner=user)
@@ -1260,15 +1395,29 @@ def exams(request):
     delete_exams=Exam.objects.filter(date__lt=treshold)
     for ex in delete_exams:
         ex.delete()
-    return render(request, 'MSP/exams.html',
-                  {'today': today, 'tomorrow': tomorrow, 'settings': settings, 'exams': exams,
-                   'weekdays': weekdays_short, 'examinations': examinations, 'other': other, 'days_left': days_left,
-                   'meta': meta, 'semester': semester, 'passed': passed, 'empty': empty,'start_date':start_date,'end_date':end_date})
+    if days_left is None:
+        days_left=0
+        percentage=0
+    else:
+        percentage = round(100 * passed / semester)
+    mobile=True
+    user_agent = request.META['HTTP_USER_AGENT']
+    template='MSP/exams_boot.html'
+    if 'Mobile' in user_agent:
+        mobile=True
+    return render(request, template,
+                      {'today': today, 'tomorrow': tomorrow, 'settings': settings, 'exams': exams,
+                       'weekdays': weekdays_short, 'examinations': examinations, 'other': other, 'days_left': days_left,
+                       'meta': meta, 'semester': semester, 'passed': passed, 'empty': empty, 'start_date': start_date,
+                       'end_date': end_date,'mobile':mobile,'percentage':percentage})
+
 
 
 def exam_edit(request, pk):
     if request.user.is_authenticated:
         user = request.user
+    else:
+        return redirect('login')
     subjects = Subject.objects.filter(owner=user)
     today=get_today(user)
     settings = Settings.objects.get(owner=user)
@@ -1328,6 +1477,8 @@ def exam_edit(request, pk):
 def exam_new(request, exam, lessons, subjects,examination):
     if request.user.is_authenticated:
         user = request.user
+    else:
+        return redirect('login')
     try:
         exam.examination = request.POST['examination']
     except:
@@ -1377,6 +1528,8 @@ def exam_new(request, exam, lessons, subjects,examination):
 def exam_new_1(request):
     if request.user.is_authenticated:
         user = request.user
+    else:
+        return redirect('login')
     subjects = Subject.objects.filter(owner=user)
     today=get_today(user)
     settings = Settings.objects.get(owner=user)
@@ -1399,6 +1552,8 @@ def exam_new_1(request):
 def exam_new_2(request, examination):
     if request.user.is_authenticated:
         user = request.user
+    else:
+        return redirect('login')
     subjects = Subject.objects.filter(owner=user)
     today=get_today(user)
     settings = Settings.objects.get(owner=user)
@@ -1428,6 +1583,8 @@ def exam_new_2(request, examination):
 def exam_delete(request, pk):
     if request.user.is_authenticated:
         user = request.user
+    else:
+        return redirect('login')
     subject = get_object_or_404(Exam, pk=pk)
     subject.delete()
     return redirect('exams')
@@ -1436,6 +1593,8 @@ def exam_delete(request, pk):
 def plans(request):
     if request.user.is_authenticated:
         user = request.user
+    else:
+        return redirect('login')
     settings = Settings.objects.get(owner=user)
     today=get_today(user)
     tomorrow=get_tomorrow(user)
@@ -1460,6 +1619,8 @@ def plans(request):
 def plan_edit(request, pk):
     if request.user.is_authenticated:
         user = request.user
+    else:
+        return redirect('login')
     today=get_today(user)
     settings = Settings.objects.get(owner=user)
     plan = get_object_or_404(Plan, pk=pk)
@@ -1491,6 +1652,8 @@ def plan_edit(request, pk):
 def plan_new(request):
     if request.user.is_authenticated:
         user = request.user
+    else:
+        return redirect('login')
     settings = Settings.objects.get(owner=user)
     today=get_today(user)
     if request.method == "POST":
@@ -1521,6 +1684,8 @@ def plan_new(request):
 def plan_delete(request, pk):
     if request.user.is_authenticated:
         user = request.user
+    else:
+        return redirect('login')
     plan = get_object_or_404(Plan, pk=pk)
     plan.delete()
     return redirect('plans')
@@ -1529,16 +1694,33 @@ def plan_delete(request, pk):
 def timetable_week(request, pk):
     if request.user.is_authenticated:
         user = request.user
+    else:
+        return redirect('login')
     days = Day.objects.filter(owner=user).order_by('date')
     settings = Settings.objects.get(owner=user)
     times = Time.objects.filter(owner=user)
     today=get_today(user)
     day = get_object_or_404(Day, pk=pk)
     week = Day.objects.filter(week=day.week, owner=user,date__gte=settings.start_date,date__lte=settings.end_date)
-    monday = week[0]
+    try:
+        monday = week.get(weekday=0)
+    except:
+        if len(week)>0:
+            first_weekday=week[0]
+        else:
+            first_weekday=days[0]
+        while len(week)<7:
+            new_date=first_weekday.date-timedelta(days=1)
+            exists=days.filter(date=new_date)
+            if exists:
+                exists[0].week=first_weekday.week
+            else:
+                Day.objects.create(date=new_date,weekday=new_date.weekday(),week=first_weekday.week,owner=user)
+        week = Day.objects.filter(week=day.week, owner=user,date__gte=settings.start_date,date__lte=settings.end_date)
+        monday=week.get(weekday=0)
+    week_pk = monday.pk
     weeklength = len(week) - 1
     sunday = week[weeklength]
-    week_pk = monday.pk
     weekspan = range(0, 7)
     lessons = Lesson.objects.filter(date__gte=monday.date, date__lte=sunday.date, owner=user).exclude(start_time=None)
     plans = Plan.objects.filter(start_date__gte=monday.date, start_date__lte=sunday.date, owner=user).exclude(
@@ -1570,16 +1752,30 @@ def timetable_week(request, pk):
     for day in week:
         if len(Lesson.objects.filter(date=day.date)) == 0  and len(Exam.objects.filter(date=day.date)) == 0:
             blanks.append(day)
+    next_w=week[0].date +timedelta(days=1)
+    prev_w=week[0].date-timedelta(days=1)
+    try:
+        days.get(date=next_w)
+        next_week=True
+    except:
+        next_week=False
+    try:
+        days.get(date=prev_w)
+        prev_week=True
+    except:
+        prev_week=False
     return render(request, 'MSP/timetable_week.html',
                   {'pk': week_pk, 'settings': settings, 'today': today, 'times': times, 'monday': monday,
                    'sunday': sunday, 'week': week, 'weekspan': weekspan, 'weekdays': weekdays_short, 'lessons': lessons,
                    'exams': exams, 'plans': plans, 'hours': hours, 'time_delta': time_delta, 'hometasks': hometasks,
-                   'exams': exams, 'days': days,'blanks':blanks})
+                   'exams': exams, 'days': days,'blanks':blanks,'next_week':next_week,'prev_week':prev_week})
 
 
 def timetable_month(request, pk):
     if request.user.is_authenticated:
         user = request.user
+    else:
+        return redirect('login')
     settings = Settings.objects.get(owner=user)
     times = Time.objects.filter(owner=user)
     today=get_today(user)

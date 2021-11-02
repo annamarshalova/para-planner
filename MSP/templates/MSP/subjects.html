@@ -20,10 +20,10 @@ height:100px;}
      .subject div{margin-top:1px;margin-bottom:1px;}
 .emoji {height:30px;position:absolute;left:30px; margin-top:0px;}
 
-.time {width:70px;text-align:center;font-size:20;position:absolute; left:20px; top:20px}
+.time {text-align:center;position:absolute; left:10px; top:20px;border-right:solid;}
 
 .emoji {height:40px;position:absolute;left:30px; margin-top:0px;}
-.subject-name {font-size:28; font-weight:bold; position:absolute; left:100px;margin-top:0;}
+.subject-name {font-size:28; font-weight:bold; position:absolute; left:20px;margin-top:0;}
 
 .write_weekday {font-size:20;position:absolute; left:100px; margin-top:40px;}
 
@@ -34,10 +34,10 @@ height:100px;}
 .classroom {width:100%;text-align:center;font-size:18px;position:absolute; top:10px;}
 .type{width:100%;text-align:center;font-size:18px;position:absolute;top:50px;}
 .teacher{width:100%;text-align:center;font-size:18px;position:absolute;top:30px;}
-.link{position:absolute;top:5px;right:100px;}
-.edit{position:absolute;top:5px;right:70px;}
-.double{position:absolute;top:5px;right:40px;}
-.delete{position:absolute;top:5px;right:10px;}
+.link{position:absolute;top:5px;right:130px;}
+.edit{position:absolute;top:5px;right:100px;}
+.double{position:absolute;top:5px;right:70px;}
+.delete{position:absolute;top:5px;right:40px;}
 .double:hover .tooltiptext {
   visibility: visible;
 }
@@ -48,7 +48,7 @@ height:100px;}
 .link:hover .tooltiptext {
   visibility: visible;
 }
-
+subject {box-shadow: 0px 4px 12px 0px #0d234308;}
     </style>
 
 </head>
@@ -74,10 +74,12 @@ height:100px;}
     <li><a href="/exams">Экзамены</a></li>
     <li><a href="/subjects" class="selected">Предметы</a></li>
         </div>
-    <li class="dropdown" style="float:right;padding-right:20px;text-align:center;"><a  class="selected">{% if user.first_name%}{{user.first_name}}{% else %}Твой профиль{% endif %}</a>
+    <li class="dropdown" style="float:right;padding-right:20px;text-align:center;"><a href="/settings">Настройки
     <div class="dropdown-content" style="position:fixed;right:20px;">
-        <a href="/settings">Настройки</a>
-        <a href="/accounts/login">Выйти</a>
+        <a href="{% url 'settings' unit='dates' %}">Календарь</a>
+        <a href="{% url 'settings' unit='schedule' %}">Звонки</a>
+        <a href="{% url 'settings' unit='misc' %}">Другое</a>
+        <a href='' onclick="Logout()">Выйти</a>
         </div>
     </li>
 </ul>
@@ -90,9 +92,6 @@ height:100px;}
     <div class='subject' style="background-color:{{ subject.color }};">
         <input type="hidden" class="weeknum" value={{subject.weekday}}>
         <div style="position:absolute;">
-            {% if subject.image != '' %}
-            <span style="font-size:10px;"><img class="emoji" alt={{ subject.title }} src={{subject.image }}></span>
-            {% endif %}
         <p class="time">{{ subject.start_time }} <br> {{ subject.end_time }}</p>
         </div>
         <div>
@@ -100,7 +99,7 @@ height:100px;}
             <p class="subject-name">{% if subject.title|length < 28 %}{{ subject.title }}{% else %}{{ subject.title_short }}{% endif %}</p>
             <p  class='write_weekday' style="text-decoration:none;">{{subject.weekday}}</p>
         </div>
-        <div style="display:inline;width:155px;position:absolute;right:15px;vertical-align:middle;text-align:center;">
+        <div style="display:inline;width:200px;position:absolute;right:10px;vertical-align:middle;text-align:center;">
             <div>
                  {% if subject.link %}
             <a class="link" href={{ subject.link }} target="_blank"><img alt="Ссылка" src="/static/images/link.svg" width="20px">
@@ -124,17 +123,7 @@ height:100px;}
 </div>
 </body>
     <script type="text/javascript">
-function Hometask(n) {
-var id =n.toString();
-var checkBox = document.getElementById('done_'+id);
-var label = document.getElementById('label_'+id);
 
-  if (checkBox.checked == true){
-    label.style.textDecoration = "line-through";
-  } else {
-    label.style.textDecoration = "none";
-  }
-};
 var weeknums=document.getElementsByClassName("weeknum");
     var weekdays = document.getElementsByClassName("weekday");
     var subjects = document.getElementsByClassName("write_weekday");
@@ -146,5 +135,11 @@ var sure=confirm('Ты точно хочешь удалить этот пред�
 if (sure){
 window.open('/subject_edit/'+s+'/delete', '_self');}
 };
+function Logout(){
+var sure=confirm('Ты точно хочешь выйти?');
+if (sure){
+window.open('/accounts/login', "_self");}
+};
+
     </script>
 </html>

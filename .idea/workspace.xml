@@ -2,7 +2,27 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="72da8ece-e22a-44b2-a99c-83318c3eb1a1" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/exam_edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/exam_edit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/exams.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/exams.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/lesson_edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/lesson_edit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/plan_edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/plan_edit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/plans.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/plans.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/settings.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/settings.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/subject_edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/subject_edit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/subjects.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/subjects.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/task_edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/task_edit.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/task_edit_lesson.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/task_edit_lesson.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/tasks.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/tasks.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/timetable.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/timetable.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/timetable_month.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/timetable_month.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/timetable_week.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/timetable_week.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/templates/extra.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/extra.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mysite/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/mysite/settings.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -13,8 +33,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="HTML File" />
         <option value="Python Script" />
+        <option value="HTML File" />
       </list>
     </option>
   </component>
@@ -26,7 +46,7 @@
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/MSP/templates/registration" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../entity_linking" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
@@ -34,8 +54,8 @@
       <recent name="C:\Users\Анна\PycharmProjects\modern_student_planner\MSP\templates\MSP" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
-      <recent name="C:\Users\Анна\PycharmProjects\modern_student_planner\MSP\templates\registration" />
       <recent name="C:\Users\Анна\PycharmProjects\modern_student_planner\MSP\templates\MSP" />
+      <recent name="C:\Users\Анна\PycharmProjects\modern_student_planner\MSP\templates\registration" />
       <recent name="C:\Users\Анна\PycharmProjects\modern_student_planner\MSP" />
       <recent name="C:\Users\Анна\PycharmProjects\modern_student_planner\MSP\static\images" />
     </key>
@@ -210,7 +230,9 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
           </value>
         </entry>
       </map>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% if exam %}
+    {% if plan %}
      <title>Редактировать план | Пара планер</title>
     {% else %}
     <title>Добавить план | Пара планер</title>
@@ -37,10 +37,12 @@
     <li><a href="/exams">Экзамены</a></li>
     <li><a href="/subjects">Предметы</a></li>
         </div>
-    <li class="dropdown" style="float:right;padding-right:20px;text-align:center;"><a>{% if user.first_name%}{{user.first_name}}{% else %}Твой профиль{% endif %}</a>
+    <li class="dropdown" style="float:right;padding-right:20px;text-align:center;"><a href="/settings">Настройки
     <div class="dropdown-content" style="position:fixed;right:20px;">
-        <a href="/settings">Настройки</a>
-        <a href="/accounts/login">Выйти</a>
+        <a href="{% url 'settings' unit='dates' %}">Календарь</a>
+        <a href="{% url 'settings' unit='schedule' %}">Звонки</a>
+        <a href="{% url 'settings' unit='misc' %}">Другое</a>
+        <a href='' onclick="Logout()">Выйти</a>
         </div>
     </li>
 </ul>
@@ -84,6 +86,10 @@
     else{
     var select_colors=document.getElementsByClassName('select-color');
     select_colors[0].checked=true};
-
+function Logout(){
+var sure=confirm('Ты точно хочешь выйти?');
+if (sure){
+window.open('/accounts/login', "_self");}
+};
 </script>
 </html>

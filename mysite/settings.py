@@ -123,7 +123,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 from django.conf.locale.es import formats as es_formats
 es_formats.DATE_INPUT_FORMATS = ['%d.%m.%Y']
 
-INSTALLED_APPS += ('django_summernote', 'django_s3_sqlite','osm_field',)
+INSTALLED_APPS += ('django_summernote', 'django_s3_sqlite',)
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 

@@ -52,10 +52,12 @@ height:100px;
     <li><a href="/exams" class="selected">Экзамены</a></li>
     <li><a href="/subjects">Предметы</a></li>
         </div>
-    <li class="dropdown" style="float:right;padding-right:20px;text-align:center;"><a>{% if user.first_name%}{{user.first_name}}{% else %}Твой профиль{% endif %}</a>
+    <li class="dropdown" style="float:right;padding-right:20px;text-align:center;"><a href="/settings">Настройки
     <div class="dropdown-content" style="position:fixed;right:20px;">
-        <a href="/settings">Настройки</a>
-        <a href="/accounts/login">Выйти</a>
+        <a href="{% url 'settings' unit='dates' %}">Календарь</a>
+        <a href="{% url 'settings' unit='schedule' %}">Звонки</a>
+        <a href="{% url 'settings' unit='misc' %}">Другое</a>
+        <a href='' onclick="Logout()">Выйти</a>
         </div>
     </li>
 </ul>
@@ -102,6 +104,11 @@ height:100px;
     if (check.checked == true){
     examination.value="True";}
     else{
-    examination.value="False";}}
+    examination.value="False";}};
+    function Logout(){
+var sure=confirm('Ты точно хочешь выйти?');
+if (sure){
+window.open('/accounts/login', "_self");}
+};
 </script>
 </html>

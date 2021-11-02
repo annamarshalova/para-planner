@@ -73,6 +73,18 @@ class TaskForm(forms.ModelForm):
         today = datetime.now().date()
         self.fields['lesson'].queryset = self.fields['lesson'].queryset.filter(date__gte=today).order_by('date')
 
+class TaskMobileForm(forms.ModelForm):
+    class Meta:
+        model = Hometask
+        fields = ('lesson', 'hometask', 'notes')
+        labels = {'lesson': 'Занятие', 'hometask': 'Задание', 'notes': 'Заметки'}
+        widgets = {'notes': forms.Textarea(attrs={'style':'width:1000px;height:100;font-size:50px;'}),'lesson':forms.Select(attrs={'style':'width:1000px;height:50px;font-size:50px;'}),'hometask':forms.TextInput(attrs={'style':'width:1000px;height:50px;font-size:50px;'}) }
+
+    def __init__(self, *args, **kwargs):
+        super(TaskMobileForm, self).__init__(*args, **kwargs)
+        today = datetime.now().date()
+        self.fields['lesson'].queryset = self.fields['lesson'].queryset.filter(date__gte=today).order_by('date')
+
 
 class ExamForm(forms.ModelForm):
     class Meta:
@@ -91,7 +103,7 @@ class ExamForm(forms.ModelForm):
 class PlanForm(forms.ModelForm):
     class Meta:
         model = Plan
-        fields = ('name', 'type', 'start_time', 'end_time', 'place', 'notes','location')
+        fields = ('name', 'type', 'start_time', 'end_time', 'place', 'notes')
         labels = {'name': "Название", 'start_time': "Время начала", 'end_time': 'Время окончания', 'notes': "Заметки",
                   'type': "Вид мероприятия", 'place': 'Место'}
         widgets = {'notes': SummernoteWidget(attrs={'summernote': {'lang': 'ru-RU'}})}

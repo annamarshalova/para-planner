@@ -51,10 +51,12 @@
     <li><a href="/exams">Экзамены</a></li>
     <li><a href="/subjects">Предметы</a></li>
         </div>
-    <li class="dropdown" style="float:right;padding-right:20px;text-align:center;"><a  class="selected">{% if user.first_name%}{{user.first_name}}{% else %}Твой профиль{% endif %}</a>
+    <li class="dropdown" style="float:right;padding-right:20px;text-align:center;"><a  class="selected" href="/settings">Настройки</a>
     <div class="dropdown-content" style="position:fixed;right:20px;">
-        <a href="/settings">Настройки</a>
-        <a href="/accounts/login">Выйти</a>
+        <a href="{% url 'settings' unit='dates' %}">Календарь</a>
+        <a href="{% url 'settings' unit='schedule' %}">Звонки</a>
+        <a href="{% url 'settings' unit='misc' %}">Другое</a>
+        <a href='' onclick="Logout()">Выйти</a>
         </div>
     </li>
 </ul>
@@ -63,6 +65,7 @@
     <a id='dates_link' href="{% url 'settings' unit='dates' %}">Календарь</a> /
     <a id='schedule_link' href="{% url 'settings' unit='schedule' %}">Расписание звонков</a> /
     <a id='misc_link' href="{% url 'settings' unit='misc' %}">Другие настройки</a> /
+    <a href=''  id='exit_link' onclick="Logout()">Выход</a>
 </p>
 <div id="dates" class="settings-block">
     <form method="POST" class="post-form" style='position:absolute;top:185px;left:60px;font-size:20px;'>{% csrf_token %}
@@ -291,6 +294,17 @@ document.getElementById('exams_date').value='';};
 function ShowChange(){
 document.getElementById('change_university').style.display='block';
 document.getElementById('import_form').style.top='330px'};
+
+function Logout(){
+var sure=confirm('Ты точно хочешь выйти?');
+if (sure){
+window.open('/accounts/login', "_self");}
+};
+function Logout(){
+var sure=confirm('Ты точно хочешь выйти?');
+if (sure){
+window.open('/accounts/login', "_self");}
+};
 </script>
 </body>
 </html>

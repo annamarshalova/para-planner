@@ -25,3 +25,64 @@ holidays=document.getElementById('holidays')
 input=document.getElementById("holiday" + n);
 input.remove();
 holidays.removeChild(input);
+
+
+.switch {position: absolute;display: inline-block;height: 24px;}
+        .switch input {display:none;}
+        .switch-text{}
+        .slider {width:30%;top:180px;left:450px;position: absolute;top: 0;left: 0;right: 0;bottom: 0;cursor: pointer;background-color: #ccc;-webkit-transition: .4s;transition: .4s;}
+        .slider:before {position: absolute;content: "";height: 25px;width: 25px;left: 4px;bottom: 0px;background-color: white;-webkit-transition: .4s;transition: .4s;}
+        #toggle:focus + .slider {box-shadow: 0 0 1px #2196F3;}
+        #toggle:checked + .slider:before {-webkit-transform: translateX(26px);-ms-transform: translateX(26px);transform: translateX(26px);}
+        .slider.round {border-radius: 24px}
+        .slider.round:before {border-radius: 50%;}
+        #toggle:checked + .slider {background-color: {{settings.theme}};}
+
+
+
+.add-hometask{position:relative;left:15%;text-decoration:none;color:#595959;top:-65px;}
+        .tasks{position:relative;height:20px;top:-20px;width:600px;}
+
+
+ <div class="row">
+       <div class="col time"> <p>{{ lesson.start_time }} <br> {% if lesson.end_time %}{{ lesson.end_time }} {% endif %}</p></div>
+       <div class="col task"><a class="add-hometask " href="{% url 'task_new_lesson' lesson=lesson.title date=lesson.date time=lesson.start_time menu='1' info=0 %}">+ <span class="tooltiptext">добавить задание</span></a>
+             <span class="tasks">
+            {% for hometask in hometasks %}
+            {% if hometask.lesson == lesson %}
+             <form id="form_{{hometask.pk}}_0">
+                <input type="checkbox" class="done" id='check_{{ hometask.pk }}_0' onchange="Hometask({{ hometask.pk }},'_0')" name="check_{{ hometask.pk }}_0" value={{hometask.done}}>
+                <p class="hometask" id='label_{{ hometask.pk }}_0'>{{ hometask.hometask }}</p>
+                 <br>
+                     <input type="hidden" name="done_{{hometask.pk}}_0" id="done_{{hometask.pk}}_0" value="False">
+                 </form>
+            {% endif %}
+            {% endfor %}
+             </span>
+       </div>
+     <div class="col info">
+            <p class="type">{{ lesson.type }}</p>
+            <p class="classroom">{{ lesson.classroom }}</p>
+            <p class="teacher">{{ lesson.teachershort }}<span class="tooltiptext">{{ lesson.teacher }}</span></p>
+     </div>
+ </div>
+
+
+
+<div class="form-floating mb-3">
+        <div class="form-control" id="colorpicker">
+        {% for color in colors %}
+        {% if color == lesson.color %}
+        <input class='select-color' type="radio" name=color id= {{ color }} checked value={{ color }}>
+        {% else %}
+        <input class='select-color' type="radio" name=color id= {{ color }} value={{ color }} >
+        {% endif %}
+        <label for=color style='display:inline-block;background-color:{{ color }};;height:30px;width:30px;border-radius:40px;'>⠀</label>
+            {% if color == '#80FE6C' %}
+        <br>
+            <br>
+            {% endif %}
+{% endfor %}
+        </div>
+            <label for="colorpicker" class="colorpicker_title">Выбери цвет занятия:</label>
+               </div>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% if exam %}
+    {% if lesson %}
      <title>Редактировать занятие | Пара планер</title>
     {% else %}
     <title>Добавить занятие | Пара планер</title>
@@ -44,10 +44,12 @@
     <li><a href="/exams">Экзамены</a></li>
     <li><a href="/subjects">Предметы</a></li>
         </div>
-    <li class="dropdown" style="float:right;padding-right:20px;text-align:center;"><a>{% if user.first_name%}{{user.first_name}}{% else %}Твой профиль{% endif %}</a>
+    <li class="dropdown" style="float:right;padding-right:20px;text-align:center;"><a href="/settings">Настройки
     <div class="dropdown-content" style="position:fixed;right:20px;">
-        <a href="/settings">Настройки</a>
-        <a href="/accounts/login">Выйти</a>
+        <a href="{% url 'settings' unit='dates' %}">Календарь</a>
+        <a href="{% url 'settings' unit='schedule' %}">Звонки</a>
+        <a href="{% url 'settings' unit='misc' %}">Другое</a>
+        <a href='' onclick="Logout()">Выйти</a>
         </div>
     </li>
 </ul>
@@ -57,7 +59,7 @@
 {% block content %}
     <form method="POST" class="post-form" id='form' style='position:absolute;top:170px;left:60px;font-size:20px;' onsubmit="return CheckTime();">{% csrf_token %}
         <label for="date">Дата:</label>
-        <input type="date" name="date" value={{lesson.date|date:'Y-m-d'}}>
+        <input type="date" name="date" {% if lesson %} value={{lesson.date|date:'Y-m-d'}} {% elif date %} value={{date|date:'Y-m-d'}} {% endif %}>
         {{ form.as_p }}
         <p class="colorpicker_title">Выбери цвет занятия:</p>
         <div class="colorpicker" id="colorpicker">
@@ -133,7 +135,10 @@ errors++;};
 alert('Выберите дату');
 errors++;};
 if (errors>0) {return false};};
-
-
+function Logout(){
+var sure=confirm('Ты точно хочешь выйти?');
+if (sure){
+window.open('/accounts/login', "_self");}
+};
 </script>
 </html>
