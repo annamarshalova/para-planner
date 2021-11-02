@@ -1,6 +1,6 @@
 from django import forms
 from .models import Lesson, Hometask, Exam, Settings, Time, Subject, Plan
-from django_summernote.widgets import SummernoteWidget, SummernoteInplaceWidget
+
 from datetime import datetime
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
@@ -28,7 +28,7 @@ class LessonForm(forms.ModelForm):
         labels = {'select_subject': 'Предмет', 'title': "Название", 'time': 'Номер занятия',
                   'start_time': "Время начала", 'end_time': 'Время окончания', 'teacher': "Преподаватель",
                   'classroom': "Кабинет", 'link': "Ссылка", 'notes': "Заметки", 'type': "Тип занятия"}
-        widgets = {'notes': SummernoteWidget(attrs={'summernote': {'height': '400','lang': 'ru-RU'}})}
+        
 
         def __init__(self, *args, **kwargs):
             super(LessonForm, self).__init__(*args, **kwargs)
@@ -66,7 +66,7 @@ class TaskForm(forms.ModelForm):
         model = Hometask
         fields = ('lesson', 'hometask', 'notes')
         labels = {'lesson': 'Занятие', 'hometask': 'Задание', 'notes': 'Заметки'}
-        widgets = {'notes': SummernoteWidget(attrs={'summernote': {'height': '400','lang': 'ru-RU'}})}
+        
 
     def __init__(self, *args, **kwargs):
         super(TaskForm, self).__init__(*args, **kwargs)
@@ -92,7 +92,7 @@ class ExamForm(forms.ModelForm):
         fields = ('lesson', 'type', 'topic', 'time', 'start_time', 'notes')
         labels = {'lesson': 'Занятие', 'type': 'Вид работы', 'topic': 'Тема', 'time': 'Номер занятия',
                   'start_time': "Время начала", 'notes': 'Заметки'}
-        widgets = {'notes': SummernoteWidget(attrs={'summernote': {'lang': 'ru-RU'}})}
+        
 
     def __init__(self, *args, **kwargs):
         super(ExamForm, self).__init__(*args, **kwargs)
@@ -106,7 +106,7 @@ class PlanForm(forms.ModelForm):
         fields = ('name', 'type', 'start_time', 'end_time', 'place', 'notes')
         labels = {'name': "Название", 'start_time': "Время начала", 'end_time': 'Время окончания', 'notes': "Заметки",
                   'type': "Вид мероприятия", 'place': 'Место'}
-        widgets = {'notes': SummernoteWidget(attrs={'summernote': {'lang': 'ru-RU'}})}
+        
 
 
 class SignUpForm(UserCreationForm):

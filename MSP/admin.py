@@ -11,9 +11,5 @@ admin.site.register(Subject)
 admin.site.register(Plan)
 admin.site.register(Holiday)
 
-from django_summernote.admin import SummernoteModelAdmin
 
-class LessonAdmin(SummernoteModelAdmin):
-    summernote_fields = ('notes',)
-
-admin.site.register(Lesson,LessonAdmin)
+admin.site.register(Lesson)
