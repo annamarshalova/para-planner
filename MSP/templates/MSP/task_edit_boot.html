@@ -72,16 +72,10 @@
     <div id="back-shadow"></div>
 
  <ul id="menu-mobile" class="nav flex-column nav-pills" aria-orientation="vertical">
-  <a class="nav-link"  href="{% url 'timetable' pk=today.pk %}" aria-selected="true" >Расписание</a>
-  <a class="nav-link pseudo-dropdown"   href="{% url 'timetable' pk=today.pk %}" aria-selected="true">на день</a>
-  {% if today.date >= settings.start_date and today.date <= settings.end_date %} <a class="nav-link pseudo-dropdown"   aria-selected="false" href="{% url 'timetable_week' pk=today.pk %}">На неделю</a>
-  {% elif today.date < settings.start_date  %} <a class="nav-link pseudo-dropdown"   aria-selected="false" href="{% url 'timetable_week' pk=start_date.pk %}">На неделю</a>
-  {% elif today.date > settings.start_date  %} <a class="nav-link pseudo-dropdown"   aria-selected="false" href="{% url 'timetable_week' pk=end_date.pk %}">На неделю</a>
-  {% endif %}
-  {% if today.date >= settings.start_date and today.date <= settings.end_date %} <a class="nav-link pseudo-dropdown"   aria-selected="false" href="{% url 'timetable_month' pk=today.pk %}">На месяц</a>
-  {% elif today.date < settings.start_date  %} <a class="nav-link pseudo-dropdown"   aria-selected="false" href="{% url 'timetable_month' pk=start_date.pk %}">На месяц</a>
-  {% elif today.date > settings.start_date  %} <a class="nav-link pseudo-dropdown"   aria-selected="false" href="{% url 'timetable_month' pk=end_date.pk %}">На месяц</a>
-  {% endif %}
+  <a class="nav-link"  href="{% url 'open_timetable' %}" aria-selected="true" >Расписание</a>
+  <a class="nav-link pseudo-dropdown"   href="{% url 'open_timetable' %}" aria-selected="true">на день</a>
+  <a class="nav-link pseudo-dropdown"   aria-selected="false" href="{% url 'open_timetable_week'%}">на неделю</a>
+  <a class="nav-link pseudo-dropdown"   aria-selected="false" href="{% url 'open_timetable_month' %}">на месяц</a>
   <a class="nav-link active"  href="/tasks"    aria-selected="false" role="button">Задания</a>
   <a class="nav-link"  href="/exams"    aria-selected="false">Экзамены</a>
   <a class="nav-link"  href="/subjects" aria-selected="false">Предметы</a>
@@ -93,17 +87,11 @@
 {% else %}
 <ul id="menu" class="nav nav-pills " aria-orientation="horizontal">
     <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{% url 'timetable' pk=today.pk %}"  role="button">Расписание</a>
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{% url 'open_timetable'  %}"  role="button">Расписание</a>
         <div class="dropdown-menu" style="position:fixed;">
-            <a class="dropdown-item" href="{% url 'timetable' pk=today.pk %}" >На день</a>
-            {% if today.date >= settings.start_date and today.date <= settings.end_date %} <a class="dropdown-item" href="{% url 'timetable_week' pk=today.pk %}">На неделю</a>
-            {% elif today.date < settings.start_date  %} <a class="dropdown-item" href="{% url 'timetable_week' pk=start_date.pk %}">На неделю</a>
-            {% elif today.date > settings.start_date  %} <a class="dropdown-item" href="{% url 'timetable_week' pk=end_date.pk %}">На неделю</a>
-            {% endif %}
-            {% if today.date >= settings.start_date and today.date <= settings.end_date %} <a class="dropdown-item" href="{% url 'timetable_month' pk=today.pk %}">На месяц</a>
-            {% elif today.date < settings.start_date  %} <a class="dropdown-item" href="{% url 'timetable_month' pk=start_date.pk %}">На месяц</a>
-            {% elif today.date > settings.start_date  %} <a class="dropdown-item" href="{% url 'timetable_month' pk=end_date.pk %}">На месяц</a>
-            {% endif %}
+            <a class="dropdown-item" href="{% url 'open_timetable' %}" >На день</a>
+            <a class="dropdown-item" href="{% url 'open_timetable_week'%}">На неделю</a>
+            <a class="dropdown-item" href="{% url 'open_timetable_month'  %}">На месяц</a>
         </div>
     </li>
     <li class="nav-item"><a class="nav-link active"  href="/tasks">Задания</a></li>
@@ -131,7 +119,7 @@
 
 {% block content %}
     <form method="POST" class="post-form" id='form'>{% csrf_token %}
-        <div class="form-floating mb-3" onclick="Enable('lesson')">
+        <div class="form-floating mb-3" onclick="SwitchFields(['lesson-field'],['deadline_subject','deadline_date'])">
 <select name="lesson" class="form-select" id="lesson-field" class="form-control">
                 {% for option in form.lesson %}
                 <option>{{option}}</option>
@@ -139,7 +127,7 @@
 </select>
             <label for="lesson-field">Занятие</label></div>
 
-        <div class="form-floating mb-3"  onclick="Enable('subject')">
+        <div class="form-floating mb-3"  onclick="SwitchFields(['deadline_subject','deadline_date'],['lesson-field'])">
                 <select name="deadline_subject" class="form-select" id="deadline_subject" class="form-control" disabled>
                 <option value="" disabled selected>---------</option>
             {% for subject in subjects %}
@@ -154,7 +142,7 @@
                     </select>
                 <label for="deadline_subject">Предмет</label>
             </div>
-        <div class="form-floating mb-3" onclick="Enable('subject')">
+        <div class="form-floating mb-3" onclick="SwitchFields(['deadline_subject','deadline_date'],['lesson-field'])">
         <input type="date" name="deadline_date" id="deadline_date" class="form-control" disabled value="{{task.date|date:'Y-m-d'}}">
         <label for="deadline_date">Дата</label>
         </div>
@@ -171,6 +159,7 @@
         {% if task.pk %}
         <button class="btn btn-primary" onclick="DeleteObject({{task.pk}})">Удалить</button>
         {% endif %}
+    </form>
 {% endblock %}
 </div>
 </body>
@@ -189,16 +178,21 @@ menu.style.display='none';
 back.style.display='none';};
 };
 
+function SwitchFields(enabled,disabled){
+    enabled.forEach(Enable);
+    disabled.forEach(Disable);
+
+};
+
 function Enable(element){
-deadline_date=document.getElementById('deadline_date');
-deadline_subject=document.getElementById('deadline_subject');
-lesson=document.getElementById('lesson-field');
-if (element =='subject') {deadline_date.disabled=false;
-deadline_subject.disabled=false;
-lesson.disabled=true;}
-else {deadline_date.disabled=true;
-deadline_subject.disabled=true;
-lesson.disabled=false};};
+    e=document.getElementById(element);
+    e.disabled=false;
+};
+
+function Disable(element){
+    e=document.getElementById(element);
+    e.disabled=true;
+};
 
 function Logout(){
 var sure=confirm('Ты точно хочешь выйти?');

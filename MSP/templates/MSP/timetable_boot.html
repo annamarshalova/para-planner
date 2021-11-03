@@ -96,16 +96,10 @@
     <div id="back-shadow"></div>
 
  <ul id="menu-mobile" class="nav flex-column nav-pills" aria-orientation="vertical">
-  <a class="nav-link active"  href="{% url 'timetable' pk=today.pk %}" aria-selected="true" >Расписание</a>
-  <a class="nav-link pseudo-dropdown pseudo-active"   href="{% url 'timetable' pk=today.pk %}" aria-selected="true">на день</a>
-  {% if today.date >= settings.start_date and today.date <= settings.end_date %} <a class="nav-link pseudo-dropdown"   aria-selected="false" href="{% url 'timetable_week' pk=today.pk %}">На неделю</a>
-  {% elif today.date < settings.start_date  %} <a class="nav-link pseudo-dropdown"   aria-selected="false" href="{% url 'timetable_week' pk=start_date.pk %}">На неделю</a>
-  {% elif today.date > settings.start_date  %} <a class="nav-link pseudo-dropdown"   aria-selected="false" href="{% url 'timetable_week' pk=end_date.pk %}">На неделю</a>
-  {% endif %}
-  {% if today.date >= settings.start_date and today.date <= settings.end_date %} <a class="nav-link pseudo-dropdown"   aria-selected="false" href="{% url 'timetable_month' pk=today.pk %}">На месяц</a>
-  {% elif today.date < settings.start_date  %} <a class="nav-link pseudo-dropdown"   aria-selected="false" href="{% url 'timetable_month' pk=start_date.pk %}">На месяц</a>
-  {% elif today.date > settings.start_date  %} <a class="nav-link pseudo-dropdown"   aria-selected="false" href="{% url 'timetable_month' pk=end_date.pk %}">На месяц</a>
-  {% endif %}
+  <a class="nav-link active"  href="{% url 'open_timetable' %}" aria-selected="true" >Расписание</a>
+  <a class="nav-link pseudo-dropdown pseudo-active"   href="{% url 'open_timetable' %}" aria-selected="true">на день</a>
+  <a class="nav-link pseudo-dropdown"   aria-selected="false" href="{% url 'open_timetable_week'%}">на неделю</a>
+  <a class="nav-link pseudo-dropdown"   aria-selected="false" href="{% url 'open_timetable_month' %}">на месяц</a>
   <a class="nav-link"  href="/tasks"    aria-selected="false" role="button">Задания</a>
   <a class="nav-link"  href="/exams"    aria-selected="false">Экзамены</a>
   <a class="nav-link"  href="/subjects" aria-selected="false">Предметы</a>
@@ -117,17 +111,12 @@
 {% else %}
 <ul id="menu" class="nav nav-pills " aria-orientation="horizontal">
     <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle active" data-toggle="dropdown" href="{% url 'timetable' pk=today.pk %}"  role="button">Расписание</a>
+        <a class="nav-link dropdown-toggle active" data-toggle="dropdown" href="{% url 'open_timetable'  %}"  role="button">Расписание</a>
         <div class="dropdown-menu" style="position:fixed;">
-            <a class="dropdown-item" href="{% url 'timetable' pk=today.pk %}" >На день</a>
-            {% if today.date >= settings.start_date and today.date <= settings.end_date %} <a class="dropdown-item" href="{% url 'timetable_week' pk=today.pk %}">На неделю</a>
-            {% elif today.date < settings.start_date  %} <a class="dropdown-item" href="{% url 'timetable_week' pk=start_date.pk %}">На неделю</a>
-            {% elif today.date > settings.start_date  %} <a class="dropdown-item" href="{% url 'timetable_week' pk=end_date.pk %}">На неделю</a>
-            {% endif %}
-            {% if today.date >= settings.start_date and today.date <= settings.end_date %} <a class="dropdown-item" href="{% url 'timetable_month' pk=today.pk %}">На месяц</a>
-            {% elif today.date < settings.start_date  %} <a class="dropdown-item" href="{% url 'timetable_month' pk=start_date.pk %}">На месяц</a>
-            {% elif today.date > settings.start_date  %} <a class="dropdown-item" href="{% url 'timetable_month' pk=end_date.pk %}">На месяц</a>
-            {% endif %}
+            <a class="dropdown-item" href="{% url 'open_timetable' %}" >На день</a>
+            <a class="dropdown-item" href="{% url 'open_timetable_week'%}">На неделю</a>
+            <a class="dropdown-item" href="{% url 'open_timetable_month'  %}">На месяц</a>
+
         </div>
     </li>
     <li class="nav-item"><a class="nav-link" href="/tasks">Задания</a></li>

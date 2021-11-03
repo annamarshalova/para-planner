@@ -1,8 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="72da8ece-e22a-44b2-a99c-83318c3eb1a1" name="Default Changelist" comment="bootstrap added">
+    <list default="true" id="72da8ece-e22a-44b2-a99c-83318c3eb1a1" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modern_student_planner.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modern_student_planner.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_02_11_2021_22_57__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_02_11_2021_22_57__Default_Changelist_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0001_initial.py" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/migrations/0001_initial.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0002_auto_20210301_1902.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0003_auto_20210301_1926.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0004_hometask_identifier.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0005_auto_20210304_2147.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0006_lesson_teachershort.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0007_auto_20210310_2102.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0008_auto_20210311_1821.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0009_auto_20210311_1904.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0010_auto_20210311_2015.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0011_lesson_weekday.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0012_lesson_time.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0013_auto_20210404_1747.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0014_auto_20210404_1749.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0015_image_path.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0016_auto_20210404_2013.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0017_remove_time_settings.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0018_day.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0019_auto_20210406_1612.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0020_auto_20210406_1619.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0021_auto_20210406_1636.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0022_auto_20210407_2333.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0023_auto_20210413_2041.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0024_auto_20210413_2337.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0025_auto_20210414_1539.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0026_auto_20210414_1849.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0027_hometask_weekday.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0028_auto_20210415_2004.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0029_hometask_select_subject.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0030_auto_20210420_2146.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0031_auto_20210420_2206.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0032_auto_20210421_2137.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0033_auto_20210423_1957.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0034_exam_type.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0035_auto_20210423_2113.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0036_auto_20210423_2301.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0037_auto_20210424_2301.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0038_auto_20210425_1430.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0039_auto_20210426_1603.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0040_auto_20210426_1605.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0041_plan_color.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0042_auto_20210501_1727.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0043_auto_20210505_1539.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0044_auto_20210513_1638.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0045_auto_20210513_1649.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0046_auto_20210621_0037.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0047_auto_20210624_1846.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0048_settings_homepage.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0049_auto_20210704_0302.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0050_settings_holidays.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0051_auto_20210704_1857.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/migrations/0052_auto_20210704_1858.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/exams_boot.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/exams_boot.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/lesson_edit_boot.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/lesson_edit_boot.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/settings_boot.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/settings_boot.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/subjects_boot.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/subjects_boot.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/task_edit_boot.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/task_edit_boot.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/task_edit_lesson_boot.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/task_edit_lesson_boot.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/tasks_boot.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/tasks_boot.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/timetable_boot.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/timetable_boot.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,23 +91,36 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="PerforceDirect.Settings">
+    <option name="ENABLED" value="false" />
+  </component>
   <component name="ProjectId" id="1ojwDGnd8sfaljCKcLW3gYuHzMx" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
     <property name="DefaultHtmlFileTemplate" value="HTML File" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../entity_linking" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/MSP/templates/MSP" />
+    <property name="node.js.detected.package.eslint" value="true" />
+    <property name="node.js.detected.package.tslint" value="true" />
+    <property name="node.js.selected.package.eslint" value="(autodetect)" />
+    <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\Анна\PycharmProjects\modern_student_planner\MSP\templates\MSP" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Анна\PycharmProjects\para-planner\MSP\templates\MSP" />
       <recent name="C:\Users\Анна\PycharmProjects\modern_student_planner\MSP\templates\MSP" />
       <recent name="C:\Users\Анна\PycharmProjects\modern_student_planner\MSP\templates\registration" />
       <recent name="C:\Users\Анна\PycharmProjects\modern_student_planner\MSP" />
       <recent name="C:\Users\Анна\PycharmProjects\modern_student_planner\MSP\static\images" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Анна\PycharmProjects\modern_student_planner\MSP\templates\MSP" />
     </key>
   </component>
   <component name="RunManager" selected="Python.sort">
@@ -182,6 +266,7 @@
       </list>
     </recent_temporary>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="SvnConfiguration">
     <configuration />
   </component>
@@ -192,8 +277,14 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1613813185638</updated>
+      <workItem from="1635923927725" duration="4000" />
+      <workItem from="1635925622125" duration="1441000" />
+      <workItem from="1635941878348" duration="15136000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="UnknownFeatures">
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.css" />

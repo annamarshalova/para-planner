@@ -4,7 +4,6 @@ from django.utils import timezone
 from datetime import timedelta, time, date, datetime
 from django.contrib.auth.models import User
 from django.db import models
-from osm_field.fields import OSMField, LatitudeField, LongitudeField
 from jsonfield import JSONField
 import copy
 
@@ -175,9 +174,6 @@ class Plan(models.Model):
     start_time = models.TimeField(null=True, blank=True)
     end_time = models.TimeField(null=True, blank=True)
     place = models.CharField(max_length=500, blank=True, default='')
-    location=OSMField(null=True)
-    location_lat=LatitudeField(null=True)
-    location_lon=LongitudeField(null=True)
     color = models.CharField(max_length=200, default='#FF81F3')
 
     def __str__(self):
