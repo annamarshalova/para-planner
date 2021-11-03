@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    {% if exam %}
+     <title>Редактировать экзамен | Пара планер</title>
+    {% else %}
+    <title>Добавить экзамен | Пара планер</title>
+    {% endif %}
+    <link rel="shortcut icon" href="/static/images/logo.ico" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <style>
+        body {background-color:#F6F5F5; font-family: 'Montserrat', sans-serif; font-weight:light; color:black; }
+        .subject {box-sizing: content-box;}
+        .nav-pills .nav-link.active {background-color:{{settings.theme}};color:black;}
+        .nav-pills .nav-link.active:hover {color:black;}
+        .nav-pills .nav-link{color:black;}
+        .nav-pills .nav-link:hover {color:{{settings.theme}};}
+        .nav-pills .nav-item:hover  .dropdown-menu{display:block;}
+        .dropdown-item:hover {background-color:{{settings.sub_color}};}
+        #menu {position:fixed;width:100%;background-color:#F6F5F5;padding-bottom:0px;};
+        #menu .logo {display:none;right:10px;}
+
+        .navbar{z-index:103;width:100%;position:fixed;background-color:#F6F5F5;}
+        #menu-mobile {z-index:102;height:100%;background-color:#F6F5F5;display:none;box-shadow: 0px 0.5px 0.5px 0px;width:60%;padding-top:60px;position:fixed;top:0px;}
+        #menu-mobile .nav-link{background-color:white;margin:5px;}
+        #menu-mobile .active{background-color:{{settings.theme}};}
+        #menu-mobile .nav-link.pseudo-dropdown {font-size:90%;color:#595959;height:35px;vertical-align:middle;background-color:#F6F5F5;}
+        #menu-mobile .nav-link.pseudo-dropdown.pseudo-active {color:{{settings.theme}};font-weight:bold;}
+        #back-shadow {display:none;z-index:101;background-color:black;opacity:0.3;height:1000%;position:absolute;width:100%;opacity:0.3;top:0px;left:0px;}
+        #side-menu {position:fixed;border-radius-bottom:10px;height:100%;width:100%;}
+        .navbar-toggler {z-index:1000;}
+        .logo {font-weight:bold;}
+        .navbar .logo {position:fixed;z-index:-2;width:100%;text-align:center;}
+
+
+        .content{position:absolute;width:90%;top:10%;left:2%;z-index:-1;}
+        .pagename {font-weight:bold;top:10%;}
+        #form {width:100%;max-width:600px;position:absolute;margin-top:30px;}
+        .btn {background-color:{{settings.theme}};border:none;color:black;}
+        .btn:hover {background-color:{{settings.sub_color}};}
+
+        </style>
+</head>
+<body>
+{% if mobile %}
+
+ <nav class="navbar navbar-light" >
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon" onclick="ShowMobileMenu()"></span>
+    </button>
+     <span class="logo"><img src="/static/images/logo.svg" style="width:50px;margin-left:10px;">пара.планер</span>
+  </nav>
+    <div id="back-shadow"></div>
+
+ <ul id="menu-mobile" class="nav flex-column nav-pills" aria-orientation="vertical">
+  <a class="nav-link"  href="{% url 'open_timetable' %}" aria-selected="true" >Расписание</a>
+  <a class="nav-link pseudo-dropdown"   href="{% url 'open_timetable' %}" aria-selected="true">на день</a>
+  <a class="nav-link pseudo-dropdown"   aria-selected="false" href="{% url 'open_timetable_week'%}">на неделю</a>
+  <a class="nav-link pseudo-dropdown"   aria-selected="false" href="{% url 'open_timetable_month' %}">на месяц</a>
+  <a class="nav-link"  href="/tasks"    aria-selected="false" role="button">Задания</a>
+  <a class="nav-link active"  href="/exams"    aria-selected="false">Экзамены</a>
+  <a class="nav-link"  href="/subjects" aria-selected="false">Предметы</a>
+  <a class="nav-link"  href="/settings" aria-selected="false">Настройки</a>
+</ul>
+
+
+
+{% else %}
+<ul id="menu" class="nav nav-pills " aria-orientation="horizontal">
+    <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{% url 'open_timetable' pk=today.pk %}"  role="button">Расписание</a>
+        <div class="dropdown-menu" style="position:fixed;">
+            <a class="dropdown-item" href="{% url 'open_timetable' %}" >На день</a>
+            <a class="dropdown-item" href="{% url 'open_timetable_week'%}">На неделю</a>
+            <a class="dropdown-item" href="{% url 'open_timetable_month' pk=today.pk %}">На месяц</a>
+        </div>
+    </li>
+    <li class="nav-item"><a class="nav-link" href="/tasks">Задания</a></li>
+    <li class="nav-item active"><a class="nav-link" href="/exams">Экзамены</a></li>
+    <li class="nav-item"><a class="nav-link" href="/subjects">Предметы</a></li>
+
+    <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="/settings">Настройки</a>
+    <div class="dropdown-menu" style="position:fixed;">
+        <a class="dropdown-item" href="{% url 'settings' unit='dates' %}">Календарь</a>
+        <a class="dropdown-item" href="{% url 'settings' unit='schedule' %}">Звонки</a>
+        <a class="dropdown-item" href="{% url 'settings' unit='misc' %}">Другое</a>
+        <a class="dropdown-item" href='' onclick="Logout()">Выйти</a>
+        </div>
+    </li>
+    <span class="logo"><img src="/static/images/logo.svg" style="width:50px;margin-left:10px;">пара.планер</span>
+</ul>
+{% endif %}
+<div class="content">
+    <p class="h1 pagename">
+        {% if exam %}Редактировать{% else %}Добавить {% endif %}
+        {% if examination or exam.type == 'экзамен' %} экзамен {% else %} контрольную {% endif %}</p>
+
+{% block content %}
+    <form method="POST" class="post-form" id='form' onsubmit="return CheckTime();">{% csrf_token %}
+         <div class="form-floating mb-3" onclick="SwitchFields(['lesson-field'],['deadline_subject','deadline_date'])">
+        <select name="lesson" class="form-select" id="lesson-field" class="form-control"
+        {% if exam.type == "экзамен" or examination %} disabled {% endif %}>
+                {% for option in form.lesson %}
+                <option>{{option}}</option>
+                {% endfor %}
+</select>
+            <label for="lesson-field">Занятие</label></div>
+        <div class="form-floating mb-3"  onclick="SwitchFields(['deadline_subject','deadline_date'],['lesson-field'])">
+                <select name="deadline_subject" class="form-select" id="deadline_subject" class="form-control"
+                        {% if exam.type == 'контрольная' or not examination  %} disabled {% endif %}>
+                <option value="" disabled selected>---------</option>
+            {% for subject in subjects %}
+            {% if task.select_subject == subject %}
+            <option value={{subject.pk}} selected>{{subject}}</option>
+            {% elif next == subject %}
+            <option value={{subject.pk}} selected>{{subject}}</option>
+            {% else %}
+            <option value={{subject.pk}}>{{subject}}</option>
+            {% endif %}
+            {% endfor %}
+                    </select>
+                <label for="deadline_subject">Предмет</label>
+            </div>
+        <div class="form-floating mb-3" onclick="SwitchFields(['deadline_subject','deadline_date'],['lesson-field'])">
+        <input type="date" name="deadline_date" id="deadline_date" class="form-control"
+        value="{{exam.date|date:'Y-m-d'}}"
+         {% if exam.type == "контрольная" or not examination %} disabled {% endif %} >
+        <label for="deadline_date">Дата</label>
+        </div>
+
+            {% for field in form %}
+          {% if field.name != 'select_subject' and field.name != 'lesson' %}
+        <div class="form-floating mb-3"
+        {% if field.name == 'time' %} onclick="SwitchFields(['time-field'],['start_time-field'])"
+       {% elif field.name == 'start_time' %} onclick="SwitchFields(['start_time-field'],['time-field'])"{% endif %}>
+      <input  {% if "_time" in field.name %} type="time" disabled {% else %} type="{{field.field.widget.input_type}}" {% endif %}
+            class="form-control" id="{{field.name}}-field" name="{{field.name}}"
+            {% if field.initial %} value="{{field.initial}}" {% endif %}>
+  <label for="{{field.name}}-field">{{field.label_tag}}</label>
+        </div>
+        {% endif %}
+        {% endfor %}
+
+ <button type="submit" class="btn btn-primary">Сохранить</button>
+        {% if lesson.pk %}
+        <button class="btn btn-primary" onclick="DeleteObject({{lesson.pk}})">Удалить</button>
+        {% endif %}
+    </form>
+{% endblock %}
+</div>
+<script>
+
+
+function ShowMobileMenu(){
+menu=document.getElementById('menu-mobile');
+back=document.getElementById('back-shadow');
+logo=document.getElementById('logo');
+if (menu.style.display =='none'){
+menu.style.display='block';
+back.style.display='block';
+}
+else {
+menu.style.display='none';
+back.style.display='none';};
+};
+
+function SwitchFields(enabled,disabled){
+    enabled.forEach(Enable);
+    disabled.forEach(Disable);
+
+};
+
+function Enable(element){
+    e=document.getElementById(element);
+    e.disabled=false;
+};
+
+function Disable(element){
+    e=document.getElementById(element);
+    e.disabled=true;
+};
+
+
+function Logout(){
+var sure=confirm('Ты точно хочешь выйти?');
+if (sure){
+window.open('/accounts/login', "_self");};
+};
+
+function DeleteObject(s){
+var sure=confirm('Ты точно хочешь удалить этот предмет?');
+if (sure){
+{% if lesson.pk %}
+window.open("{% url 'lesson_delete' pk=lesson.pk page=page fix_day=fix_day %}"){% endif %}
+};
+};
+function Logout(){
+var sure=confirm('Ты точно хочешь выйти?');
+if (sure){
+window.open('/accounts/login', "_self");}
+};
+$(function () {
+$('[data-toggle="tooltip"]').tooltip()
+});
+</script>
+</body>
+</html>
