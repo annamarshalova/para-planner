@@ -1,0 +1,164 @@
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"72da8ece-e22a-44b2-a99c-83318c3eb1a1\" name=\"Default Changelist\" comment=\"\">\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/MSP/forms.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/MSP/forms.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/MSP/templates/MSP/exam_edit.html\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/MSP/templates/MSP/exam_edit.html\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/MSP/templates/MSP/exams.html\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/MSP/templates/MSP/exams.html\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/MSP/templates/MSP/lesson_edit.html\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/MSP/templates/MSP/lesson_edit.html\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/MSP/templates/MSP/plan_edit.html\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/MSP/templates/MSP/plan_edit.html\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/MSP/templates/MSP/plans.html\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/MSP/templates/MSP/plans.html\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/MSP/templates/MSP/settings.html\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/MSP/templates/MSP/settings.html\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/MSP/templates/MSP/subject_edit.html\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/MSP/templates/MSP/subject_edit.html\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/MSP/templates/MSP/subjects.html\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/MSP/templates/MSP/subjects.html\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/MSP/templates/MSP/task_edit.html\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/MSP/templates/MSP/task_edit.html\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/MSP/templates/MSP/task_edit_lesson.html\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/MSP/templates/MSP/task_edit_lesson.html\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/MSP/templates/MSP/tasks.html\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/MSP/templates/MSP/tasks.html\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/MSP/templates/MSP/timetable.html\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/MSP/templates/MSP/timetable.html\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/MSP/templates/MSP/timetable_month.html\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/MSP/templates/MSP/timetable_month.html\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/MSP/templates/MSP/timetable_week.html\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/MSP/templates/MSP/timetable_week.html\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/MSP/templates/extra.html\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/MSP/templates/extra.html\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/MSP/urls.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/MSP/urls.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/MSP/views.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/MSP/views.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/db.sqlite3\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/db.sqlite3\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/mysite/settings.py\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/mysite/settings.py\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"EXCLUDED_CONVERTED_TO_IGNORED\" value=\"true\" />\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Python Script\" />\r\n        <option value=\"HTML File\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"ProjectId\" id=\"1ojwDGnd8sfaljCKcLW3gYuHzMx\" />\r\n  <component name=\"ProjectLevelVcsManager\" settingsEditedManually=\"true\" />\r\n  <component name=\"PropertiesComponent\">\r\n    <property name=\"DefaultHtmlFileTemplate\" value=\"HTML File\" />\r\n    <property name=\"SHARE_PROJECT_CONFIGURATION_FILES\" value=\"true\" />\r\n    <property name=\"last_opened_file_path\" value=\"$PROJECT_DIR$/../entity_linking\" />\r\n    <property name=\"settings.editor.selected.configurable\" value=\"com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable\" />\r\n  </component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"MoveFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Users\\Анна\\PycharmProjects\\modern_student_planner\\MSP\\templates\\MSP\" />\r\n    </key>\r\n    <key name=\"CopyFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Users\\Анна\\PycharmProjects\\modern_student_planner\\MSP\\templates\\MSP\" />\r\n      <recent name=\"C:\\Users\\Анна\\PycharmProjects\\modern_student_planner\\MSP\\templates\\registration\" />\r\n      <recent name=\"C:\\Users\\Анна\\PycharmProjects\\modern_student_planner\\MSP\" />\r\n      <recent name=\"C:\\Users\\Анна\\PycharmProjects\\modern_student_planner\\MSP\\static\\images\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"RunDashboard\">\r\n    <option name=\"ruleStates\">\r\n      <list>\r\n        <RuleState>\r\n          <option name=\"name\" value=\"ConfigurationTypeDashboardGroupingRule\" />\r\n        </RuleState>\r\n        <RuleState>\r\n          <option name=\"name\" value=\"StatusDashboardGroupingRule\" />\r\n        </RuleState>\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"RunManager\" selected=\"Python.sort\">\r\n    <configuration name=\"nsu_timetable (1)\" type=\"PythonConfigurationType\" factoryName=\"Python\" temporary=\"true\">\r\n      <module name=\"modern_student_planner\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"PARENT_ENVS\" value=\"true\" />\r\n      <envs>\r\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\r\n      </envs>\r\n      <option name=\"SDK_HOME\" value=\"\" />\r\n      <option name=\"WORKING_DIRECTORY\" value=\"$PROJECT_DIR$/MSP\" />\r\n      <option name=\"IS_MODULE_SDK\" value=\"true\" />\r\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\r\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\r\n      <option name=\"SCRIPT_NAME\" value=\"$PROJECT_DIR$/MSP/nsu_timetable.py\" />\r\n      <option name=\"PARAMETERS\" value=\"\" />\r\n      <option name=\"SHOW_COMMAND_LINE\" value=\"false\" />\r\n      <option name=\"EMULATE_TERMINAL\" value=\"false\" />\r\n      <option name=\"MODULE_MODE\" value=\"false\" />\r\n      <option name=\"REDIRECT_INPUT\" value=\"false\" />\r\n      <option name=\"INPUT_FILE\" value=\"\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration name=\"nsu_timetable_parser\" type=\"PythonConfigurationType\" factoryName=\"Python\" temporary=\"true\">\r\n      <module name=\"modern_student_planner\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"PARENT_ENVS\" value=\"true\" />\r\n      <envs>\r\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\r\n      </envs>\r\n      <option name=\"SDK_HOME\" value=\"\" />\r\n      <option name=\"WORKING_DIRECTORY\" value=\"$PROJECT_DIR$/MSP\" />\r\n      <option name=\"IS_MODULE_SDK\" value=\"true\" />\r\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\r\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\r\n      <option name=\"SCRIPT_NAME\" value=\"$PROJECT_DIR$/MSP/nsu_timetable_parser.py\" />\r\n      <option name=\"PARAMETERS\" value=\"\" />\r\n      <option name=\"SHOW_COMMAND_LINE\" value=\"false\" />\r\n      <option name=\"EMULATE_TERMINAL\" value=\"false\" />\r\n      <option name=\"MODULE_MODE\" value=\"false\" />\r\n      <option name=\"REDIRECT_INPUT\" value=\"false\" />\r\n      <option name=\"INPUT_FILE\" value=\"\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration name=\"runserver\" type=\"PythonConfigurationType\" factoryName=\"Python\">\r\n      <module name=\"modern_student_planner\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"PARENT_ENVS\" value=\"true\" />\r\n      <envs>\r\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\r\n      </envs>\r\n      <option name=\"SDK_HOME\" value=\"\" />\r\n      <option name=\"WORKING_DIRECTORY\" value=\"$PROJECT_DIR$/myvenv/Lib/site-packages/django/core/management/commands\" />\r\n      <option name=\"IS_MODULE_SDK\" value=\"true\" />\r\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\r\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\r\n      <option name=\"SCRIPT_NAME\" value=\"$PROJECT_DIR$/myvenv/Lib/site-packages/django/core/management/commands/runserver.py\" />\r\n      <option name=\"PARAMETERS\" value=\"\" />\r\n      <option name=\"SHOW_COMMAND_LINE\" value=\"false\" />\r\n      <option name=\"EMULATE_TERMINAL\" value=\"false\" />\r\n      <option name=\"MODULE_MODE\" value=\"false\" />\r\n      <option name=\"REDIRECT_INPUT\" value=\"false\" />\r\n      <option name=\"INPUT_FILE\" value=\"\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration name=\"sort\" type=\"PythonConfigurationType\" factoryName=\"Python\" temporary=\"true\">\r\n      <module name=\"modern_student_planner\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"PARENT_ENVS\" value=\"true\" />\r\n      <envs>\r\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\r\n      </envs>\r\n      <option name=\"SDK_HOME\" value=\"\" />\r\n      <option name=\"WORKING_DIRECTORY\" value=\"$PROJECT_DIR$/MSP\" />\r\n      <option name=\"IS_MODULE_SDK\" value=\"true\" />\r\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\r\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\r\n      <option name=\"SCRIPT_NAME\" value=\"$PROJECT_DIR$/MSP/sort.py\" />\r\n      <option name=\"PARAMETERS\" value=\"\" />\r\n      <option name=\"SHOW_COMMAND_LINE\" value=\"false\" />\r\n      <option name=\"EMULATE_TERMINAL\" value=\"false\" />\r\n      <option name=\"MODULE_MODE\" value=\"false\" />\r\n      <option name=\"REDIRECT_INPUT\" value=\"false\" />\r\n      <option name=\"INPUT_FILE\" value=\"\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration name=\"syllables\" type=\"PythonConfigurationType\" factoryName=\"Python\" temporary=\"true\">\r\n      <module name=\"modern_student_planner\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"PARENT_ENVS\" value=\"true\" />\r\n      <envs>\r\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\r\n      </envs>\r\n      <option name=\"SDK_HOME\" value=\"\" />\r\n      <option name=\"WORKING_DIRECTORY\" value=\"$PROJECT_DIR$/MSP\" />\r\n      <option name=\"IS_MODULE_SDK\" value=\"true\" />\r\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\r\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\r\n      <option name=\"SCRIPT_NAME\" value=\"$PROJECT_DIR$/MSP/syllables.py\" />\r\n      <option name=\"PARAMETERS\" value=\"\" />\r\n      <option name=\"SHOW_COMMAND_LINE\" value=\"false\" />\r\n      <option name=\"EMULATE_TERMINAL\" value=\"false\" />\r\n      <option name=\"MODULE_MODE\" value=\"false\" />\r\n      <option name=\"REDIRECT_INPUT\" value=\"false\" />\r\n      <option name=\"INPUT_FILE\" value=\"\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <configuration name=\"universities_names_parser\" type=\"PythonConfigurationType\" factoryName=\"Python\" temporary=\"true\">\r\n      <module name=\"modern_student_planner\" />\r\n      <option name=\"INTERPRETER_OPTIONS\" value=\"\" />\r\n      <option name=\"PARENT_ENVS\" value=\"true\" />\r\n      <envs>\r\n        <env name=\"PYTHONUNBUFFERED\" value=\"1\" />\r\n      </envs>\r\n      <option name=\"SDK_HOME\" value=\"\" />\r\n      <option name=\"WORKING_DIRECTORY\" value=\"$PROJECT_DIR$/MSP\" />\r\n      <option name=\"IS_MODULE_SDK\" value=\"true\" />\r\n      <option name=\"ADD_CONTENT_ROOTS\" value=\"true\" />\r\n      <option name=\"ADD_SOURCE_ROOTS\" value=\"true\" />\r\n      <option name=\"SCRIPT_NAME\" value=\"$PROJECT_DIR$/MSP/universities_names_parser.py\" />\r\n      <option name=\"PARAMETERS\" value=\"\" />\r\n      <option name=\"SHOW_COMMAND_LINE\" value=\"false\" />\r\n      <option name=\"EMULATE_TERMINAL\" value=\"false\" />\r\n      <option name=\"MODULE_MODE\" value=\"false\" />\r\n      <option name=\"REDIRECT_INPUT\" value=\"false\" />\r\n      <option name=\"INPUT_FILE\" value=\"\" />\r\n      <method v=\"2\" />\r\n    </configuration>\r\n    <recent_temporary>\r\n      <list>\r\n        <item itemvalue=\"Python.sort\" />\r\n        <item itemvalue=\"Python.universities_names_parser\" />\r\n        <item itemvalue=\"Python.syllables\" />\r\n        <item itemvalue=\"Python.nsu_timetable_parser\" />\r\n        <item itemvalue=\"Python.nsu_timetable (1)\" />\r\n      </list>\r\n    </recent_temporary>\r\n  </component>\r\n  <component name=\"SvnConfiguration\">\r\n    <configuration />\r\n  </component>\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"72da8ece-e22a-44b2-a99c-83318c3eb1a1\" name=\"Default Changelist\" comment=\"\" />\r\n      <created>1613813185638</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1613813185638</updated>\r\n    </task>\r\n    <servers />\r\n  </component>\r\n  <component name=\"UnknownFeatures\">\r\n    <option featureType=\"com.intellij.fileTypeFactory\" implementationName=\"*.css\" />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State>\r\n              <option name=\"COLUMN_ORDER\" />\r\n            </State>\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"XDebuggerManager\">\r\n    <breakpoint-manager>\r\n      <breakpoints>\r\n        <line-breakpoint enabled=\"true\" suspend=\"THREAD\" type=\"python-line\">\r\n          <url>file://$PROJECT_DIR$/MSP/sort.py</url>\r\n          <line>6</line>\r\n          <option name=\"timeStamp\" value=\"1\" />\r\n        </line-breakpoint>\r\n      </breakpoints>\r\n    </breakpoint-manager>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	
++++ b/.idea/workspace.xml	
+@@ -3,28 +3,7 @@
+   <component name="ChangeListManager">
+     <list default="true" id="72da8ece-e22a-44b2-a99c-83318c3eb1a1" name="Default Changelist" comment="">
+       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/MSP/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/forms.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/exam_edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/exam_edit.html" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/exams.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/exams.html" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/lesson_edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/lesson_edit.html" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/plan_edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/plan_edit.html" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/plans.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/plans.html" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/settings.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/settings.html" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/subject_edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/subject_edit.html" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/subjects.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/subjects.html" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/task_edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/task_edit.html" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/task_edit_lesson.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/task_edit_lesson.html" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/tasks.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/tasks.html" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/timetable.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/timetable.html" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/timetable_month.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/timetable_month.html" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/timetable_week.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/timetable_week.html" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/MSP/templates/extra.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/extra.html" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/MSP/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/urls.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/MSP/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/views.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/mysite/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/mysite/settings.py" afterDir="false" />
+     </list>
+-    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+@@ -43,11 +22,18 @@
+   </component>
+   <component name="ProjectId" id="1ojwDGnd8sfaljCKcLW3gYuHzMx" />
+   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
++  <component name="ProjectViewState">
++    <option name="hideEmptyMiddlePackages" value="true" />
++    <option name="showLibraryContents" value="true" />
++  </component>
+   <component name="PropertiesComponent">
+     <property name="DefaultHtmlFileTemplate" value="HTML File" />
++    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
++    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
++    <property name="WebServerToolWindowFactoryState" value="false" />
+     <property name="last_opened_file_path" value="$PROJECT_DIR$/../entity_linking" />
+-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
++    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
+   </component>
+   <component name="RecentsManager">
+     <key name="MoveFile.RECENT_KEYS">
+@@ -59,18 +45,6 @@
+       <recent name="C:\Users\Анна\PycharmProjects\modern_student_planner\MSP" />
+       <recent name="C:\Users\Анна\PycharmProjects\modern_student_planner\MSP\static\images" />
+     </key>
+-  </component>
+-  <component name="RunDashboard">
+-    <option name="ruleStates">
+-      <list>
+-        <RuleState>
+-          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+-        </RuleState>
+-        <RuleState>
+-          <option name="name" value="StatusDashboardGroupingRule" />
+-        </RuleState>
+-      </list>
+-    </option>
+   </component>
+   <component name="RunManager" selected="Python.sort">
+     <configuration name="nsu_timetable (1)" type="PythonConfigurationType" factoryName="Python" temporary="true">
+@@ -85,6 +59,7 @@
+       <option name="IS_MODULE_SDK" value="true" />
+       <option name="ADD_CONTENT_ROOTS" value="true" />
+       <option name="ADD_SOURCE_ROOTS" value="true" />
++      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/MSP/nsu_timetable.py" />
+       <option name="PARAMETERS" value="" />
+       <option name="SHOW_COMMAND_LINE" value="false" />
+@@ -106,6 +81,7 @@
+       <option name="IS_MODULE_SDK" value="true" />
+       <option name="ADD_CONTENT_ROOTS" value="true" />
+       <option name="ADD_SOURCE_ROOTS" value="true" />
++      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/MSP/nsu_timetable_parser.py" />
+       <option name="PARAMETERS" value="" />
+       <option name="SHOW_COMMAND_LINE" value="false" />
+@@ -127,6 +103,7 @@
+       <option name="IS_MODULE_SDK" value="true" />
+       <option name="ADD_CONTENT_ROOTS" value="true" />
+       <option name="ADD_SOURCE_ROOTS" value="true" />
++      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/myvenv/Lib/site-packages/django/core/management/commands/runserver.py" />
+       <option name="PARAMETERS" value="" />
+       <option name="SHOW_COMMAND_LINE" value="false" />
+@@ -148,6 +125,7 @@
+       <option name="IS_MODULE_SDK" value="true" />
+       <option name="ADD_CONTENT_ROOTS" value="true" />
+       <option name="ADD_SOURCE_ROOTS" value="true" />
++      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/MSP/sort.py" />
+       <option name="PARAMETERS" value="" />
+       <option name="SHOW_COMMAND_LINE" value="false" />
+@@ -169,6 +147,7 @@
+       <option name="IS_MODULE_SDK" value="true" />
+       <option name="ADD_CONTENT_ROOTS" value="true" />
+       <option name="ADD_SOURCE_ROOTS" value="true" />
++      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/MSP/syllables.py" />
+       <option name="PARAMETERS" value="" />
+       <option name="SHOW_COMMAND_LINE" value="false" />
+@@ -190,6 +169,7 @@
+       <option name="IS_MODULE_SDK" value="true" />
+       <option name="ADD_CONTENT_ROOTS" value="true" />
+       <option name="ADD_SOURCE_ROOTS" value="true" />
++      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/MSP/universities_names_parser.py" />
+       <option name="PARAMETERS" value="" />
+       <option name="SHOW_COMMAND_LINE" value="false" />
+@@ -209,6 +189,7 @@
+       </list>
+     </recent_temporary>
+   </component>
++  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+   <component name="SvnConfiguration">
+     <configuration />
+   </component>
+@@ -219,9 +200,13 @@
+       <option name="number" value="Default" />
+       <option name="presentableId" value="Default" />
+       <updated>1613813185638</updated>
++      <workItem from="1635869106347" duration="466000" />
+     </task>
+     <servers />
+   </component>
++  <component name="TypeScriptGeneratedFilesManager">
++    <option name="version" value="3" />
++  </component>
+   <component name="UnknownFeatures">
+     <option featureType="com.intellij.fileTypeFactory" implementationName="*.css" />
+   </component>
+@@ -230,13 +215,12 @@
+       <map>
+         <entry key="MAIN">
+           <value>
+-            <State>
+-              <option name="COLUMN_ORDER" />
+-            </State>
++            <State />
+           </value>
+         </entry>
+       </map>
+     </option>
++    <option name="oldMeFiltersMigrated" value="true" />
+   </component>
+   <component name="XDebuggerManager">
+     <breakpoint-manager>
