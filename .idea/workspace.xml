@@ -5,12 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="72da8ece-e22a-44b2-a99c-83318c3eb1a1" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modern_student_planner.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modern_student_planner.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/exams_boot.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/exams_boot.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/settings_boot.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/settings_boot.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/timetable_week.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/timetable_week.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MSP/templates/extra.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/extra.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mysite/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/mysite/settings.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -226,7 +228,7 @@
       <workItem from="1636381953263" duration="1281000" />
       <workItem from="1636395691507" duration="58000" />
       <workItem from="1636397404330" duration="1129000" />
-      <workItem from="1636473826775" duration="4686000" />
+      <workItem from="1636473826775" duration="16462000" />
     </task>
     <task id="LOCAL-00001" summary="03.11: exam form, subject form, settings, menu timetable links">
       <created>1635960151256</created>
@@ -242,7 +244,14 @@
       <option name="project" value="LOCAL" />
       <updated>1635960197252</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="03.11: settings">
+      <created>1636478623379</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1636478623379</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -265,7 +274,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="03.11: exam form, subject form, settings, menu timetable links" />
-    <option name="LAST_COMMIT_MESSAGE" value="03.11: exam form, subject form, settings, menu timetable links" />
+    <MESSAGE value="03.11: settings" />
+    <option name="LAST_COMMIT_MESSAGE" value="03.11: settings" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

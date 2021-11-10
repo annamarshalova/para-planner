@@ -73,6 +73,21 @@
         #edit_schedule {grid-column-start: 1;grid-column-end: 2;grid-row-start: 1;grid-row-end: 2;}
         #auto_schedule {grid-column-start: 2;grid-column-end: 3;grid-row-start: 1;grid-row-end: 2;}
 
+        #schedule.mobile {width:100%;display: grid;grid-template-columns: 90% 0%;}
+        #auto_schedule.mobile {grid-column-start: 1;grid-column-end: 2;grid-row-start: 2;grid-row-end: 3;}
+
+        #misc {width:100%;display: grid;grid-template-columns:35% 50%; grid-column-gap: 5%;}
+        #site {grid-column-start: 1;grid-column-end: 2;grid-row-start: 1;grid-row-end: 2;}
+        #university {grid-column-start: 2;grid-column-end: 3;grid-row-start: 1;grid-row-end: 2;}
+
+        #misc.mobile {width:100%;display: grid;grid-template-columns: 90% 0%;}
+        #university.mobile {grid-column-start: 1;grid-column-end: 2;grid-row-start: 2;grid-row-end: 3;}
+
+        input[name='group'] {width:50%;}
+
+
+
+
 
 
 
@@ -108,8 +123,8 @@
         <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{% url 'open_timetable'%}"  role="button">Расписание</a>
         <div class="dropdown-menu" style="position:fixed;">
             <a class="dropdown-item" href="{% url 'open_timetable' %}" >На день</a>
-            <a class="dropdown-item" href="{% url 'open_timetable_week'%}">На неделю</a>
             <a class="dropdown-item" href="{% url 'open_timetable_month'  %}">На месяц</a>
+            <a class="dropdown-item" href="{% url 'open_timetable_week'%}">На неделю</a>
         </div>
     </li>
     <li class="nav-item"><a class="nav-link" href="/tasks">Задания</a></li>
@@ -144,9 +159,8 @@
     <a class="nav-link" onclick="Logout()">Выход</a>
   </li>
 </ul>
-
+<br>
     <div id="dates" class="settings-block">
-        <br>
       <form id="dates_form" method="POST" class="post-form">{% csrf_token %}
           <div id="semester_form_hover" data-toggle="tooltip" data-placement="left" title="Пожалуйста, укажи правильные даты. Иначе приложение может работать неправильно.">
           {% for field in semester_form %}
@@ -189,10 +203,10 @@
 </form>
     </div>
 
-    <div id="schedule" class="settings-block">
-        <br>
-     <div id="show_schedule">
-    <table>
+
+    <div id="schedule" class="settings-block" style="display: none;">
+     <div id="show_schedule"> <form>
+    <table class="table">
     {% for time in schedule %}
         <tr>
       <td style="background-color:{{settings.sub_color}};">{{ time.number }}</td>
@@ -201,31 +215,112 @@
         </tr>
     {% endfor %}
         </table>
-    <button onclick="Edit_schedule()" >Редактировать</button>
+    <button class="btn btn-default" onclick="Edit_schedule()">Редактировать</button>
+         </form>
+         <br>
 </div>
+
 <div id="edit_schedule" style="display:none;">
-{% block schedule %}
     <form method="POST" class="post-form" >{% csrf_token %}
-        <table style="position:absolute; top:100px;font-size:20px;">
+        <table class="table">
     {% for time in schedule %}
         <tr>
       <td>{{ time.number }}</td>
-      <td><input class="select-time" type="time"  name ='start_time{{time.number}}' value='{{ time.start_time|time:"H:i"}}'></td>
-      <td><input class="select-time" type="time" name ='end_time{{time.number}}' value='{{ time.end_time|time:"H:i" }}'></td>
+      <td>
+          <input class="select-time form-control" type="time"  name ='start_time{{time.number}}' value='{{ time.start_time|time:"H:i"}}'></td>
+      <td>
+          <input class="select-time form-control" type="time" name ='end_time{{time.number}}' value='{{ time.end_time|time:"H:i" }}'></td>
         </tr>
     {% endfor %}
         </table>
     <button  name="save_manual"type="submit" class="save btn btn-default">Сохранить</button>
     </form>
-{% endblock %}
+<br>
 </div>
-{% block settings %}
-    <form method="POST" class="post-form" id='auto_schedule' style=''>{% csrf_token %}
-        {{ settings_form.as_p }}
+        <div id="auto_schedule">
+    <form method="POST" class="post-form">{% csrf_token %}
+       {% for field in settings_form %}
+        <div class="form-floating mb-3">
+      <input  {% if field.name == "first_lesson_start" %} type="time" {% if field.initial %} value="{{field.initial|time:'H:i'}}" {% endif %} {% else %} type="{{field.field.widget.input_type}}" {% if field.initial %} value="{{field.initial}}" {% endif %} {% endif %} class="form-control" id="{{field.name}}-field" name="{{field.name}}" >
+  <label for="{{field.name}}-field">{{field.label_tag}}</label>
+        </div>
+        {% endfor %}
         <button type="submit"name="save_auto" class="save btn btn-default">Сохранить</button>
     </form>
-{% endblock %}
+            </div>
 </div>
+
+    <div id="misc" class="settings-block" style="display: none;">
+        <div id="site">
+    <form method="POST" class="post-form">{% csrf_token %}
+        <input type="hidden" id="current-color" value={{ settings.theme }}>
+        <div class="form-floating mb-3">
+        <input name="color" type="color" class="form-control" id="colorpicker" list="color-choices" {% if settings.theme %} value="{{settings.theme}}" {% else %}  value="{{colors|first}}"{% endif %}>
+            <datalist id="color-choices">
+        {% for color in colors %}
+                <option>{{color}}</option>
+{% endfor %}
+            </datalist>
+        </input>
+            <label for="colorpicker" class="colorpicker_title">Цвет темы:</label>
+               </div>
+   <div class="form-floating mb-3">
+    <select class="form-control" name="homepage" id="homepage">
+        <option value="timetable" name="homepage" class="choose_homepage" {% if settings.homepage == "timetable" %}selected{% endif %}>Расписание на день</option>
+    <option value="timetable_week" name="homepage" class="choose_homepage" {% if settings.homepage == "timetable_week" %}selected{% endif %}>Расписание на неделю</option>
+    <option value="timetable_month" name="homepage" class="choose_homepage" {% if settings.homepage == "timetable_month" %}selected{% endif %}>Расписание на месяц</option>
+    <option value="tasks" name="homepage" class="choose_homepage" {% if settings.homepage == "tasks" %}selected{% endif %}>Задания</option>
+    <option value="exams" name="homepage" class="choose_homepage" {% if settings.homepage == "exams" %}selected{% endif %}>Экамены</option>
+    <option value="plans" name="homepage" class="choose_homepage" {% if settings.homepage == "plans" %}selected{% endif %}>Планы</option>
+    </select>
+     <label for="homepage">Начальная страница:</label>
+        </div>
+    <button type="submit" name="save_misc"  class="save btn btn-default">Сохранить</button>
+</form>
+            <br>
+        </div>
+
+<div id="university">
+    <form method="POST" class="post-form">{% csrf_token %}
+        {% if settings.university %}
+        <p>Ты учишься в:<br> <b>{{ settings.university}}</b> <img src="/static/images/edit.svg" width="20px" onclick="ShowChange()"> </p>
+        {% else %}
+        <p>Выбери место, где ты учишься:</p>
+        {% endif %}
+        <div id="change_university" style="display: none;">
+            <div class="form-floating mb-3">
+        <input list="select" id="select_university" name="select_university" class="form-control" placeholder="---">
+        <datalist id="select">
+            {% for university in universities %}
+            <option id="{{university}}">{{university}}</option>
+            {% endfor %}
+        </datalist>
+            <label for="select">Выбрать из списка:</label>
+            </div>
+            <div class="form-check">
+            <input class="form-check-input" type="radio"  id="other_radio" onchange="Other()" {% if settings.university not in universities %} checked {% endif %}>
+            <label for="other_radio" class="form-check-label">Другое:</label>
+            <input type="hidden" id="other"name="other" value="False">
+            </div>
+        <input class="form-control"  id='other_university' name="other_university" type="text" {% if settings.university not in universities %} value={{settings.university}} {% endif %} disabled>
+        <br>
+        <button type="submit" name="save_university"  class="save btn btn-default">Сохранить</button>
+    </form>
+    </div>
+    <form method="POST" class="post-form" id="import_form" style="display: none;">{% csrf_token %}
+        <p>Тебе повезло!<br>
+            Просто введи <b>номер своей группы</b> и расписание запишется само.<br>
+            Ты в любой момент сможешь его отредактировать.<br>
+            Расписание звонков ты также можешь изменять в настройках.
+        </p>
+        <input class="form-control" type="text" name="group">
+        <br>
+    <button type="submit" name="import_timetable" class="save btn btn-default">Импортировать</button>
+
+</form>
+</div>
+</div>
+
 </div>
 </body>
 <script>
@@ -239,7 +334,7 @@ starts[i].id='input_end'+i;
 starts[i].name='input_end'+i;};
 
 document.getElementById('nav-{{unit}}').className+=' active';
-document.getElementById('{{unit}}').style.display='block';
+document.getElementById('{{unit}}').style.display='grid';
     function Edit_schedule() {
 var edit_schedule=document.getElementById("edit_schedule");
 var show_schedule=document.getElementById("show_schedule");
@@ -311,15 +406,20 @@ document.getElementById('tooltiptext-holidays').style.visibility='hidden';};
 function Other(){
 radio=document.getElementById('other_radio');
 other=document.getElementById('other');
-if (radio.checked){other.value="True";}
- else {other.value="False";};};
-    function Color(color){
-    button=document.getElementById('save_color');
-    button.style.backgroundColor=color;
-    };
-try {if (document.getElementById('Новосибирский государственный университет (НГУ)').selected) {
-document.getElementById('import_form').style.display='block';};}
-catch {};
+other_university=document.getElementById('other_university');
+if (radio.checked){other.value="True";
+other_university.disabled=false;}
+ else {other.value="False";
+ other_university.disabled=true;};};
+
+function Color(color){
+button=document.getElementById('save_color');
+button.style.backgroundColor=color;
+};
+nsu='Новосибирский государственный университет (НГУ)';
+if ("{{settings.university}}" == nsu) {
+document.getElementById('import_form').style.display='block';};
+
 
 function NoExams(){
 document.getElementById('exams_date').value='';};
@@ -329,7 +429,7 @@ document.getElementById('change_university').style.display='block';
 document.getElementById('import_form').style.top='330px'};
 
 if ("{{mobile}}"=="True"){
-ids=['holidays_block','save_dates','dates_form']
+ids=['holidays_block','save_dates','dates_form','schedule','auto_schedule','misc','university']
 ids.forEach(Mobile);};
 
 function Mobile(name){
@@ -339,7 +439,7 @@ element.className+=" mobile";};
 function Logout(){
 var sure=confirm('Ты точно хочешь выйти?');
 if (sure){
-window.open('/accounts/login', "_self");}
+window.open('/log_out', "_self");}
 };
 
 function ShowMobileMenu(){
@@ -354,6 +454,7 @@ else {
 menu.style.display='none';
 back.style.display='none';};
 };
+
 $(function () {
 $('[data-toggle="tooltip"]').tooltip()
 });
