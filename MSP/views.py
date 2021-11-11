@@ -5,7 +5,7 @@ from .forms import SubjectForm, LessonForm, SettingsForm, TimeForm, TaskForm, Se
     SignUpForm, LogInForm, TaskMobileForm
 from datetime import datetime, date, timedelta, time
 from .syllables import syllables, shorten
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate,logout
 import random
 from django.core.mail import send_mail
 import json
@@ -23,7 +23,7 @@ colors = ["#FF67F9", "#CA34FF", "#179EFF", "#3DD8FA", "#00FEEF", "#00FEA3", "#80
           "#F8E438", "#FECC6C", "#FF8C4B", "#FE5A36", "#E4364B"]
 sub_colors = ["#FFAFFC", "#E3BBFB", "#70C3FF", "#ADF0FF", "#ACFEF9", "#85FFD3", "#98FF88", "#E0FB93", "#FDFF8B",
               "#FFF281", "#F9D591", "#FFA673", "#FF8165", "#F66D7D"]
-palette = dict(zip(colors, sub_colors))
+palette = dict(zip([color.lower() for color in colors], sub_colors))
 seconds_in_day = 60 * 60 * 24
 seconds_in_week = seconds_in_day * 7
 
@@ -36,6 +36,8 @@ def shorten_title(t):
         return ''.join(title)
     return t
 
+def page_not_found(request,exception):
+    return render(request, 'MSP/404.html',{})
 
 def create_lessons(subject, lesson):
     if not lesson.teacher:
@@ -76,6 +78,9 @@ def signup(request):
         form = SignUpForm()
     return render(request, 'registration/signup.html', {'form': form})
 
+def log_out(request):
+    logout(request)
+    return redirect('login')
 
 def create_times(settings, user):
     first_delta = settings.first_lesson_start
@@ -271,39 +276,43 @@ def start(request):
                 settings.end_date = semester.end_date
                 settings.save()
                 Day.objects.filter(owner=user).delete()
-                gap = settings.start_date.weekday()
-                start_monday = settings.start_date - timedelta(days=gap)
-                gap = 7 - settings.end_date.weekday()
-                end_sunday = settings.end_date + timedelta(days=gap)
-                start_date = int(datetime.combine(start_monday, datetime.now().time()).timestamp())
-                end_date = int(datetime.combine(end_sunday, datetime.now().time()).timestamp())
-                d = start_date
-                week = 1
-                while d <= end_date:
-                    day = Day()
-                    day.date = datetime.fromtimestamp(d).date()
-                    day.weekday = datetime.fromtimestamp(d).weekday()
-                    day.week = week
-                    day.owner = user
-                    day.save()
-                    if day.weekday == 6:
-                        week += 1
-                    d += 86400
-            try:
-                settings.exams_date = request.POST['exams_date']
-                settings.save()
-            except:
-                pass
-            for i in range(8):
                 try:
-                    holiday_start = request.POST[f'holiday_start{i}']
-                    holiday_end = request.POST[f'holiday_end{i}']
-                    holiday = Holiday(start_date=holiday_start, end_date=holiday_end, owner=user)
-                    holiday.save()
-                    settings.holidays.add(holiday)
+                    settings.exams_date = request.POST['exams_date']
                     settings.save()
                 except:
                     pass
+                for i in range(8):
+                    try:
+                        holiday_start = request.POST[f'holiday_start{i}']
+                        holiday_end = request.POST[f'holiday_end{i}']
+                        holiday = Holiday(start_date=holiday_start, end_date=holiday_end, owner=user)
+                        holiday.save()
+                        settings.holidays.add(holiday)
+                        settings.save()
+                    except:
+                        pass
+            if not settings.start_date:
+                settings.start_date = datetime.date(year=2021, month=9, day=1)
+            if not settings.end_date:
+                settings.end_date = datetime.date(year=2022, month=1, day=31)
+            gap = settings.start_date.weekday()
+            start_monday = settings.start_date - timedelta(days=gap)
+            gap = 7 - settings.end_date.weekday()
+            end_sunday = settings.end_date + timedelta(days=gap)
+            start_date = int(datetime.combine(start_monday, datetime.now().time()).timestamp())
+            end_date = int(datetime.combine(end_sunday, datetime.now().time()).timestamp())
+            d = start_date
+            week = 1
+            while d <= end_date:
+                day = Day()
+                day.date = datetime.fromtimestamp(d).date()
+                day.weekday = datetime.fromtimestamp(d).weekday()
+                day.week = week
+                day.owner = user
+                day.save()
+                if day.weekday == 6:
+                    week += 1
+                d += 86400
 
         elif "save_auto" in request.POST:
             step = "schedule"
@@ -344,11 +353,6 @@ def start(request):
             nsu_import = True
         elif "move_to_last" in request.POST:
             step = "appearance"
-
-    else:
-        start_date = Day.objects.get(date=settings.start_date, owner=user)
-        end_date = Day.objects.get(date=settings.end_date, owner=user)
-    return redirect(settings)
     return render(request, 'MSP/start.html',
                   {'semester_form': semester_form, 'step': step, 'schedule': schedule, 'schedule_forms': schedule_forms,
                    'settings': settings, 'settings_form': settings_form, 'nsu': nsu, 'colors': colors,
@@ -816,10 +820,12 @@ def settings(request, unit='dates'):
     settings = get_object_or_404(Settings, owner=user)
     if request.method == "POST":
         if "save_misc" in request.POST:
-            settings.theme = request.POST["color"]
-            settings.sub_color = palette[settings.theme]
-            settings.homepage = request.POST['homepage']
-            settings.save()
+            try:
+                settings.theme = request.POST["color"]
+                settings.sub_color = palette[settings.theme]
+            finally:
+                settings.homepage = request.POST['homepage']
+                settings.save()
             return redirect('settings', unit='misc')
         if "save_dates" in request.POST:
             f = 0
@@ -920,7 +926,7 @@ def settings(request, unit='dates'):
         end_date = Day.objects.get(date=settings.end_date, owner=user)
         template = 'MSP/settings_boot.html'
         user_agent = request.META['HTTP_USER_AGENT']
-        mobile = False
+        mobile = True
         if 'Mobile' in user_agent:
             mobile = True
         return render(request, template,
@@ -1290,10 +1296,6 @@ def subjects(request):
     subjects = Subject.objects.filter(owner=user).order_by('weekday', 'start_time', 'end_time', 'title', )
     today = get_today(user)
     settings = Settings.objects.get(owner=user)
-    start_date = Day.objects.get(date=settings.start_date)
-    end_date = Day.objects.get(date=settings.end_date, owner=user)
-    start_date = Day.objects.get(date=settings.start_date, owner=user)
-    end_date = Day.objects.get(date=settings.end_date, owner=user)
     user_agent = request.META['HTTP_USER_AGENT']
     template = 'MSP/subjects_boot.html'
     mobile = False
@@ -1301,9 +1303,7 @@ def subjects(request):
         mobile = True
         # template='MSP/subjects_mobile.html'
     return render(request, template,
-                  {'subjects': subjects, 'settings': settings, 'today': today, 'weekdays': weekdays,
-                   'start_date': start_date, 'end_date': end_date, 'start_date': start_date, 'end_date': end_date,
-                   'mobile': mobile})
+                  {'subjects': subjects, 'settings': settings, 'today': today, 'weekdays': weekdays, 'mobile': mobile})
 
 
 def subject_edit(request, pk):
@@ -1400,8 +1400,6 @@ def subject_edit(request, pk):
             return redirect('subjects')
     else:
         form = SubjectForm(instance=subject)
-    start_date = Day.objects.get(date=settings.start_date, owner=user)
-    end_date = Day.objects.get(date=settings.end_date, owner=user)
     user_agent = request.META['HTTP_USER_AGENT']
     template = 'MSP/subject_edit_boot.html'
     mobile = True
@@ -1409,7 +1407,7 @@ def subject_edit(request, pk):
         mobile = True
     return render(request, template,
                   {'subject': subject, 'form': form, 'colors': colors, 'settings': settings, 'images': images,
-                   'today': today, 'pk': pk, 'range': weekrange, 'start_date': start_date, 'end_date': end_date,'mobile':mobile})
+                   'today': today, 'pk': pk, 'range': weekrange,'mobile':mobile})
 
 
 def subject_delete(request, pk):

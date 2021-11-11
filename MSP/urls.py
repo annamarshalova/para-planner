@@ -1,6 +1,7 @@
 from django.urls import path, include
 from . import views
 
+
 urlpatterns = [
     path('', views.dashboard, name='dashboard'),
     path('start/', views.start, name='start'),
@@ -43,5 +44,6 @@ urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),
     path('signup/', views.signup, name='signup'),
     path('import/', views.import_timetable, name='import_timetable'),
-    path('feedback/', views.feedback, name='feedback')
+    path('feedback/', views.feedback, name='feedback'),
+    path('log_out/', views.log_out, name='log_out')
 ]

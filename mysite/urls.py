@@ -25,6 +25,9 @@ urlpatterns = [
 
 from django.conf import settings
 from django.conf.urls.static import static
+from MSP import views
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+handler404 = views.page_not_found
