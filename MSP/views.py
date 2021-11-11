@@ -934,7 +934,7 @@ def settings(request, unit='dates'):
         end_date = Day.objects.get(date=settings.end_date, owner=user)
         template = 'MSP/settings_boot.html'
         user_agent = request.META['HTTP_USER_AGENT']
-        mobile = True
+        mobile = False
         if 'Mobile' in user_agent:
             mobile = True
         return render(request, template,
