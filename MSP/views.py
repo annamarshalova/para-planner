@@ -353,10 +353,18 @@ def start(request):
             nsu_import = True
         elif "move_to_last" in request.POST:
             step = "appearance"
-    return render(request, 'MSP/start.html',
-                  {'semester_form': semester_form, 'step': step, 'schedule': schedule, 'schedule_forms': schedule_forms,
-                   'settings': settings, 'settings_form': settings_form, 'nsu': nsu, 'colors': colors,
-                   'nsu_import': nsu_import, 'universities': universities, 'compliment_colors': palette})
+    else:
+        headlines={"dates":["Учебный календарь","Первый шаг","25%"],"university":["Где ты учишься?","Второй шаг","50%"],"schedule":["Расписание звонков","Третий шаг","75%"],"import":["Импорт расписания","Третий шаг","75%"],"appearance":["Последний штрих","Четвёртый шаг","100%"]}
+        user_agent = request.META['HTTP_USER_AGENT']
+        template = 'MSP/start_boot.html'
+        mobile = True
+        if 'Mobile' in user_agent:
+            mobile = True
+    return render(request, template,
+              {'semester_form': semester_form, 'step': step, 'schedule': schedule, 'schedule_forms': schedule_forms,
+               'settings': settings, 'settings_form': settings_form, 'nsu': nsu, 'colors': colors,
+               'nsu_import': nsu_import, 'universities': universities, 'compliment_colors': palette,'mobile':mobile,'headlines':headlines})
+
 
 
 def dashboard(request):
