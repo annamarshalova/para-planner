@@ -244,7 +244,8 @@ def get_tomorrow(user):
 
 def start(request,step="dates"):
     steps=["dates","university","schedule","import","appearance"]
-    path=os.path.join('MSP','universities.json')
+    THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+    path=os.path.join(THIS_FOLDER,'universities.json')
     with open(path, 'r', encoding='utf-8') as js:
         universities = json.load(js)
     nsu = False
@@ -834,7 +835,8 @@ def lesson_delete(request, pk, page, fix_day):
 
 
 def settings(request, unit='dates'):
-    path=os.path.join('MSP','universities.json')
+    THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+    path=os.path.join(THIS_FOLDER,'universities.json')
     with open(path, 'r', encoding='utf-8') as js:
         universities = json.load(js)
     if request.user.is_authenticated:

@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="72da8ece-e22a-44b2-a99c-83318c3eb1a1" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MSP/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -235,7 +234,7 @@
       <workItem from="1637821205244" duration="12594000" />
       <workItem from="1637992385225" duration="18809000" />
       <workItem from="1638591001266" duration="1189000" />
-      <workItem from="1638606978868" duration="2467000" />
+      <workItem from="1638606978868" duration="2792000" />
     </task>
     <task id="LOCAL-00001" summary="03.11: exam form, subject form, settings, menu timetable links">
       <created>1635960151256</created>
@@ -293,7 +292,14 @@
       <option name="project" value="LOCAL" />
       <updated>1638856558195</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="11.11: settings finished, 404, start">
+      <created>1638857353424</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1638857353424</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
