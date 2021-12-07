@@ -15,6 +15,7 @@ from django.contrib.auth.models import User
 
 from django.shortcuts import HttpResponse
 from django import template
+import os
 
 weekdays = ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']
 weekdays_short = ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс']
@@ -243,7 +244,8 @@ def get_tomorrow(user):
 
 def start(request,step="dates"):
     steps=["dates","university","schedule","import","appearance"]
-    with open('MSP/universities.json', 'r', encoding='utf-8') as js:
+    path=os.path.join('MSP','universities.json')
+    with open(path, 'r', encoding='utf-8') as js:
         universities = json.load(js)
     nsu = False
     nsu_import = False
@@ -832,7 +834,8 @@ def lesson_delete(request, pk, page, fix_day):
 
 
 def settings(request, unit='dates'):
-    with open('MSP/universities.json', 'r', encoding='utf-8') as js:
+    path=os.path.join('MSP','universities.json')
+    with open(path, 'r', encoding='utf-8') as js:
         universities = json.load(js)
     if request.user.is_authenticated:
         user = request.user
