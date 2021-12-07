@@ -5,17 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="72da8ece-e22a-44b2-a99c-83318c3eb1a1" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modern_student_planner.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modern_student_planner.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/settings_boot.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/settings_boot.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/start_boot.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/start_boot.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/timetable_boot.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/timetable_boot.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MSP/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MSP/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mysite/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/mysite/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mysite/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/mysite/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/models.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -244,7 +234,7 @@
       <workItem from="1637821205244" duration="12594000" />
       <workItem from="1637992385225" duration="18809000" />
       <workItem from="1638591001266" duration="1189000" />
-      <workItem from="1638606978868" duration="892000" />
+      <workItem from="1638606978868" duration="1628000" />
     </task>
     <task id="LOCAL-00001" summary="03.11: exam form, subject form, settings, menu timetable links">
       <created>1635960151256</created>
@@ -288,7 +278,14 @@
       <option name="project" value="LOCAL" />
       <updated>1636629486711</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="11.11: settings finished, 404, start">
+      <created>1638855809278</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1638855809278</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
