@@ -5,9 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="72da8ece-e22a-44b2-a99c-83318c3eb1a1" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modern_student_planner.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modern_student_planner.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/settings_boot.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/settings_boot.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/start_boot.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/start_boot.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/timetable_boot.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/timetable_boot.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MSP/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mysite/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/mysite/settings.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mysite/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/mysite/urls.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -24,6 +32,14 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GitSEFilterConfiguration">
+    <file-type-list>
+      <filtered-out-file-type name="LOCAL_BRANCH" />
+      <filtered-out-file-type name="REMOTE_BRANCH" />
+      <filtered-out-file-type name="TAG" />
+      <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
+    </file-type-list>
   </component>
   <component name="PerforceDirect.Settings">
     <option name="ENABLED" value="false" />
@@ -224,6 +240,11 @@
       <workItem from="1636395691507" duration="58000" />
       <workItem from="1636397404330" duration="1129000" />
       <workItem from="1636473826775" duration="16794000" />
+      <workItem from="1637398387086" duration="22000" />
+      <workItem from="1637821205244" duration="12594000" />
+      <workItem from="1637992385225" duration="18809000" />
+      <workItem from="1638591001266" duration="1189000" />
+      <workItem from="1638606978868" duration="892000" />
     </task>
     <task id="LOCAL-00001" summary="03.11: exam form, subject form, settings, menu timetable links">
       <created>1635960151256</created>
@@ -260,7 +281,14 @@
       <option name="project" value="LOCAL" />
       <updated>1636625821991</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="11.11: settings finished, 404, start">
+      <created>1636629486711</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1636629486711</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -285,7 +313,8 @@
     <MESSAGE value="03.11: exam form, subject form, settings, menu timetable links" />
     <MESSAGE value="03.11: settings" />
     <MESSAGE value="10.11: settings finished, 404" />
-    <option name="LAST_COMMIT_MESSAGE" value="10.11: settings finished, 404" />
+    <MESSAGE value="11.11: settings finished, 404, start" />
+    <option name="LAST_COMMIT_MESSAGE" value="11.11: settings finished, 404, start" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

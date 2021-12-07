@@ -20,21 +20,19 @@
 
         .content{position:absolute;top:10%;left:2%;z-index:-1;width:100%;}
         .pagename {font-weight:bold;top:10%;}
+        #pagename-navigation {width:100%;}
+        #pagename-start {width:200%;}
         .progress {width:90%;}
 
-        form {display:grid; grid-template-columns: 35% 35%;grid-column-gap:5%;}
+        .grid-form {display:grid; grid-template-columns: 35% 35%;grid-column-gap:5%;}
         .left {grid-column-start: 1;grid-column-end: 2;grid-row-start: 1;grid-row-end: 2}
         .right{grid-column-start: 2;grid-column-end: 3;grid-row-start: 1;grid-row-end: 10}
-        .save {grid-column-start: 1;grid-column-end: 2;grid-row-start: 2;grid-row-end: 3}
-
-        #exams_block {display: grid;grid-template-columns: 100% 10%; grid-column-gap: 5%}
-        #exams_block .form-floating {grid-column-start: 1;grid-column-end: 2;}
-        #exams_block .btn {grid-column-start: 2;grid-column-end: 3;}
+        .grid-form .save {grid-column-start: 1;grid-column-end: 2;grid-row-start: 2;grid-row-end: 3}
 
         button {background-color:{{settings.theme}};}
         .btn {cursor:pointer;background-color:{{settings.theme}};border:none;color:black;}
         .btn:hover {background-color:{{settings.sub_color}}}
-        .close_button {cursor:pointer;}
+        .close_button {cursor:pointer;vertical-align: middle;}
 
         #holidays {display: grid;}
         .form-inline {display: grid;}
@@ -43,6 +41,18 @@
         .label-input_end {grid-column-start: 3;grid-column-end:4}
         .input_end {grid-column-start: 4;grid-column-end:5}
 
+        .settings-block-start{display: none;}
+        .navigation-button {font-weight: bold;}
+
+        #schedule-block {display: grid;grid-template-columns:35% 35%; grid-column-gap: 5%;}
+        #show_schedule {grid-column-start: 1;grid-column-end: 2;grid-row-start: 1;grid-row-end: 2}
+        #edit_schedule {grid-column-start: 1;grid-column-end: 2;grid-row-start: 1;grid-row-end: 2}
+        #auto_schedule {grid-column-start: 2;grid-column-end: 3;grid-row-start: 1;grid-row-end: 2}
+
+        #schedule-block.mobile {width:100%;display: grid;grid-template-columns: 90% 0%;}
+        #auto_schedule.mobile {grid-column-start: 1;grid-column-end: 2;grid-row-start: 2;grid-row-end: 3;}
+
+        input[name='group'] {width:50%;}
 
     </style>
 </head>
@@ -56,29 +66,44 @@
 </nav>
 
 <div class="content">
-    <p class="h1 pagename" id="pagename-start">Настройки</p>
+    <form method="POST" id="pagename-navigation"> {% csrf_token %}
+        <p class="h1 pagename" id="pagename-start">
+            {% if not step == steps|first %}
+            <button class="btn navigation-button" type="submit" name="prev_page" id="prev-button"><</button>
+            {% endif %}
+            <span id="step-title">Настройки</span>
+            {% if not step == step|last %}
+            <button class="btn navigation-button" type="submit" name="next_page" id="next-button">></button>
+            </p> </form>
+    {% endif %}
     <div class="progress">
         <div class="progress-bar" id="progress_bar" role="progressbar"  aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
     </div>
 <div class="settings-block-start" id="dates">
     <br>
-    <form method="POST" id="save-dates">{% csrf_token %}
+    <form method="POST" id="save-dates" class="grid-form">{% csrf_token %}
         <div class="left">
         <div id="semester_form_hover" data-toggle="tooltip" data-placement="left" title="Пожалуйста, укажи правильные даты. Иначе приложение может работать неправильно.">
             {% for field in semester_form %}
             <div class="form-floating mb-3" >
-                <input type="date" class="form-control" id="{{field.name}}-field" name="{{field.name}}" {% if field.initial %} value="{{field.initial}}" {% endif %}>
+                <input type="date" class="form-control" id="{{field.name}}-field" name="{{field.name}}" {% if field.initial %} value="{{field.initial|date:'Y-m-d'}}" {% endif %}>
                 <label for="{{field.name}}-field">{{field.label_tag}}</label>
             </div>
             {% endfor %}
         </div>
+            <div>
+           <a id="exams-collapse-button" class="btn btn-primary" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="multiCollapseExample1" onclick="Collapse(this.id,'exams-collapse')">Добавить даты сессии</a>
+            <div id="exams-collapse" class="collapse">
+                <br>
             <div id="exams_block" data-toggle="tooltip" data-placement="left" title="Обрати внимание, что дата начала сессии должна быть меньше даты окончания семестра.">
                 <div class="form-floating mb-3">
                     <input type="date" id="exams_date" class="form-control" name="exams_date" value={{settings.exams_date|date:'Y-m-d'}}>
                     <label for="exams_date" id="exams_date_label">Дата начала сессии:</label>
                 </div>
-                <span class="close_button" onclick="NoExams()">x</span>
             </div>
+        </div>
+            </div>
+            <br>
         </div>
         <div id="holidays_block">
             <p id="add_holidays2" class="add_holidays" data-placement="left" title="Ты можешь добавить не более восьми каникул.">
@@ -103,33 +128,170 @@
         <button type="submit" id="save_dates" name="save_dates"  class="save btn btn-default">Сохранить</button>
     </form>
 </div>
+
+    <div class="settings-block-start" id="university">
+        <br>
+        <form method="POST" class="grid-form">{% csrf_token %}
+            <img class="university-image" src="/static/images/msu.svg">
+           <div id="university-change-block">
+            <p>Выбери место, где ты учишься:</p>
+            <div id="change_university" >
+                <div class="form-floating mb-3">
+                    <input list="select" id="select_university" name="select_university" class="form-control" placeholder="---">
+                    <datalist id="select">
+                        {% for university in universities %}
+                        <option id="{{university}}">{{university}}</option>
+                        {% endfor %}
+                    </datalist>
+                    <label for="select">Выбрать из списка:</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio"  id="other_radio" onchange="Other()" {% if settings.university not in universities %} checked {% endif %}>
+                    <label for="other_radio" class="form-check-label">Другое:</label>
+                    <input type="hidden" id="other"name="other" value="False">
+                </div>
+                <input class="form-control"  id='other_university' name="other_university" type="text"  {% if settings.university in universities %} disabled {% endif %} {% if settings.university not in universities %} value={{settings.university}} {% endif %}> </div>
+               <br>
+               <button type="submit" name="save_university" class="btn university-button" >Сохранить</button>
+           </div>
+        </form>
+    </div>
+
+
+    <div class="settings-block-start" id="schedule">
+        <p>
+            Задай необходимые парметры и расписание звонков установится само.<br>
+            Ты также можешь изменить его вручную.
+        </p>
+        <div id="schedule-block">
+        <div id="show_schedule">
+            <form>
+            <table class="table">
+                {% for time in schedule %}
+                <tr>
+                    <td style="background-color:{{settings.sub_color}};">{{ time.number }}</td>
+                    <td>{{ time.start_time }}</td>
+                    <td>{{ time.end_time }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+                <br>
+        </form>
+            <button class="btn btn-default" onclick="Edit_schedule()">Редактировать</button>
+            <br>
+        </div>
+
+        <div id="edit_schedule" style="display:none;">
+            <form method="POST" class="post-form" >{% csrf_token %}
+                <table class="table">
+                    {% for time in schedule %}
+                    <tr>
+                        <td>{{ time.number }}</td>
+                        <td>
+                            <input class="select-time form-control" type="time"  name ='start_time{{time.number}}' value='{{ time.start_time|time:"H:i"}}'></td>
+                        <td>
+                            <input class="select-time form-control" type="time" name ='end_time{{time.number}}' value='{{ time.end_time|time:"H:i" }}'></td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                <button  name="save_manual"type="submit" class="save btn btn-default">Сохранить</button>
+            </form>
+            <br>
+        </div>
+
+        <div id="auto_schedule">
+            <form method="POST" class="post-form">{% csrf_token %}
+                {% for field in settings_form %}
+                <div class="form-floating mb-3">
+                    <input  {% if field.name == "first_lesson_start" %} type="time" {% if field.initial %} value="{{field.initial|time:'H:i'}}" {% endif %} {% else %} type="{{field.field.widget.input_type}}" {% if field.initial %} value="{{field.initial}}" {% endif %} {% endif %} class="form-control" id="{{field.name}}-field" name="{{field.name}}" >
+                    <label for="{{field.name}}-field">{{field.label_tag}}</label>
+                </div>
+                {% endfor %}
+                <br>
+                <button type="submit"name="save_auto" class="save btn btn-default">Сохранить</button>
+            </form>
+        </div>
+</div>
+    </div>
+
+    <div class="settings-block-start" id="import">
+        <br>
+        <form method="POST" class="grid-form" id="import_form">{% csrf_token %}
+            <img class="university-image" src="/static/images/nsu.svg" alt="Новосибирский государственный университет (НГУ)" class="left">
+            <div class="right">
+            <p>Тебе повезло!<br>
+                Просто введи <b>номер своей группы</b> и расписание запишется само.<br>
+                Ты в любой момент сможешь его отредактировать.<br>
+                Расписание звонков ты также можешь изменять в настройках.
+            </p>
+            <input class="form-control" type="text" name="group">
+            <br>
+            <button type="submit" name="import_timetable" class="save btn btn-default">Импортировать</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="settings-block-start" id="appearance">
+        <br>
+        <form method="POST" class="grid-form" id="select_color">{% csrf_token %}
+            <div class="left">
+            {% if nsu_import %}
+            <p>Твоё расписание успешно импортировано!<br>
+                Перед тем, как перейти к нему, давай раскрасим твой пара.планер!<br>
+                Выбери <b>цветовую схему</b> приложения:</p>
+            {% else %}
+            <p>Давай раскрасим твой пара.планер!<br>
+                Выбери <b>цветовую схему</b> приложения:</p>
+            {% endif %}
+            <input type="hidden" id="current-color" value={{ settings.theme }}>
+            <div class="form-floating mb-3" >
+                <input name="color" type="color" class="form-control" id="colorpicker" list="color-choices" onchange="Color(this.value)" {% if settings.theme %} value="{{settings.theme}}" {% else %}  value="{{colors|first}}"{% endif %}>
+                <datalist id="color-choices">
+                    {% for color in colors %}
+                    <option>{{color}}</option>
+                    {% endfor %}
+                </datalist>
+                </input>
+                <label for="colorpicker" class="colorpicker_title">Цвет темы:</label>
+            </div>
+            <button type="submit" name="save_color"  id='save_color' class="save btn btn-default" style="background-color:{{settings.theme}}">Полетели!</button>
+            </div>
+        <div class="right">
+            <svg width="301" height="301" viewBox="0 0 301 301" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M128.479 294.57L61.3037 75.806M128.479 294.57L86.042 67.811M128.479 294.57L119.742 67.811M128.479 294.57L243.334 75.806M128.479 294.57L216.406 71.6624M128.479 294.57L196.623 67.811" stroke="black"/>
+                <path d="M227.803 174.909L221.572 168.332C217.78 164.329 215.884 162.328 213.784 160.55C211.684 158.773 209.397 157.233 204.823 154.154L172.713 132.537L111.988 97.5788L234.154 119.465L227.803 174.909Z" fill="#EBF2F8"/>
+                <path d="M247.41 169.879L233.311 160.363C227.02 156.117 223.874 153.995 220.459 152.375C217.043 150.755 213.408 149.664 206.14 147.48L162.424 134.347L138.477 125.86C128.002 122.148 119.503 114.31 114.957 104.169V104.169L117.76 100.46L149.86 96.48L187.896 111.16L250.99 137.024L247.41 169.879Z" fill="#EBF2F8"/>
+                <path d="M250.662 161.589L112.521 93.4785H131.2L257.254 146.609L250.662 161.589Z" fill="#EBF2F8"/>
+                <path d="M255.265 148.298L115.026 89.0822L128.21 92.1249H135.102L263.953 138.234L255.265 148.298Z" fill="#EBF2F8"/>
+                <path d="M104.205 124.703C101.097 127.129 97.5828 128.983 93.8257 130.178L72.3339 137.014L47.3374 143.242C41.6738 144.653 38.842 145.358 36.1239 146.382C34.8542 146.86 33.6046 147.39 32.378 147.97C29.7521 149.211 27.2759 150.756 22.3235 153.845V153.845L24.1574 132.92L43.3279 115.179L117.76 96.3127L116.572 103.749C115.246 112.045 110.828 119.532 104.205 124.703V124.703Z" fill="#EBF2F8"/>
+                <path d="M115.026 96.8798C108.316 108.971 97.7449 118.463 85.003 123.835L80.1205 125.894C72.3135 129.185 64.0174 131.168 55.5657 131.763L37.0318 133.066C35.5302 133.172 34.7794 133.224 34.0391 133.299C27.4879 133.956 21.131 135.9 15.3333 139.021C14.6781 139.373 14.0262 139.749 12.7225 140.502V140.502V140.502C12.7225 134.751 10.3996 129.244 6.28092 125.231L4.87713 123.863L75.4853 96.8798H115.026V96.8798Z" fill="#EBF2F8"/>
+                <path d="M127.981 101.555L117.252 104.435L116.173 99.3117L126.627 99.8102L127.981 101.555Z" fill="#EBF2F8"/>
+                <path d="M222.986 136.368L255.213 150.907L253.712 154.815L238.676 148.623L195.529 131.466L164.019 115.057L164.018 115.057C161.568 113.782 160.344 113.144 159.142 112.476C152.19 108.609 145.724 103.927 139.882 98.5278C138.872 97.5949 137.884 96.63 135.908 94.7002L184.546 117.985L222.986 136.368Z" fill="#E2E8EE"/>
+                <path d="M96.816 98.7916L98.9414 95.1947L72.1828 107.202L72.1816 107.202C71.8133 107.367 71.6289 107.45 71.4447 107.532C64.7087 110.522 57.6627 112.758 50.4353 114.2C50.2375 114.239 50.0389 114.278 49.6419 114.355L49.6414 114.355C49.1685 114.448 48.9319 114.494 48.6966 114.541C40.0914 116.264 31.7504 119.113 23.8887 123.013C23.6736 123.12 23.4581 123.228 23.0273 123.445L13.3009 128.329L54.9205 117.076L75.5227 113.5C80.9007 112.566 85.9349 110.223 90.112 106.709C92.7774 104.467 95.0441 101.79 96.816 98.7916Z" fill="#E2E8EE"/>
+                <path d="M173.565 126.563L250.591 161.513L182.979 135.141L155.383 124.181C143.32 119.39 133.356 110.459 127.28 98.9888L173.565 126.563Z" fill="#E2E8EE"/>
+                <path d="M107.18 97.6646L108.886 91.3809L104.121 96.6978C103.702 97.1655 103.493 97.3993 103.282 97.6315C99.9663 101.285 96.3848 104.688 92.5669 107.813C92.3242 108.011 92.0707 108.216 91.5637 108.626C90.5202 109.469 89.9985 109.891 89.4958 110.286C80.806 117.126 71.0418 122.477 60.6008 126.121C59.9969 126.332 59.386 126.536 58.1641 126.945C57.2728 127.244 56.8272 127.393 56.3846 127.546C48.7417 130.184 41.447 133.74 34.6603 138.134C34.2673 138.389 33.8752 138.648 33.0911 139.166L25.2307 144.361L60.6524 131.41L76.0839 127.758C82.2961 126.288 88.0952 123.431 93.047 119.402C99.916 113.813 104.859 106.211 107.18 97.6646Z" fill="#E2E8EE"/>
+                <path id='right' d="M288.366 149.94L148.525 100.461L209.481 7.10302L300.317 37.911L288.366 149.94Z" fill="{{settings.sub_color}}"/>
+                <path d="M148.419 100.46H96.1922L71.2948 99.8477L148.419 4.85443L167.095 3.87201C171.862 3.62124 174.246 3.49585 176.571 3.92569C178.896 4.35554 181.077 5.3248 185.44 7.26334L198.724 13.1664L148.419 100.46Z" fill="#858585"/>
+                <path id='side' d="M148.525 100.46V100.46C141.592 98.2366 138.125 97.1249 134.645 96.2779C121.769 93.144 108.397 92.6009 95.3092 94.68C91.7718 95.2419 88.2266 96.0688 81.1362 97.7225L71.091 100.065L148.412 2.72034L152.708 2.43283C165.791 1.55725 172.333 1.11947 178.847 1.53392C180.473 1.63735 182.096 1.78049 183.714 1.9632C190.201 2.69535 196.565 4.27139 209.292 7.42346V7.42346L148.525 100.46Z" fill="{{settings.theme}}"/>
+                <path id='left' d="M71.9161 99.7327L0.317509 127.534L107.645 19.8563L148.419 2.71866L71.9161 99.7327Z" fill="{{settings.sub_color}}"/>
+                <rect x="120.802" y="280.436" width="18.81" height="20.0782" rx="5" fill="white" stroke="black"/>
+                <path id='tick' d="M129.268 292.1L117.303 287.627L132.625 300.514L137.811 270.222L129.268 292.1Z" fill="{{settings.theme}}"/>
+            </svg>
+        </div>
+        </form>
+    </div>
 </div>
 
 </body>
 <script>
-    headlines={{headlines|safe}};
-    headline=headlines["{{step}}"][0];
+    var headlines={{headlines|safe}};
+    var headline=headlines["{{step}}"][0];
     block=document.getElementById('{{step}}');
     block.style.display='block';
-    document.getElementById('pagename-start').innerHTML=headline;
-    progressBar=document.getElementById('progress_bar');
+    document.getElementById('step-title').innerHTML=headline;
+    var progressBar=document.getElementById('progress_bar');
     progressBar.innerHTML=headlines["{{step}}"][1];
     progressBar.style.width=headlines["{{step}}"][2];
-
-    function Back(from,to){
-        block1=document.getElementById(from);
-        block2=document.getElementById(to);
-        block1.style.display='none';
-        block2.style.display='grid';};
-    function Activate (c,o,i){
-        close=document.getElementById(c);
-        open=document.getElementById(o);
-        input=document.getElementById(i);
-        close.style.display='none';
-        open.style.display='grid';
-        if (input.value)
-        {input.value=""};
-    };
 
     var numbers=document.getElementsByClassName('number');
     for (let i=0;i<numbers.length;i++){
@@ -196,16 +358,52 @@
         else {other.value="False";
             other_university.disabled=true;};};
 
-    function Color(color){
-        button=document.getElementById('save_color');
-        button.style.backgroundColor=color;
+    var collapsed=false;
+    function Collapse (b,collapse) {
+        if (collapsed) {
+            $('#exams_date').value='';
+            $('#'+b).html("Добавить даты сессии");
+            $('#'+collapse).collapse('hide');
+            document.getElementById('exams_date').value='';
+            collapsed=false;
+        }
+        else {
+            $('#'+b).html("Удалить даты сессии");
+            $('#'+collapse).collapse('show');
+            collapsed=true;
+        }
     };
-    nsu='Новосибирский государственный университет (НГУ)';
-    if ("{{settings.university}}" == nsu) {
-        document.getElementById('import_form').style.display='block';};
+    function Edit_schedule() {
+        var edit_schedule=document.getElementById("edit_schedule");
+        var show_schedule=document.getElementById("show_schedule");
+        show_schedule.style.display="none";
+        edit_schedule.style.display="block";
+    }
+    function Show_schedule() {
+        var edit_schedule=document.getElementById("edit_schedule");
+        var show_schedule=document.getElementById("show_schedule");
+        edit_schedule.style.display="none";
+        show_schedule.style.display="block";
+    };
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    });
+
+    function Color(color){
+        var complimentColors={{compliment_colors|safe}};
+        var subcolor=complimentColors[color];
+        var button=document.getElementById('save_color');
+        var left=document.getElementById('left');
+        var right=document.getElementById('right');
+        var tick=document.getElementById('tick');
+        var side=document.getElementById('side');
+        button.style.backgroundColor=color;
+        left.style.fill=subcolor;
+        right.style.fill=subcolor;
+        tick.style.fill=color;
+        side.style.fill=color;};
 
 
-    function NoExams(){
-        document.getElementById('exams_date').value='';};
+
 </script>
 </html>

@@ -9,6 +9,7 @@ from django.contrib.auth import login, authenticate,logout
 import random
 from django.core.mail import send_mail
 import json
+import itertools
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
@@ -240,12 +241,13 @@ def get_tomorrow(user):
     return tomorrow
 
 
-def start(request):
+def start(request,step="dates"):
+    steps=["dates","university","schedule","import","appearance"]
     with open('MSP/universities.json', 'r', encoding='utf-8') as js:
         universities = json.load(js)
     nsu = False
     nsu_import = False
-    step = "dates"
+    #step = "dates"
     if request.user.is_authenticated:
         user = request.user
     else:
@@ -257,13 +259,15 @@ def start(request):
     schedule_forms = []
     for time in schedule:
         schedule_forms.append(TimeForm(request.POST, instance=time))
-    palette = dict(zip(colors, sub_colors))
     if request.method == "POST":
         if "save_color" in request.POST:
             step = 'appearance'
-            settings.theme = request.POST["color"]
-            settings.sub_color = palette[settings.theme]
-            settings.save()
+            try:
+                settings.theme = request.POST["color"]
+                settings.sub_color = palette[settings.theme]
+                settings.save()
+            except:
+                pass
             return redirect('subjects')
         if "save_dates" in request.POST:
             step = 'university'
@@ -313,7 +317,6 @@ def start(request):
                 if day.weekday == 6:
                     week += 1
                 d += 86400
-
         elif "save_auto" in request.POST:
             step = "schedule"
             settings_form = SettingsForm(request.POST, instance=settings)
@@ -338,9 +341,13 @@ def start(request):
                     time.owner = user
                     time.save()
         elif "save_university" in request.POST:
-            settings.university = request.POST["select_university"]
-            if request.POST["other"] == "True":
-                settings.university = request.POST["other_university"]
+            try:
+                if request.POST["other"] == "True" or request.POST["other_university"]:
+                    settings.university = request.POST["other_university"]
+            except:
+                pass
+            if request.POST["select_university"]:
+                settings.university = request.POST["select_university"]
             settings.save()
             if settings.university == 'Новосибирский государственный университет (НГУ)':
                 step = "import"
@@ -353,17 +360,24 @@ def start(request):
             nsu_import = True
         elif "move_to_last" in request.POST:
             step = "appearance"
-    else:
-        headlines={"dates":["Учебный календарь","Первый шаг","25%"],"university":["Где ты учишься?","Второй шаг","50%"],"schedule":["Расписание звонков","Третий шаг","75%"],"import":["Импорт расписания","Третий шаг","75%"],"appearance":["Последний штрих","Четвёртый шаг","100%"]}
-        user_agent = request.META['HTTP_USER_AGENT']
-        template = 'MSP/start_boot.html'
+        elif "next_page" in request.POST:
+            next_step=steps[steps.index(step)+1]
+            print(next_step)
+            return redirect('start',step=next_step)
+        elif "prev_page" in request.POST:
+            prev_step=steps[steps.index(step)-1]
+            return redirect('start',step=prev_step)
+    titles=[["Учебный календарь","Первый шаг","25%"],["Где ты учишься?","Второй шаг","50%"],["Расписание звонков","Третий шаг","75%"],["Импорт расписания","Третий шаг","75%"],["Последний штрих","Четвёртый шаг","100%"]]
+    headlines=dict(zip(steps,titles))
+    user_agent = request.META['HTTP_USER_AGENT']
+    template = 'MSP/start_boot.html'
+    mobile = False
+    if 'Mobile' in user_agent:
         mobile = True
-        if 'Mobile' in user_agent:
-            mobile = True
     return render(request, template,
               {'semester_form': semester_form, 'step': step, 'schedule': schedule, 'schedule_forms': schedule_forms,
                'settings': settings, 'settings_form': settings_form, 'nsu': nsu, 'colors': colors,
-               'nsu_import': nsu_import, 'universities': universities, 'compliment_colors': palette,'mobile':mobile,'headlines':headlines})
+               'nsu_import': nsu_import, 'universities': universities, 'compliment_colors': palette,'mobile':mobile,'headlines':headlines,"steps":steps})
 
 
 

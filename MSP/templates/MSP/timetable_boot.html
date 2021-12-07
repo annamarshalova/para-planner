@@ -12,7 +12,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <style>
-        body {background-color:#F6F5F5; font-family: 'Montserrat', sans-serif; font-weight:light; color:black; }
+        body {background-color:#F6F5F5;font-family: 'Montserrat', sans-serif; font-weight:light; color:black; }
         .subject {box-sizing: content-box;}
         .nav-pills .nav-link.active {background-color:{{settings.theme}};color:black;}
         .nav-pills .nav-link.active:hover {color:black;}
@@ -78,6 +78,8 @@
         .color-block.mobile {grid-template-columns:15% 50% 35%;grid-template-rows:40% 29.5% 29.5%;}
 
         .tooltiptext{display:none;}
+
+        .relax-image{width:40%;height:40%}
 
 
 </style>
@@ -284,7 +286,15 @@
     {% endfor %}
 
 </div>
-
+    {% elif day.date <= settings.end_date and day.date >= settings.exams_date %}
+    <p id='exam-session-text' class="relax-text h4">Удачи на экзаменах!</p>
+    <img id='exams-image' class='relax-image' alt="У тебя сейчас сессия. Удачи на экзаменах!" src="/static/images/exams.svg">
+ {% elif day.date < settings.start_date or day.date > settings.end_date or holiday %}
+ <p id='holiday-text' class="relax-text h4">Приятного отдыха на каникулах!</p>
+ <img id="summer-image" class='relax-image' alt="Похоже, у тебя сейчас каникулы. Приятного отдыха!" src="/static/images/summer.svg">
+ {% elif weekend %}
+ <p id='weekend-text' class="relax-text h4">Ура! Сегодня выходной.</p>
+ <img id="sleep-image" class='relax-image' alt="Ура! Сегодня выходной" src="/static/images/sleep.svg">
 {% endif %}
 </div>
 

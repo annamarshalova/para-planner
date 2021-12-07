@@ -165,7 +165,7 @@
           <div id="semester_form_hover" data-toggle="tooltip" data-placement="left" title="Пожалуйста, укажи правильные даты. Иначе приложение может работать неправильно.">
           {% for field in semester_form %}
           <div class="form-floating mb-3" >
-      <input type="date" class="form-control" id="{{field.name}}-field" name="{{field.name}}" {% if field.initial %} value="{{field.initial}}" {% endif %}>
+      <input type="date" class="form-control" id="{{field.name}}-field" name="{{field.name}}" {% if field.initial %} value="{{field.initial|date:'Y-m-d'}}" {% endif %}>
   <label for="{{field.name}}-field">{{field.label_tag}}</label>
         </div>
           {% endfor %}
@@ -205,7 +205,8 @@
 
 
     <div id="schedule" class="settings-block" style="display: none;">
-     <div id="show_schedule"> <form>
+     <div id="show_schedule">
+     <form>
     <table class="table">
     {% for time in schedule %}
         <tr>
@@ -215,9 +216,10 @@
         </tr>
     {% endfor %}
         </table>
-    <button class="btn btn-default" onclick="Edit_schedule()">Редактировать</button>
          </form>
+         <button class="btn btn-default" onclick="Edit_schedule()">Редактировать</button>
          <br>
+
 </div>
 
 <div id="edit_schedule" style="display:none;">
@@ -282,12 +284,9 @@
 
 <div id="university">
     <form method="POST" class="post-form">{% csrf_token %}
-        {% if settings.university %}
         <p>Ты учишься в:<br> <b>{{ settings.university}}</b> <img src="/static/images/edit.svg" width="20px" onclick="ShowChange()"> </p>
-        {% else %}
-        <p>Выбери место, где ты учишься:</p>
-        {% endif %}
         <div id="change_university" style="display: none;">
+            <p>Выбери место, где ты учишься:</p>
             <div class="form-floating mb-3">
         <input list="select" id="select_university" name="select_university" class="form-control" placeholder="---">
         <datalist id="select">
@@ -302,12 +301,12 @@
             <label for="other_radio" class="form-check-label">Другое:</label>
             <input type="hidden" id="other"name="other" value="False">
             </div>
-        <input class="form-control"  id='other_university' name="other_university" type="text" {% if settings.university not in universities %} value={{settings.university}} {% endif %} disabled>
+        <input class="form-control"  id='other_university' name="other_university" type="text"  disabled {% if settings.university not in universities %} value={{settings.university}} {% endif %}>
         <br>
         <button type="submit" name="save_university"  class="save btn btn-default">Сохранить</button>
+        </div>
     </form>
-    </div>
-    <form method="POST" class="post-form" id="import_form" style="display: none;">{% csrf_token %}
+    <form method="POST" class="post-form" id="import_form" style="display:none;">{% csrf_token %}
         <p>Тебе повезло!<br>
             Просто введи <b>номер своей группы</b> и расписание запишется само.<br>
             Ты в любой момент сможешь его отредактировать.<br>
@@ -418,15 +417,16 @@ button.style.backgroundColor=color;
 };
 nsu='Новосибирский государственный университет (НГУ)';
 if ("{{settings.university}}" == nsu) {
-document.getElementById('import_form').style.display='block';};
+var importForm=$("#import_form");
+importForm.css("display","block");};
 
 
 function NoExams(){
 document.getElementById('exams_date').value='';};
 
 function ShowChange(){
-document.getElementById('change_university').style.display='block';
-document.getElementById('import_form').style.top='330px'};
+$('#change_university').css("display","block");
+$('#import_form').css("top","330px");};
 
 if ("{{mobile}}"=="True"){
 ids=['holidays_block','save_dates','dates_form','schedule','auto_schedule','misc','university']
@@ -458,5 +458,6 @@ back.style.display='none';};
 $(function () {
 $('[data-toggle="tooltip"]').tooltip()
 });
+
 </script>
 </html>
