@@ -42,9 +42,11 @@
         .block-list {width:100%;max-width:600px;position:absolute;margin-top:30px;}
         .color-block {border-radius:20px;margin-bottom:3%;display:grid;grid-template-columns:10% 58% 30%;grid-template-rows:29.5% 34.5% 34.5%;grid-row-gap:1.5%;grid-column-gap:1%;min-height:100px;}
         .name {grid-column-start: 1;grid-column-end:3;grid-row-start: 1;grid-row-end: 2;}
-        .name label {font-weight:bold; text-overflow:ellipsis;}
-        .subtitle {grid-column-start: 1;grid-column-end: 3;grid-row-start: 2;grid-row-end:3;vertical-align:top;padding:0px;margin:0px;}
-        .done {vertical-align:baseline;}
+        .subtitle {grid-column-start: 1;grid-column-end: 3;grid-row-start: 2;grid-row-end:3;}
+        .done-form {display: inline-grid;}
+        .done {grid-row-start: 1;grid-row-end: 2;grid-column-start: 1;grid-column-end: 2;vertical-align:bottom;}
+        .task-name {grid-row-start: 1;grid-row-end: 2;grid-column-start: 2;grid-column-end: 3;vertical-align:top;font-weight:bold;}
+        .overflowing {white-space: nowrap;text-overflow: ellipsis;overflow:hidden;}
         .buttons{grid-column-start: 3;grid-column-end: 4;grid-row-start: 1;grid-row-end: 4;text-align:center;}
         .buttons p{margin:0px;}
         .color-block.mobile {grid-template-columns:15% 50% 35%;grid-template-rows:40% 29.5% 29.5%;}
@@ -117,9 +119,9 @@
             <input type="hidden" class="deadline_weeknum" value={{task.weekday}}>
         <input type="hidden" class="deadline_date" value={{task.date}}>
             <div class="box name">
-            <form id="form_{{task.pk}}">
-            <input type="checkbox" name="check_{{task.pk}}" id="check_{{task.pk}}" class="done" style="" value={{ task.done }} onchange="Done('{{task.pk}}')" >
-            <label for="check_{{task.pk}}"  id="label_{{task.pk}}" class="task-name h3"  > {{ task.hometask }} </label>
+            <form id="form_{{task.pk}}" class="done-form form-inline">
+            <input type="checkbox" name="check_{{task.pk}}" id="check_{{task.pk}}" class="done form-check-input" style="" value={{ task.done }} onchange="Done('{{task.pk}}')" >
+            <p id="label_{{task.pk}}" class="task-name h3 overflowing" title="{{ task.hometask }}" > {{ task.hometask }} </p>
             <input type="hidden" name="done_{{task.pk}}" id="done_{{task.pk}}" value="False">
             </form>
             </div>
@@ -144,7 +146,7 @@
         {% endif %}
 
             </div>
-            <div class="subtitle">{{task.select_subject.title}}</div>
+            <div class="subtitle overflowing">{{task.select_subject.title}}</div>
         </div>
         {% endfor %}
     {% if tasks %}

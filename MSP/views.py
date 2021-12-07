@@ -121,6 +121,64 @@ def load_subjects_ics(link):
                 except:
                     subject.classroom = str(component.get('location'))
 
+def load_subjects_ics_url(url,user,settings):
+    if len(Time.objects.filter(owner=user)) == 0:
+        settings.first_lesson_start = datetime.strptime('09:00', '%H:%M').time()
+        settings.lesson_length = 95
+        settings.break_length = 15
+        settings.max_lessons = 7
+        settings.repeating_weeks = 2
+        create_times(settings, user)
+    import requests
+    from icalendar import Calendar
+    import re
+    from django.contrib.staticfiles.storage import staticfiles_storage
+    import urllib.request
+    with urllib.request.urlopen(url) as f:
+        g = f.read().decode('utf-8')
+        gcal = Calendar.from_ical(g)
+        for component in gcal.walk():
+            if component.name == 'VEVENT':
+                subject = Subject()
+                fullname = str(component.get('summary'))
+                subject.type = str(re.findall('(\(.*?\))', fullname)[-1].strip('()'))
+                subject.title = fullname.replace(f'({subject.type})', '').rstrip(' ')
+                subject.start_time = component.decoded('dtstart').astimezone().strftime("%H:%M")
+                subject.end_time = component.decoded('dtend').astimezone().strftime("%H:%M")
+                subject.weekday = component.decoded('dtstart').weekday()
+                subject.teacher = str(component.get('description')).replace('Преподаватель: ', '')
+                subject.color = random.choice(colors)
+                subject.owner=user
+                print('successful')
+                try:
+                    subject.classroom = re.findall('[а-я]?\d+[а-я]?', str(component.get('location')))[0]
+                except:
+                    subject.classroom = str(component.get('location'))
+                subject.save()
+                days = Day.objects.filter(owner=user).order_by('date')
+                if settings.exams_date:
+                    exams_start = settings.exams_date
+                else:
+                    exams_start = settings.end_date
+                for day in days:
+                    if day.date <= exams_start:
+                        day_week = day.week % settings.repeating_weeks
+                        if day_week == 0:
+                            day_week = settings.repeating_weeks
+                        day_week = str(day_week)
+                        if day.weekday == subject.weekday and day_week in subject.weeks:
+                            lesson = Lesson()
+                            lesson = create_lessons(subject, lesson)
+                            lesson.select_subject = subject
+                            lesson.title = subject.title
+                            lesson.time = subject.time
+                            lesson.start_time = subject.start_time
+                            lesson.end_time = subject.end_time
+                            lesson.date = day.date
+                            lesson.type = subject.type
+                            lesson.owner = user
+                            lesson.save()
+
 
 def load_subjects_html(group, user, settings):
     import requests
@@ -501,7 +559,9 @@ def import_timetable(request):
     today = Day.objects.get(date=datetime.today(), owner=user)
     if request.method == "POST":
         group = request.POST['group']
-        load_subjects_html(group, user, settings)
+        url="https://table.nsu.ru/ics/group/"+group
+        #load_subjects_html(group, user, settings)
+        load_subjects_ics_url(url,user,settings)
         return redirect('subjects')
     else:
         return render(request, 'MSP/import.html', {'settings': settings, 'today': today})
@@ -660,8 +720,11 @@ def lesson_new(request, fix_day):
             except:
                 pass
             for field in object_fields:
-                var = request.POST[field]
-                object_fields[field] = var
+                try:
+                    var = request.POST[field]
+                    object_fields[field] = var
+                except:
+                    pass
             subject_pk = request.POST["subject"]
             lesson.select_subject = subjects.get(pk=subject_pk)
             try:
@@ -760,8 +823,11 @@ def lesson_edit(request, pk, page, fix_day):
             else:
                 lesson.teachershort = ''
             for field in object_fields:
-                var = request.POST[field]
-                object_fields[field] = var
+                try:
+                    var = request.POST[field]
+                    object_fields[field] = var
+                except:
+                    pass
             lesson.save()
             lesson.date = datetime.strptime(lesson.date, '%Y-%m-%d')
             lesson.weekday = lesson.date.weekday()

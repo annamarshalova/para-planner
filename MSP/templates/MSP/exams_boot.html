@@ -124,7 +124,7 @@
               <div class="box buttons">
                 <div>
             <a  href="{% url 'exam_edit' pk=exam.pk %}" data-toggle="tooltip" data-placement="top" title="Редактировать"><img alt="Редактировать" src="/static/images/edit.svg" class="edit" width="22px"></a>
-            <a onclick="DeleteObject('{{exam.pk}}')" data-toggle="tooltip" data-placement="top" title="Удалить"> <img alt="Удалить" src="/static/images/delete.svg" class="delete" width="22px"></a>
+            <a onclick="DeleteObject('{{exam.pk}}','эту контрольную')" data-toggle="tooltip" data-placement="top" title="Удалить"> <img alt="Удалить" src="/static/images/delete.svg" class="delete" width="22px"></a>
             </div>
                    <p class="deadline">
         {% if today.date == exam.lesson.date %}
@@ -155,6 +155,7 @@
         {% endif %}
   </div>
         {% endif %}
+    </div>
 
         <br>
          {% for exam in examinations %}
@@ -168,7 +169,7 @@
               <div class="box buttons">
                 <div>
             <a  href="{% url 'exam_edit' pk=exam.pk %}" data-toggle="tooltip" data-placement="top" title="Редактировать"><img alt="Редактировать" src="/static/images/edit.svg" class="edit" width="22px"></a>
-            <a onclick="DeleteObject('{{exam.pk}}')" data-toggle="tooltip" data-placement="top" title="Удалить"> <img alt="Удалить" src="/static/images/delete.svg" class="delete" width="22px"></a>
+            <a onclick="DeleteObject('{{exam.pk}}','этот экзамен')" data-toggle="tooltip" data-placement="top" title="Удалить"> <img alt="Удалить" src="/static/images/delete.svg" class="delete" width="22px"></a>
             </div>
                    <p class="deadline">
         {% if today.date == exam.lesson.date %}
@@ -261,6 +262,12 @@ back.style.display='block';
 else {
 menu.style.display='none';
 back.style.display='none';};
+};
+function DeleteObject(s,object_type){
+var sure=confirm('Ты точно хочешь удалить '+object_type+'?');
+var sure=confirm('Ты точно хочешь удалить '+object_type+'?');
+if (sure){
+window.open('/task_edit/'+s+'/delete', '_self');}
 };
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()
