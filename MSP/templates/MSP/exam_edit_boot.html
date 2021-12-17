@@ -75,11 +75,11 @@
 {% else %}
 <ul id="menu" class="nav nav-pills " aria-orientation="horizontal">
     <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{% url 'open_timetable' pk=today.pk %}"  role="button">Расписание</a>
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{% url 'open_timetable' %}"  role="button">Расписание</a>
         <div class="dropdown-menu" style="position:fixed;">
             <a class="dropdown-item" href="{% url 'open_timetable' %}" >На день</a>
             <a class="dropdown-item" href="{% url 'open_timetable_week'%}">На неделю</a>
-            <a class="dropdown-item" href="{% url 'open_timetable_month' pk=today.pk %}">На месяц</a>
+            <a class="dropdown-item" href="{% url 'open_timetable_month'%}">На месяц</a>
         </div>
     </li>
     <li class="nav-item"><a class="nav-link" href="/tasks">Задания</a></li>

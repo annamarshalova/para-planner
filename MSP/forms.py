@@ -71,7 +71,8 @@ class TaskForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(TaskForm, self).__init__(*args, **kwargs)
         today = datetime.now().date()
-        self.fields['lesson'].queryset = self.fields['lesson'].queryset.filter(date__gte=today).order_by('date')
+        self.user = kwargs.pop('user', None)
+        self.fields['lesson'].queryset = self.fields['lesson'].queryset.filter(date__gte=today,owner=self.user).order_by('date')
 
 class TaskMobileForm(forms.ModelForm):
     class Meta:
@@ -83,7 +84,8 @@ class TaskMobileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(TaskMobileForm, self).__init__(*args, **kwargs)
         today = datetime.now().date()
-        self.fields['lesson'].queryset = self.fields['lesson'].queryset.filter(date__gte=today).order_by('date')
+        self.user = kwargs.pop('user', None)
+        self.fields['lesson'].queryset = self.fields['lesson'].queryset.filter(date__gte=today,owner=self.user).order_by('date')
 
 
 class ExamForm(forms.ModelForm):
@@ -97,7 +99,8 @@ class ExamForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ExamForm, self).__init__(*args, **kwargs)
         today = datetime.now().date()
-        self.fields['lesson'].queryset = self.fields['lesson'].queryset.filter(date__gte=today).order_by('date')
+        self.user = kwargs.pop('user', None)
+        self.fields['lesson'].queryset = self.fields['lesson'].queryset.filter(date__gte=today,owner=self.user).order_by('date')
 
 
 class PlanForm(forms.ModelForm):

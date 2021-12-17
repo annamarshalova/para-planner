@@ -1,0 +1,1 @@
+.task-name {grid-row-start: 1;grid-row-end: 2;grid-column-start: 2;grid-column-end: 3;vertical-align:top;font-weight:bold;-ms-text-overflow: ellipsis;-o-text-overflow: ellipsis;text-overflow: ellipsis;overflow: hidden;-ms-line-clamp: 1;-webkit-line-clamp: 1;line-clamp: 1;display: -webkit-box;display: box;word-wrap: break-word;-webkit-box-orient: vertical;box-orient: vertical;}

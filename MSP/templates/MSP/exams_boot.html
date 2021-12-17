@@ -158,10 +158,10 @@
         <label for="progress">осталось {{days_left}} дня</label>
         {% else %}
         <label for="progress">осталось {{days_left}} дней</label>
-  </div>
         {% endif %}
   </div>
-        {% endif %}
+ {% endif %}
+  </div>
         {% endif %}
 
         <br>
@@ -184,9 +184,9 @@
         {% elif tomorrow.date == exam.lesson.date %}
          завтра
         {% else %}
-        <span class="deadline_weekday"></span>{{ exam.date|date:"d.m"}}
-        <br>{{exam.lesson.start_time}}</p>
+        <span class="deadline_weekday"></span>{{ exam.date|date:"d.m"}}</p>
         {% endif %}
+        <br>{{exam.lesson.start_time}}
               </div>
 
           </div>
@@ -271,9 +271,8 @@ back.style.display='none';};
 };
 function DeleteObject(s,object_type){
 var sure=confirm('Ты точно хочешь удалить '+object_type+'?');
-var sure=confirm('Ты точно хочешь удалить '+object_type+'?');
 if (sure){
-window.open('/task_edit/'+s+'/delete', '_self');}
+window.open('/exam_edit/'+s+'/delete', '_self');}
 };
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()

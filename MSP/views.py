@@ -60,7 +60,7 @@ def password_reset(request):
 
 def signup(request):
     user_agent = request.META['HTTP_USER_AGENT']
-    mobile = True
+    mobile = False
     if 'Mobile' in user_agent:
         mobile = True
     if request.method == 'POST':
@@ -77,6 +77,8 @@ def signup(request):
             settings.end_date = datetime.strptime('31.01.2022', '%d.%m.%Y')
             settings.save()
             return redirect('start')
+        else:
+            print('error')
     else:
         form = SignUpForm()
     return render(request, 'registration/signup.html', {'form': form,'mobile':mobile})
@@ -355,13 +357,9 @@ def start(request,step="dates"):
                 semester.save()
                 settings.start_date = semester.start_date
                 settings.end_date = semester.end_date
+                settings.exams_date = request.POST['exams_date']
                 settings.save()
                 Day.objects.filter(owner=user).delete()
-                try:
-                    settings.exams_date = request.POST['exams_date']
-                    settings.save()
-                except:
-                    pass
                 for i in range(8):
                     try:
                         holiday_start = request.POST[f'holiday_start{i}']
@@ -444,11 +442,11 @@ def start(request,step="dates"):
         elif "prev_page" in request.POST:
             prev_step=steps[steps.index(step)-1]
             return redirect('start',step=prev_step)
-    titles=[["Учебный календарь","Первый шаг","20%"],["Где ты учишься?","Второй шаг","40%"],["Расписание звонков","Третий шаг","60%"],["Импорт расписания","Четвёртый шаг","80%"],["Последний штрих","Пятый шаг","100%"]]
+    titles=[["Учебный календарь","Первый шаг","25%"],["Где ты учишься?","Второй шаг","50%"],["Расписание звонков","Третий шаг","75%"],["Импорт расписания","Третий шаг","75%"],["Последний штрих","Пятый шаг","100%"]]
     headlines=dict(zip(steps,titles))
     user_agent = request.META['HTTP_USER_AGENT']
     template = 'MSP/start_boot.html'
-    mobile = True
+    mobile = False
     if 'Mobile' in user_agent:
         mobile = True
     return render(request, template,
@@ -1150,7 +1148,7 @@ def task_new(request):
         except:
             next = None
             next_subject = None
-        form = TaskForm(initial={'lesson': next})
+        form = TaskForm(initial={'lesson': next,'user': user})
     start_date = Day.objects.get(date=settings.start_date, owner=user)
     end_date = Day.objects.get(date=settings.end_date, owner=user)
     template = 'MSP/task_edit_boot.html'
@@ -1760,9 +1758,9 @@ def exam_new_2(request, examination):
     else:
         examination = examination == 'examination'
         if examination:
-            form = ExamForm({'type': 'экзамен'})
+            form = ExamForm({'type': 'экзамен','user': user})
         else:
-            form = ExamForm({'type': 'контрольная'})
+            form = ExamForm({'type': 'контрольная','user': user})
     start_date = Day.objects.get(date=settings.start_date, owner=user)
     end_date = Day.objects.get(date=settings.end_date, owner=user)
     template = 'MSP/exam_edit_boot.html'

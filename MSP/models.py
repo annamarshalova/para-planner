@@ -40,7 +40,7 @@ class Settings(models.Model):
     end_date = models.DateField(default=datetime.now().strftime("%Y-%m-%d"))
     exams_date=models.DateField(null=True, blank=True)
     homepage=models.CharField(default='timetable',max_length=50)
-    university=models.CharField(default='НГУ',max_length=200)
+    university=models.CharField(default='Новосибирский государственный университет (НГУ)',max_length=200)
     holidays=models.ManyToManyField(Holiday,blank=True)
 
     def __str__(self):

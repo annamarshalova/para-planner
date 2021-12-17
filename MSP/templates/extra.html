@@ -99,3 +99,18 @@ import requests
     from django.contrib.staticfiles.storage import staticfiles_storage
     import urllib.request
     with urllib.request.urlopen(url) as f:
+
+
+
+ <script>
+    {% if form.errors %}
+    {% for field in form %}
+        {% for error in field.errors %}
+                alert("{{ error|escape }}");
+        {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+            alert("{{ error|escape }}");
+    {% endfor %}
+{% endif %}
+    </script>

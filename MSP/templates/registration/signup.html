@@ -30,6 +30,7 @@
         #image-box.mobile {display:none;grid-column-start: 1;grid-column-end:2;grid-row-start: 2;grid-row-end:3}
         #nav-top-logo {display: none;}
         #nav-top-logo.mobile {display: block;}
+        .error-message {color:#FF81F2;}
 
     </style>
             <body>
@@ -44,7 +45,27 @@
 <div class="sign-box" id="registration-box">
 <p class="h1 pagename">Регистрация</p>
   {% block content %}
-  <form method="post">{% csrf_token %}
+    {% if form.errors %}
+    <script>
+        var errors=[];
+    {% for field in form %}
+        {% for error in field.errors %}
+                errors.push("{{ error|escape }}");
+        {% endfor %}
+    {% endfor %}
+    {% for error in form.non_field_errors %}
+            errors.push("{{ error|escape }}");
+    {% endfor %}
+        if (errors){
+            var box=document.getElementById("registration-box");
+            var message=document.createElement("b");
+            message.className= "error-message";
+            message.innerText=errors[0].split('.')[0];
+            box.appendChild(message);
+        };
+    </script>
+    {% endif %}
+  <form method="POST">{% csrf_token %}
 
 {% for field in form %}
 <div class="form-floating mb-3">

@@ -6,20 +6,16 @@
   <component name="ChangeListManager">
     <list default="true" id="72da8ece-e22a-44b2-a99c-83318c3eb1a1" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MSP/syllables.py" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/syllables.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/forms.py" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/forms.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/exam_edit_boot.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/exam_edit_boot.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/exams_boot.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/exams_boot.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/settings_boot.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/settings_boot.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/start_boot.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/start_boot.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/subjects_boot.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/subjects_boot.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/tasks_boot.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/tasks_boot.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MSP/templates/MSP/timetable_boot.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/MSP/timetable_boot.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MSP/templates/extra.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/extra.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MSP/templates/registration/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/registration/login.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MSP/templates/registration/signup.html" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/templates/registration/signup.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MSP/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MSP/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/MSP/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mysite/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/mysite/settings.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -240,6 +236,7 @@
       <workItem from="1639061553098" duration="874000" />
       <workItem from="1639201638392" duration="18080000" />
       <workItem from="1639293008791" duration="13824000" />
+      <workItem from="1639728239365" duration="8499000" />
     </task>
     <task id="LOCAL-00001" summary="03.11: exam form, subject form, settings, menu timetable links">
       <created>1635960151256</created>
@@ -283,7 +280,14 @@
       <option name="project" value="LOCAL" />
       <updated>1638898059665</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="final version">
+      <created>1639728352731</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1639728352731</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -309,7 +313,8 @@
     <MESSAGE value="03.11: settings" />
     <MESSAGE value="10.11: settings finished, 404" />
     <MESSAGE value="07.12" />
-    <option name="LAST_COMMIT_MESSAGE" value="07.12" />
+    <MESSAGE value="final version" />
+    <option name="LAST_COMMIT_MESSAGE" value="final version" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
