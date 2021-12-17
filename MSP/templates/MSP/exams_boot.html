@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-    <title>Экзамены| Пара планер</title>
+    <title>Экзамены | Пара планер</title>
     <link rel="shortcut icon" href="/static/images/logo.ico" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
@@ -52,9 +52,14 @@
         .buttons p{margin:0px;}
         .color-block.mobile {grid-template-columns:15% 50% 35%;grid-template-rows:40% 29.5% 29.5%;}
         .topic {grid-column-start: 1;grid-column-end: 3;grid-row-start: 3;grid-row-end:4;padding:0px;margin:0px;}
+        .overflowing {white-space: nowrap;text-overflow: ellipsis;overflow:hidden;}
 
         .progress-bar{background-color:{{settings.theme}};border-radius:10px;color:black;}
         .progress {background-color:white;height:20px;border-radius:10px;}
+
+        .relax-image{width:40%;height:40%}
+        .relax-image.mobile {width:100%;height:90%;}
+
     </style>
 </head>
 <body>
@@ -106,6 +111,7 @@
 </ul>
 {% endif %}
 
+
 {% for weekday in weekdays %}
 <input type="hidden" class="weekday" value={{weekday}}>
 {% endfor %}
@@ -118,8 +124,8 @@
             <input type="hidden" class="weeknum" value={{subject.weekday}}>
             <input type="hidden" class="deadline_weeknum" value={{exam.weekday}}>
         <input type="hidden" class="deadline_date" value={{task.date}}>
-              <div class="box name"><p class="subject-name h3">{{ exam.select_subject.title }}</p></div>
-              <div class="box subtitle">{{ exam.type}}</div>
+              <div class="box name overflowing"><p class="subject-name h3">{{ exam.select_subject.title }}</p></div>
+              <div class="box subtitle overflowing">{{ exam.type}}</div>
               <div class="topic">{{ exam.topic}}</div>
               <div class="box buttons">
                 <div>
@@ -142,6 +148,7 @@
 
     <div class="exam-list" id="examination-list">
         <p class="h1 pagename">Экамены({{examinations|length}}) <a href="{% url 'exam_new_2' examination='examination' %}" class="badge badge-pill badge-secondary badge-add">+</a></p>
+        {% if examinations %}
         {% if days_left >= 0 %}
         <div class="progress" data-toggle="tooltip" data-placement="right" title="Столько дней осталось до первого экзамена">
   <div id="progress" class="progress-bar" role="progressbar" style="width: {{percentage}}%;" aria-valuenow="{{passed}}" aria-valuemin="0" aria-valuemax="{{semester}}">
@@ -155,7 +162,7 @@
         {% endif %}
   </div>
         {% endif %}
-    </div>
+        {% endif %}
 
         <br>
          {% for exam in examinations %}
@@ -163,9 +170,9 @@
             <input type="hidden" class="weeknum" value={{subject.weekday}}>
             <input type="hidden" class="deadline_weeknum" value={{exam.weekday}}>
         <input type="hidden" class="deadline_date" value={{task.date}}>
-              <div class="box name"><p class="subject-name h3">{{ exam.select_subject.title }}</p></div>
-              <div class="box subtitle">{{ exam.type}}</div>
-              <div class="topic">{{ exam.topic}}</div>
+              <div class="box name overflowing"><p class="subject-name h3">{{ exam.select_subject.title }}</p></div>
+              <div class="box subtitle overflowing">{{ exam.type}}</div>
+              <div class="topic overflowing">{{ exam.topic}}</div>
               <div class="box buttons">
                 <div>
             <a  href="{% url 'exam_edit' pk=exam.pk %}" data-toggle="tooltip" data-placement="top" title="Редактировать"><img alt="Редактировать" src="/static/images/edit.svg" class="edit" width="22px"></a>
@@ -185,7 +192,6 @@
           </div>
          {% endfor %}
     </div>
-
 </div>
 </body>
 <script>
@@ -235,7 +241,7 @@ if ("{{mobile}}"=="True"){
 classnames=['time','subtitle','color-block','name','buttons','info','exams-list','test-list','content']
 classnames.forEach(Mobile);}
 else{
-classnames=['exams-list','test-list','content']
+classnames=['exams-list','test-list','content','relax-image']
 classnames.forEach(Desktop);
 list=document.getElementsByClassName('time');
 for (i=0; i<list.length; i++){

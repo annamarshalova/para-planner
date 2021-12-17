@@ -35,9 +35,24 @@ def shorten(word):
         return conventional[word]
     elif word[m] in consonants and word[m + 1] in 'ъь':
         return ''.join(word[:m + 2]) + '.'
+    elif word[m] in consonants and word[m + 1] in consonants:
+        return ''.join(word[:m + 2]) + '.'
     elif word[m] in consonants:
-        return ''.join(word[:m + 1]) + '.'
+        return ''.join(word[:m+1]) + '.'
     elif m == 0:
         return word
     else:
         return ''.join(word[:m]) + '.'
+
+def shorten_any_title(title):
+    shortened_title=[]
+    for word in title.split(' '):
+        if len(word)<3:
+            shortened_title.append(word)
+            shortened_title.append(' ')
+        else:
+            shortened_title.append(shorten(word))
+    return ''.join(shortened_title)
+
+if __name__ == "__main__":
+    print(shorten_title(input()))

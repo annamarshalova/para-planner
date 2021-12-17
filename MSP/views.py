@@ -4,7 +4,7 @@ from .models import Lesson, Hometask, Exam, Settings, Time, Image, Day, Subject,
 from .forms import SubjectForm, LessonForm, SettingsForm, TimeForm, TaskForm, SemesterForm, ExamForm, PlanForm, \
     SignUpForm, LogInForm, TaskMobileForm
 from datetime import datetime, date, timedelta, time
-from .syllables import syllables, shorten
+from .syllables import syllables, shorten_any_title
 from django.contrib.auth import login, authenticate,logout
 import random
 from django.core.mail import send_mail
@@ -32,10 +32,7 @@ seconds_in_week = seconds_in_day * 7
 
 def shorten_title(t):
     if len(t) > 20:
-        title = t.split(' ')
-        for i in range(len(title)):
-            title[i] = shorten(title[i])
-        return ''.join(title)
+        return shorten_any_title(t)
     return t
 
 def page_not_found(request,exception):
@@ -48,8 +45,8 @@ def create_lessons(subject, lesson):
         lesson.teachershort = subject.teachershort
     if not lesson.classroom:
         lesson.classroom = subject.classroom
-    if not lesson.image:
-        lesson.image = subject.image
+    if not lesson.title:
+        lesson.title=subject.title
     if not lesson.title_short:
         lesson.title_short = subject.title_short
     lesson.weekday = subject.weekday
@@ -62,6 +59,10 @@ def password_reset(request):
 
 
 def signup(request):
+    user_agent = request.META['HTTP_USER_AGENT']
+    mobile = True
+    if 'Mobile' in user_agent:
+        mobile = True
     if request.method == 'POST':
         form = SignUpForm(request.POST)
         if form.is_valid():
@@ -78,7 +79,7 @@ def signup(request):
             return redirect('start')
     else:
         form = SignUpForm()
-    return render(request, 'registration/signup.html', {'form': form})
+    return render(request, 'registration/signup.html', {'form': form,'mobile':mobile})
 
 def log_out(request):
     logout(request)
@@ -121,7 +122,9 @@ def load_subjects_ics(link):
                 except:
                     subject.classroom = str(component.get('location'))
 
-def load_subjects_ics_url(url,user,settings):
+def load_subjects_ics_file(file,user,settings):
+    from icalendar import Calendar
+    import re
     if len(Time.objects.filter(owner=user)) == 0:
         settings.first_lesson_start = datetime.strptime('09:00', '%H:%M').time()
         settings.lesson_length = 95
@@ -129,55 +132,68 @@ def load_subjects_ics_url(url,user,settings):
         settings.max_lessons = 7
         settings.repeating_weeks = 2
         create_times(settings, user)
-    import requests
-    from icalendar import Calendar
-    import re
-    from django.contrib.staticfiles.storage import staticfiles_storage
-    import urllib.request
-    with urllib.request.urlopen(url) as f:
-        g = f.read().decode('utf-8')
-        gcal = Calendar.from_ical(g)
-        for component in gcal.walk():
-            if component.name == 'VEVENT':
-                subject = Subject()
-                fullname = str(component.get('summary'))
-                subject.type = str(re.findall('(\(.*?\))', fullname)[-1].strip('()'))
-                subject.title = fullname.replace(f'({subject.type})', '').rstrip(' ')
-                subject.start_time = component.decoded('dtstart').astimezone().strftime("%H:%M")
-                subject.end_time = component.decoded('dtend').astimezone().strftime("%H:%M")
-                subject.weekday = component.decoded('dtstart').weekday()
-                subject.teacher = str(component.get('description')).replace('Преподаватель: ', '')
+    g = file.read().decode('utf-8')
+    gcal = Calendar.from_ical(g)
+    for component in gcal.walk():
+        if component.name == 'VEVENT':
+            subject = Subject()
+            fullname = str(component.get('summary'))
+            subject.type = str(re.findall('(\(.*?\))', fullname)[-1].strip('()'))
+            subject.title = fullname.replace(f'({subject.type})', '').rstrip(' ')
+            subject.title_short = shorten_title(subject.title)
+            subject.start_time = component.decoded('dtstart').astimezone().strftime("%H:%M")
+            subject.end_time = component.decoded('dtend').astimezone().strftime("%H:%M")
+            subject.weekday = component.decoded('dtstart').weekday()
+            subject.teacher = str(component.get('description')).replace('Преподаватель: ', '')
+            teacher = subject.teacher.split(' ')
+            if len(teacher) == 3:
+                subject.teachershort = ''.join([teacher[0], ' ', teacher[1][0], '.', teacher[2][0], '.'])
+            similar = Subject.objects.filter(title=subject.title, owner=user)
+            if len(similar) > 0:
+                subject.color = similar[0].color
+                subject.image = similar[0].image
+            else:
                 subject.color = random.choice(colors)
-                subject.owner=user
-                print('successful')
-                try:
-                    subject.classroom = re.findall('[а-я]?\d+[а-я]?', str(component.get('location')))[0]
-                except:
-                    subject.classroom = str(component.get('location'))
-                subject.save()
-                days = Day.objects.filter(owner=user).order_by('date')
-                if settings.exams_date:
-                    exams_start = settings.exams_date
+            interval = component.decoded('rrule')['interval']
+            if interval == 1:
+                subject.weeks = 12
+            elif interval == 2:
+                if Subject.objects.filter(owner=user, start_time=subject.start_time, end_time=subject.end_time):
+                    subject.weeks = 2
                 else:
-                    exams_start = settings.end_date
-                for day in days:
-                    if day.date <= exams_start:
-                        day_week = day.week % settings.repeating_weeks
-                        if day_week == 0:
-                            day_week = settings.repeating_weeks
-                        day_week = str(day_week)
-                        if day.weekday == subject.weekday and day_week in subject.weeks:
-                            lesson = Lesson()
-                            lesson = create_lessons(subject, lesson)
-                            lesson.select_subject = subject
-                            lesson.title = subject.title
-                            lesson.time = subject.time
-                            lesson.start_time = subject.start_time
-                            lesson.end_time = subject.end_time
-                            lesson.date = day.date
-                            lesson.type = subject.type
-                            lesson.owner = user
-                            lesson.save()
+                    subject.weeks = 1
+            subject.owner = user
+            print('successful')
+            try:
+                subject.classroom = re.findall('[а-я]?\d+[а-я]?', str(component.get('location')))[0]
+            except:
+                subject.classroom = str(component.get('location'))
+            subject.time = Time.objects.filter(owner=user, start_time=subject.start_time, end_time=subject.end_time)[
+                0].number
+            subject.save()
+            days = Day.objects.filter(owner=user).order_by('date')
+            if settings.exams_date:
+                exams_start = settings.exams_date
+            else:
+                exams_start = settings.end_date
+            for day in days:
+                if day.date <= exams_start:
+                    day_week = day.week % settings.repeating_weeks
+                    if day_week == 0:
+                        day_week = settings.repeating_weeks
+                    day_week = str(day_week)
+                    if day.weekday == subject.weekday and day_week in subject.weeks:
+                        lesson = Lesson()
+                        lesson = create_lessons(subject, lesson)
+                        lesson.select_subject = subject
+                        lesson.title = subject.title
+                        lesson.time = subject.time
+                        lesson.start_time = subject.start_time
+                        lesson.end_time = subject.end_time
+                        lesson.date = day.date
+                        lesson.type = subject.type
+                        lesson.owner = user
+                        lesson.save()
 
 
 def load_subjects_html(group, user, settings):
@@ -415,8 +431,8 @@ def start(request,step="dates"):
             else:
                 step = "schedule"
         elif "import_timetable" in request.POST:
-            group = request.POST['group']
-            load_subjects_html(group, user, settings)
+            file = request.FILES["timetable_file"]
+            load_subjects_ics_file(file, user, settings)
             step = "appearance"
             nsu_import = True
         elif "move_to_last" in request.POST:
@@ -428,11 +444,11 @@ def start(request,step="dates"):
         elif "prev_page" in request.POST:
             prev_step=steps[steps.index(step)-1]
             return redirect('start',step=prev_step)
-    titles=[["Учебный календарь","Первый шаг","25%"],["Где ты учишься?","Второй шаг","50%"],["Расписание звонков","Третий шаг","75%"],["Импорт расписания","Третий шаг","75%"],["Последний штрих","Четвёртый шаг","100%"]]
+    titles=[["Учебный календарь","Первый шаг","20%"],["Где ты учишься?","Второй шаг","40%"],["Расписание звонков","Третий шаг","60%"],["Импорт расписания","Четвёртый шаг","80%"],["Последний штрих","Пятый шаг","100%"]]
     headlines=dict(zip(steps,titles))
     user_agent = request.META['HTTP_USER_AGENT']
     template = 'MSP/start_boot.html'
-    mobile = False
+    mobile = True
     if 'Mobile' in user_agent:
         mobile = True
     return render(request, template,
@@ -442,7 +458,7 @@ def start(request,step="dates"):
 
 
 
-def dashboard(request):
+def main(request):
     if request.user.is_authenticated:
         user = request.user
         settings = Settings.objects.get(owner=user)
@@ -452,7 +468,7 @@ def dashboard(request):
         else:
             return redirect(settings.homepage)
     else:
-        return redirect('dashboard')
+        return redirect('main')
 
 
 def info(request, pk):
@@ -902,6 +918,7 @@ def lesson_delete(request, pk, page, fix_day):
 
 def settings(request, unit='dates'):
     THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+    successful_import=False
     path=os.path.join(THIS_FOLDER,'universities.json')
     with open(path, 'r', encoding='utf-8') as js:
         universities = json.load(js)
@@ -1004,9 +1021,10 @@ def settings(request, unit='dates'):
             settings.save()
             return redirect('settings', unit='misc')
         elif "import_timetable" in request.POST:
-            group = request.POST['group']
-            load_subjects_html(group, user, settings)
-            return redirect('settings', unit='misc')
+            #group = request.POST['group']
+            file=request.FILES["timetable_file"]
+            load_subjects_ics_file(file, user, settings)
+            return redirect('subjects')
     else:
         settings = get_object_or_404(Settings, owner=user)
         today = get_today(user)
@@ -1026,7 +1044,7 @@ def settings(request, unit='dates'):
                       {'settings_form': settings_form, 'colors': colors, 'settings': settings, 'schedule': schedule,
                        'schedule_forms': schedule_forms, 'semester_form': semester_form, 'today': today, 'user': user,
                        'start_date': start_date, 'end_date': end_date, 'unit': unit, 'universities': universities,
-                       'mobile': mobile})
+                       'mobile': mobile,'successful_import':successful_import})
 
 
 def tasks(request):
@@ -1065,7 +1083,7 @@ def tasks(request):
     end_date = Day.objects.get(date=settings.end_date, owner=user)
     template = 'MSP/tasks_boot.html'
     user_agent = request.META['HTTP_USER_AGENT']
-    mobile = False
+    mobile = True
     if 'Mobile' in user_agent:
         mobile = True
     return render(request, template,
@@ -1561,7 +1579,7 @@ def exams(request):
         percentage = 0
     else:
         percentage = round(100 * passed / semester)
-    mobile = True
+    mobile = False
     user_agent = request.META['HTTP_USER_AGENT']
     template = 'MSP/exams_boot.html'
     if 'Mobile' in user_agent:

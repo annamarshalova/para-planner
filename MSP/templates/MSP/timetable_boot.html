@@ -78,10 +78,15 @@
         .info p{margin:0px;}
         .window {background-color:white;}
         .color-block.mobile {grid-template-columns:15% 50% 35%;grid-template-rows:40% 29.5% 29.5%;}
-
+        .overflowing {white-space: nowrap;text-overflow: ellipsis;overflow:hidden;}
+        .overflowing-task{text-overflow: ellipsis;}
         .tooltiptext{display:none;}
 
         .relax-image{width:40%;height:40%}
+
+        .relax-image.mobile {width:100%;height:90%;}
+
+
 
 
 </style>
@@ -170,7 +175,7 @@
     <div class="block-list" id='no_windows'>
     {% for lesson in lessons %}
     <div id='subject_{{lesson.pk}}_0' class='color-block container-fluid' style="background-color:{{ lesson.color }};">
-        <div class="box name"><p class="subject-name h3" onclick="Info({{lesson.pk}},'_0')">{% if lesson.title|length < 28 %}{{ lesson.title }}{% else %}{{ lesson.title_short }}{% endif %}</p></div>
+        <div class="box name overflowing"><p class="subject-name h3" onclick="Info({{lesson.pk}},'_0')">{% if lesson.title|length < 28 %}{{ lesson.title }}{% else %}{{ lesson.title_short }}{% endif %}</p></div>
             <div class="box buttons">
                 <div>
          {% if lesson.link %}
@@ -181,7 +186,7 @@
             <a  href="{% url 'lesson_edit' pk=lesson.pk page='timetable' fix_day=day.pk %}"  onclick="Close()" data-toggle="tooltip" data-placement="top" title="Редактировать"> <img alt="Редактировать" src="/static/images/edit.svg" class="edit" width="25px"></a>
             <a  onclick="DeleteObject('{{lesson.pk}}')" data-toggle="tooltip" data-placement="top" title="Удалить"> <img alt="Удалить" src="/static/images/delete.svg" class="delete" width="22px"></a>
             </div>
-                         <p class="type">{{ lesson.type }}</p>
+                         <p class="type overflowing">{{ lesson.type }}</p>
                          <p class="classroom">{{ lesson.classroom }}</p>
                          <p class="teacher" data-toggle="tooltip" data-placement="right" title="{{ lesson.teacher }}">{{ lesson.teachershort }}</p>
 
@@ -192,7 +197,7 @@
            <span class="badge badge-pill badge-primary now">сейчас</span>
            {% endif %}</p>
        </div>
-       <div class="box task">
+       <div class="box task overflowing">
              <form id="form_{{lesson.pk}}_0">
                  <a class="add-hometask " href="{% url 'task_new_lesson' lesson=lesson.title date=lesson.date time=lesson.start_time menu='1' info=0 %}" data-toggle="tooltip" data-placement="left" title="добавить задание">+ <span class="tooltiptext">добавить задание</span></a>
                          {% for hometask in hometasks %}
@@ -205,7 +210,7 @@
                                  {% endfor %} 
                  </form>
              </div>
-        <div class="box exams">
+        <div class="box exams overflowing">
                   {% for exam in exams %}
                   {% if exam.lesson == lesson %}
                   <p class="exam" data-toggle="tooltip" data-placement="left" title="{% if exam.topic %}{{ exam.topic}}{% endif %}">{{exam.type}}</p>
@@ -221,7 +226,7 @@
     {% if value|length > 0 %}
     {% for lesson in value %}
     <div id='subject_{{lesson.pk}}_1' class='color-block container-fluid' style="background-color:{{ lesson.color }};">
-        <div class="box name"><p class="subject-name h3" onclick="Info({{lesson.pk}},'_0')">{% if lesson.title|length < 28 %}{{ lesson.title }}{% else %}{{ lesson.title_short }}{% endif %}</p></div>
+        <div class="box name overflowing"><p class="subject-name h3" onclick="Info({{lesson.pk}},'_1')">{% if lesson.title|length < 28 %}{{ lesson.title }}{% else %}{{ lesson.title_short }}{% endif %}</p></div>
             <div class="box buttons">
                 <div>
          {% if lesson.link %}
@@ -232,7 +237,7 @@
             <a  href="{% url 'lesson_edit' pk=lesson.pk page='timetable' fix_day=day.pk %}"  onclick="Close()" data-toggle="tooltip" data-placement="top" title="Редактировать"> <img alt="Редактировать" src="/static/images/edit.svg" class="edit" width="25px"></a>
             <a  onclick="DeleteObject('{{lesson.pk}}')" data-toggle="tooltip" data-placement="top" title="Удалить"> <img alt="Удалить" src="/static/images/delete.svg" class="delete" width="22px"></a>
             </div>
-                         <p class="type">{{ lesson.type }}</p>
+                         <p class="type overflowing">{{ lesson.type }}</p>
                          <p class="classroom">{{ lesson.classroom }}</p>
                          <p class="teacher" data-toggle="tooltip" data-placement="right" title="{{ lesson.teacher }}">{{ lesson.teachershort }}</p>
 
@@ -243,20 +248,20 @@
            <span class="badge badge-pill badge-primary now">сейчас</span>
            {% endif %}</p>
        </div>
-       <div class="box task">
+       <div class="box task overflowing">
              <form id="form_{{lesson.pk}}_1">
                  <a class="add-hometask " href="{% url 'task_new_lesson' lesson=lesson.title date=lesson.date time=lesson.start_time menu='1' info=0 %}" data-toggle="tooltip" data-placement="left" title="добавить задание">+</a>
                          {% for hometask in hometasks %}
                          {% if hometask.lesson == lesson %}
-                 <input type="checkbox" class="done form-check-input" id='check_{{ hometask.pk }}_1' onchange="Hometask({{ hometask.pk }},{{ lesson.pk }},'_0')" name="check_{{ hometask.pk }}_0" value={{hometask.done}}>
-                <label class="hometask form-check-label" for="check_{{ hometask.pk }}_0" id='label_{{ hometask.pk }}_1'>{{ hometask.hometask }}</label>
-                 <br>
-                     <input type="hidden" name="done_{{hometask.pk}}_0" id="done_{{hometask.pk}}_1" value="False">
+                 <input type="checkbox" class="done form-check-input" id='check_{{ hometask.pk }}_1' onchange="Hometask({{ hometask.pk }},{{ lesson.pk }},'_1')" name="check_{{ hometask.pk }}_1" value={{hometask.done}}>
+                   <label class="hometask form-check-label overflowing-task" for="check_{{ hometask.pk }}_1" id='label_{{ hometask.pk }}_1'>{{ hometask.hometask }}</label>
+                     <br>
+                     <input type="hidden" name="done_{{hometask.pk}}_1" id="done_{{hometask.pk}}_1" value="False">
                                  {% endif %}
                                  {% endfor %}
                  </form>
              </div>
-        <div class="box exams">
+        <div class="box exams overflowing">
                   {% for exam in exams %}
                   {% if exam.lesson == lesson %}
                   <p class="exam" data-toggle="tooltip" data-placement="left" title="{% if exam.topic %}{{ exam.topic}}{% endif %}">{{exam.type}}{% if exam.topic %}{% endif %}</p>
@@ -303,10 +308,10 @@
 
 <script>
 if ("{{mobile}}"=="True"){
-classnames=['time','tasks','color-block','name','buttons','info']
+classnames=['time','tasks','color-block','name','buttons','info','relax-image','go_to_date_fake']
 classnames.forEach(Mobile);
 datepicker=document.getElementById('go_to_date_fake');
-datepicker.style.width='45%';}
+datepicker.style.width='75%';}
 else{
 list=document.getElementsByClassName('time');
 for (i=0; i<list.length; i++){

@@ -53,6 +53,10 @@
 
         .btn {background-color:{{settings.theme}};border:none;color:black;}
         .btn:hover {background-color:{{settings.sub_color}};}
+
+        .relax-image{width:40%;height:40%}
+        .relax-image.mobile {width:100%;height:90%;}
+
     </style>
 </head>
 <body>
@@ -107,6 +111,10 @@
 
 <div class="content">
     <p class="h1 pagename">Задания({{tasks|length}}) <a href="/task_new" class="badge badge-pill badge-secondary badge-add">+</a></p>
+{% if empty %}
+<p id='no-tasks-text' class="relax-text h4">Заданий пока нет.Можно отдыхать!</p>
+<img id='sleep-image' class='relax-image' alt="Заданий нет" src="/static/images/sleep.svg">
+{% else %}
 
 {% for weekday in weekdays %}
 <input type="hidden" class="weekday" value={{weekday}}>
@@ -153,6 +161,7 @@
        <form><button type='submit' name='delete_done' class="btn btn-primary" style="background-color:{{settings.theme}};">удалить выполненное</button></form>
     {% endif %}
 </div>
+    {% endif %}
 </div>
 </body>
 <script>
@@ -219,7 +228,7 @@ if (sure){
 window.open('/accounts/login', "_self");}
 };
 if ("{{mobile}}"=="True"){
-classnames=['time','subtitle','color-block','name','buttons','info']
+classnames=['time','subtitle','color-block','name','buttons','info','relax-image']
 classnames.forEach(Mobile);}
 else{
 list=document.getElementsByClassName('time');

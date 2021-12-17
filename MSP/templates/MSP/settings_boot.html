@@ -8,9 +8,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="//js/jquery-3.3.1.slim.min.js" crossorigin="anonymous"></script>
+<script src="//js/popper.min.js" crossorigin="anonymous"></script>
+<script src="//js/bootstrap.min.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
     <style>
         body {background-color:#F6F5F5; font-family: 'Montserrat', sans-serif; font-weight:light; color:black; }
         .nav-pills .nav-link.active {background-color:{{settings.theme}};color:black;}
@@ -64,6 +68,11 @@
         .label-input_end {grid-column-start: 3;grid-column-end:4}
         .input_end {grid-column-start: 4;grid-column-end:5}
 
+        {% if mobile %}
+        .label-input_end {grid-row-start:2;grid-row-end:3;grid-column-start: 1;grid-column-end:2}
+        .input_end {grid-row-start:2;grid-row-end:3;grid-column-start: 2;grid-column-end:3}
+        {% endif %}
+
         #dates_form.mobile {width:100%;display: grid;grid-template-columns: 90% 0%;}
         #holidays_block.mobile{grid-row-start: 3;grid-row-end: 10;grid-column-start: 1;grid-column-end: 2;}
         #save_dates.mobile {grid-row-start: 10;grid-row-end: 11;grid-column-start: 1;grid-column-end: 2;}
@@ -84,6 +93,8 @@
         #university.mobile {grid-column-start: 1;grid-column-end: 2;grid-row-start: 2;grid-row-end: 3;}
 
         input[name='group'] {width:50%;}
+
+
 
 
 
@@ -190,7 +201,7 @@
                 <div class="form-inline">
                 <label for="form-control input_start" class="label-input_start">c⠀</label>
                 <input type="date" class="form-control input_start" value={{holiday.start_date|date:'Y-m-d'}}>
-                <label for="form-control input_end" class="label-input_end">⠀по⠀</label>
+                <label for="form-control input_end" class="label-input_end">{% if not mobile %}⠀{% endif %}по</label>
                 <input type="date" class="form-control input_end" value={{holiday.end_date|date:'Y-m-d'}}>
 
                 </div>
@@ -306,16 +317,17 @@
         <button type="submit" name="save_university"  class="save btn btn-default">Сохранить</button>
         </div>
     </form>
-    <form method="POST" class="post-form" id="import_form" style="display:none;">{% csrf_token %}
-        <p>Тебе повезло!<br>
-            Просто введи <b>номер своей группы</b> и расписание запишется само.<br>
-            Ты в любой момент сможешь его отредактировать.<br>
-            Расписание звонков ты также можешь изменять в настройках.
-        </p>
-        <input class="form-control" type="text" name="group">
+    <div id="import_nsu" style="display: none;">
+        <p>Введи номер своей группы, чтобы скачать своё расписание в формате ics и загрузить его в пара.планер</p>
+        <input type="text" name="group" class="form-control" id="group" onchange="GenerateLink(this.value)">
+        <p id="import-link-text" style="display: none;">А вот и твоя ссылка: <a id="import-link"></a>
+        <br>Теперь загрузи скачанный файл в форму</p>
+    </div>
+    <form method="POST" class="post-form" id="import_ics_form" enctype="multipart/form-data">{% csrf_token %}
+        <p id="import-upload-text"> Если у тебя уже есть расписание в формате ics, можешь загрузить его сюда</p>
+        <input class="form-control" type="file" id="timetable_file" name="timetable_file" value="">
         <br>
     <button type="submit" name="import_timetable" class="save btn btn-default">Импортировать</button>
-
 </form>
 </div>
 </div>
@@ -323,6 +335,9 @@
 </div>
 </body>
 <script>
+    {% if successful_import %}
+        alert('Твоё расписание успешно импортировано. Можешь убедиться в этом в разделе "Предметы".')
+    {% endif %}
 starts=document.getElementsByClassName('input_start');
 for (let i=0;i<starts.length;i++){
 starts[i].id='input_start'+i;
@@ -370,7 +385,12 @@ input_start.id= "holiday_start" + n;
 input_start.className="form-control input_start";
 input.appendChild(input_start);
 var label_end = document.createElement("label");
-label_end.appendChild(document.createTextNode("⠀по "));
+{% if mobile %}
+space="";
+{% else %}
+space="⠀";
+{% endif %}
+label_end.appendChild(document.createTextNode(space+"по "));
 label_end.className="label-input_end";
 label_end.for="holiday_end" + n;
 input.appendChild(label_end);
@@ -417,16 +437,17 @@ button.style.backgroundColor=color;
 };
 nsu='Новосибирский государственный университет (НГУ)';
 if ("{{settings.university}}" == nsu) {
-var importForm=$("#import_form");
-importForm.css("display","block");};
+importForm=document.getElementById("import_nsu");
+importForm.style.display="block";
+document.getElementById('import-upload-text').innerHTML="Если у тебя уже есть расписание в формате ics, ты также можешь загрузить его сюда."};
 
 
 function NoExams(){
 document.getElementById('exams_date').value='';};
 
 function ShowChange(){
-$('#change_university').css("display","block");
-$('#import_form').css("top","330px");};
+document.getElementById('change_university').style.display="block";
+document.getElementById('import_form').style.top="330px";};
 
 if ("{{mobile}}"=="True"){
 ids=['holidays_block','save_dates','dates_form','schedule','auto_schedule','misc','university']
@@ -454,7 +475,13 @@ else {
 menu.style.display='none';
 back.style.display='none';};
 };
-
+function GenerateLink(group) {
+ link=document.getElementById('import-link');
+ url=`https://table.nsu.ru/ics/group/${group}`;
+ link.href=url;
+ link.innerHTML=url;
+ document.getElementById('import-link-text').style.display='block';
+};
 $(function () {
 $('[data-toggle="tooltip"]').tooltip()
 });

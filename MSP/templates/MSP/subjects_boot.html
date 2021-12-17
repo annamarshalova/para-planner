@@ -50,6 +50,7 @@
         .buttons{grid-column-start: 3;grid-column-end: 4;grid-row-start: 1;grid-row-end: 4;text-align:center;}
         .buttons p{margin:0px;}
         .color-block.mobile {grid-template-columns:15% 50% 35%;grid-template-rows:40% 29.5% 29.5%;}
+        .overflowing {white-space: nowrap;text-overflow: ellipsis;overflow:hidden;}
 
     </style>
 </head>
@@ -112,7 +113,7 @@
         {% for subject in subjects %}
         <div class="color-block container-fluid" style="background-color:{{subject.color}};">
             <input type="hidden" class="weeknum" value={{subject.weekday}}>
-            <div class="box name"><p class="subject-name h3">{% if subject.title|length < 28 %}{{ subject.title }}{% else %}{{ subject.title_short }}{% endif %}</p></div>
+            <div class="box name overflowing"><p class="subject-name h3">{% if subject.title|length < 28 %}{{ subject.title }}{% else %}{{ subject.title_short }}{% endif %}</p></div>
             <div class="box buttons">
                 <div>
          {% if subject.link %}
@@ -124,7 +125,7 @@
              <a  href="{% url 'subject_double' pk=subject.pk %}" data-toggle="tooltip" data-placement="top" title="Копировать"><img alt="Копировать" src="/static/images/double.svg" class="double" width="22px"></a>
                     <a onclick="DeleteObject('{{subject.pk}}')" data-toggle="tooltip" data-placement="top" title="Удалить"> <img alt="Удалить" src="/static/images/delete.svg" class="delete" width="22px"></a>
             </div>
-                         <p class="type">{{ subject.type }}</p>
+                         <p class="type overflowing">{{ subject.type }}</p>
                          <p class="classroom">{{ subject.classroom }}</p>
                          <p class="teacher" data-toggle="tooltip" data-placement="right" title="{{ subject.teacher }}">{{ subject.teachershort }}</span></p>
 

@@ -13,10 +13,13 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <style>
         body {background-color:#F6F5F5; font-family: 'Montserrat', sans-serif; font-weight:light; color:black; }
-        .navbar{z-index:103;width:100%;position:fixed;background-color:#F6F5F5;}
+        navbar{width:100%;position:fixed;background-color:#F6F5F5;margin: 0px;top:0px;}
         .navbar-toggler {visibility: hidden;}
-        .logo {font-weight:bold;}
-        .navbar .logo {position:fixed;z-index:-2;width:100%;text-align:center;}
+        .logo {font-weight:bold;background-color:#F6F5F5;top:0px;}
+        .navbar .logo {position:fixed;;width:100%;text-align:center;}
+        .navbar .logo img {}
+        #nav-top-logo.mobile {display: block;background-color:#F6F5F5;}
+        #top-logo.mobile {width:auto;}
 
         .content{position:absolute;top:10%;left:2%;z-index:-1;width:100%;}
         .pagename {font-weight:bold;top:10%;}
@@ -41,16 +44,39 @@
         .label-input_end {grid-column-start: 3;grid-column-end:4}
         .input_end {grid-column-start: 4;grid-column-end:5}
 
+        {% if mobile %}
+        .label-input_end {grid-row-start:2;grid-row-end:3;grid-column-start: 1;grid-column-end:2}
+        .input_end {grid-row-start:2;grid-row-end:3;grid-column-start: 2;grid-column-end:3}
+        {% endif %}
+
         .settings-block-start{display: none;}
         .navigation-button {font-weight: bold;}
 
-        #schedule-block {display: grid;grid-template-columns:35% 35%; grid-column-gap: 5%;}
+        #dates {width:100%;}
+        #semester_form_hover {grid-column-start: 1;grid-column-end: 2;grid-row-start: 1;grid-row-end: 2;}
+        #exams-collapse-group {grid-column-start: 1;grid-column-end: 2;grid-row-start: 2;grid-row-end: 3;}
+        #holidays_block {grid-column-start: 2;grid-column-end: 3;grid-row-start: 1;grid-row-end: 10;}
+        #save_dates {grid-column-start: 1;grid-column-end: 2;grid-row-start: 3;grid-row-end: 4;}
+
         #show_schedule {grid-column-start: 1;grid-column-end: 2;grid-row-start: 1;grid-row-end: 2}
         #edit_schedule {grid-column-start: 1;grid-column-end: 2;grid-row-start: 1;grid-row-end: 2}
         #auto_schedule {grid-column-start: 2;grid-column-end: 3;grid-row-start: 1;grid-row-end: 2}
 
-        #schedule-block.mobile {width:100%;display: grid;grid-template-columns: 90% 0%;}
+        .grid-form.mobile {width:100%;display: grid;grid-template-columns: 90% 0%;}
+
+        #holidays_block.mobile{grid-row-start: 4;grid-row-end: 11;grid-column-start: 1;grid-column-end: 2;}
+        #exams-collapse-group.mobile {grid-column-start: 1;grid-column-end: 2;grid-row-start: 2;grid-row-end: 3}
+        #save_dates.mobile {grid-row-start: 11;grid-row-end: 12;grid-column-start: 1;grid-column-end: 2;}
+
         #auto_schedule.mobile {grid-column-start: 1;grid-column-end: 2;grid-row-start: 2;grid-row-end: 3;}
+
+        #university-change-block.mobile {grid-column-start: 1;grid-column-end: 2;grid-row-start: 1;grid-row-end: 2;}
+        .university-image.mobile {grid-column-start: 1;grid-column-end: 2;grid-row-start: 2;grid-row-end: 3;}
+
+        #import-block.mobile {grid-column-start: 1;grid-column-end: 2;grid-row-start: 1;grid-row-end: 2;}
+
+        #change-color-block {grid-column-start: 1;grid-column-end: 2;grid-row-start: 1;grid-row-end: 2;}
+        #change-color-image {grid-column-start: 1;grid-column-end: 2;grid-row-start: 2;grid-row-end: 3;}
 
         input[name='group'] {width:50%;}
 
@@ -58,14 +84,15 @@
 </head>
 <body>
 
-<nav class="navbar navbar-light" >
+<nav class="navbar navbar-light" id="nav-top-logo" >
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon" onclick="ShowMobileMenu()"></span>
     </button>
-    <span class="logo"><img src="/static/images/logo.svg" style="width:50px;margin-left:10px;">пара.планер</span>
+    <span class="logo" id="top-logo"><img src="/static/images/logo.svg" style="width:50px;">пара.планер</span>
 </nav>
 
-<div class="content">
+
+<div class="content" id="start-content">
     <form method="POST" id="pagename-navigation"> {% csrf_token %}
         <p class="h1 pagename" id="pagename-start">
             {% if not step == steps|first %}
@@ -81,8 +108,8 @@
     </div>
 <div class="settings-block-start" id="dates">
     <br>
-    <form method="POST" id="save-dates" class="grid-form">{% csrf_token %}
-        <div class="left">
+
+    <form method="POST" id="dates_form" class="grid-form">{% csrf_token %}
         <div id="semester_form_hover" data-toggle="tooltip" data-placement="left" title="Пожалуйста, укажи правильные даты. Иначе приложение может работать неправильно.">
             {% for field in semester_form %}
             <div class="form-floating mb-3" >
@@ -91,9 +118,10 @@
             </div>
             {% endfor %}
         </div>
-            <div>
+            <div id="exams-collapse-group">
            <a id="exams-collapse-button" class="btn btn-primary" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="multiCollapseExample1" onclick="Collapse(this.id,'exams-collapse')">Добавить даты сессии</a>
-            <div id="exams-collapse" class="collapse">
+                 {% if not mobile %} <br> <br>{% endif %}
+                <div id="exams-collapse" class="collapse">
                 <br>
             <div id="exams_block" data-toggle="tooltip" data-placement="left" title="Обрати внимание, что дата начала сессии должна быть меньше даты окончания семестра.">
                 <div class="form-floating mb-3">
@@ -104,8 +132,8 @@
         </div>
             </div>
             <br>
-        </div>
         <div id="holidays_block">
+            {% if mobile %} <br> {% endif %}
             <p id="add_holidays2" class="add_holidays" data-placement="left" title="Ты можешь добавить не более восьми каникул.">
                 Каникулы
                 <span class="btn plus right" onclick="n=AddHoliday()" onmouseout="RemoveTooltip()">+</span>
@@ -116,7 +144,7 @@
                     <div class="form-inline" style="display: grid;">
                         <label for="form-control input_start" class="label-input_start">c </label>
                         <input type="date" class="form-control input_start" value={{holiday.start_date|date:'Y-m-d'}}>
-                        <label for="form-control input_end" class="label-input_end">⠀по⠀</label>
+                        <label for="form-control input_end" class="label-input_end">{% if not mobile%}⠀{% endif%}по</label>
                         <input type="date" class="form-control input_end" value={{holiday.end_date|date:'Y-m-d'}}>
 
                     </div>
@@ -131,8 +159,8 @@
 
     <div class="settings-block-start" id="university">
         <br>
-        <form method="POST" class="grid-form">{% csrf_token %}
-            <img class="university-image" src="/static/images/msu.svg">
+        <form method="POST" id="university_form" class="grid-form">{% csrf_token %}
+            <img class="university-image" id="university-image" src="/static/images/msu.svg">
            <div id="university-change-block">
             <p>Выбери место, где ты учишься:</p>
             <div id="change_university" >
@@ -163,7 +191,7 @@
             Задай необходимые парметры и расписание звонков установится само.<br>
             Ты также можешь изменить его вручную.
         </p>
-        <div id="schedule-block">
+        <div id="schedule-block" class="grid-form">
         <div id="show_schedule">
             <form>
             <table class="table">
@@ -216,25 +244,28 @@
 
     <div class="settings-block-start" id="import">
         <br>
-        <form method="POST" class="grid-form" id="import_form">{% csrf_token %}
+        <div class="grid-form" id="import_form">{% csrf_token %}
             <img class="university-image" src="/static/images/nsu.svg" alt="Новосибирский государственный университет (НГУ)" class="left">
-            <div class="right">
-            <p>Тебе повезло!<br>
-                Просто введи <b>номер своей группы</b> и расписание запишется само.<br>
-                Ты в любой момент сможешь его отредактировать.<br>
-                Расписание звонков ты также можешь изменять в настройках.
-            </p>
-            <input class="form-control" type="text" name="group">
-            <br>
+            <div class="right" id="import-block">
+            <div id="import_nsu" style="display: none;">
+        <p>Введи номер своей группы, чтобы скачать своё расписание в формате ics и загрузить его в пара.планер</p>
+        <input type="text" name="group" class="form-control" id="group" onchange="GenerateLink(this.value)">
+        <p id="import-link-text" style="display: none;">А вот и твоя ссылка: <a id="import-link"></a>
+        <br>Теперь загрузи скачанный файл в форму</p>
+    </div>
+    <form method="POST" class="post-form" id="import_ics_form" enctype="multipart/form-data">{% csrf_token %}
+        <p id="import-upload-text"> Если у тебя уже есть расписание в формате ics, можешь загрузить его сюда</p>
+        <input class="form-control" type="file" id="timetable_file" name="timetable_file">
+        <br>
             <button type="submit" name="import_timetable" class="save btn btn-default">Импортировать</button>
-            </div>
         </form>
     </div>
-
+    </div>
+    </div>
     <div class="settings-block-start" id="appearance">
         <br>
         <form method="POST" class="grid-form" id="select_color">{% csrf_token %}
-            <div class="left">
+            <div class="left" id="change-color-block">
             {% if nsu_import %}
             <p>Твоё расписание успешно импортировано!<br>
                 Перед тем, как перейти к нему, давай раскрасим твой пара.планер!<br>
@@ -256,7 +287,7 @@
             </div>
             <button type="submit" name="save_color"  id='save_color' class="save btn btn-default" style="background-color:{{settings.theme}}">Полетели!</button>
             </div>
-        <div class="right">
+        <div class="right" id="change-color-image">
             <svg width="301" height="301" viewBox="0 0 301 301" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M128.479 294.57L61.3037 75.806M128.479 294.57L86.042 67.811M128.479 294.57L119.742 67.811M128.479 294.57L243.334 75.806M128.479 294.57L216.406 71.6624M128.479 294.57L196.623 67.811" stroke="black"/>
                 <path d="M227.803 174.909L221.572 168.332C217.78 164.329 215.884 162.328 213.784 160.55C211.684 158.773 209.397 157.233 204.823 154.154L172.713 132.537L111.988 97.5788L234.154 119.465L227.803 174.909Z" fill="#EBF2F8"/>
@@ -290,7 +321,9 @@
     block.style.display='block';
     document.getElementById('step-title').innerHTML=headline;
     var progressBar=document.getElementById('progress_bar');
+    {% if not mobile %}
     progressBar.innerHTML=headlines["{{step}}"][1];
+    {% endif %}
     progressBar.style.width=headlines["{{step}}"][2];
 
     var numbers=document.getElementsByClassName('number');
@@ -317,7 +350,12 @@
             input_start.className="form-control input_start";
             input.appendChild(input_start);
             var label_end = document.createElement("label");
-            label_end.appendChild(document.createTextNode("⠀по "));
+            {% if mobile %}
+            space="";
+            {% else %}
+            space="⠀";
+            {% endif %}
+            label_end.appendChild(document.createTextNode(space+"по "));
             label_end.className="label-input_end";
             label_end.for="holiday_end" + n;
             input.appendChild(label_end);
@@ -361,15 +399,15 @@
     var collapsed=false;
     function Collapse (b,collapse) {
         if (collapsed) {
-            $('#exams_date').value='';
-            $('#'+b).html("Добавить даты сессии");
-            $('#'+collapse).collapse('hide');
+            document.getElementById('exams_date').value='';
+            document.getElementById(b).innerHTML="Добавить даты сессии";
+            document.getElementById(collapse).style.display='none';
             document.getElementById('exams_date').value='';
             collapsed=false;
         }
         else {
-            $('#'+b).html("Удалить даты сессии");
-            $('#'+collapse).collapse('show');
+            document.getElementById(b).innerHTML="Удалить даты сессии";
+            document.getElementById(collapse).style.display='block';
             collapsed=true;
         }
     };
@@ -385,9 +423,18 @@
         edit_schedule.style.display="none";
         show_schedule.style.display="block";
     };
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip()
-    });
+    function GenerateLink(group) {
+ link=document.getElementById('import-link');
+ url=`https://table.nsu.ru/ics/group/${group}`;
+ link.href=url;
+ link.innerHTML=url;
+ document.getElementById('import-link-text').style.display='block';
+};
+    nsu='Новосибирский государственный университет (НГУ)';
+if ("{{settings.university}}" == nsu) {
+importForm=document.getElementById("import_nsu");
+importForm.style.display="block";
+document.getElementById('import-upload-text').innerHTML="Если у тебя уже есть расписание в формате ics, ты также можешь загрузить его сюда."};
 
     function Color(color){
         var complimentColors={{compliment_colors|safe}};
@@ -403,7 +450,25 @@
         tick.style.fill=color;
         side.style.fill=color;};
 
+    if ("{{mobile}}"=="True"){
+ids=['holidays_block','save_dates','exams-collapse-group','auto_schedule','university-image','university-change-block','top-logo','nav-top-logo','start-content','import-block','change-color-block','change-color-image']
+ids.forEach(Mobile);
+classNames=['left','right','grid-form','university-image'];
+classNames.forEach(MobileByClassName);};
 
+function Mobile(name){
+element=document.getElementById(name);
+element.className+=" mobile";};
+
+function MobileByClassName(name){
+    elements=document.getElementsByClassName(name);
+    for (let i=0;i<elements.length;i++){
+        elements[i].className+=" mobile";
+    };};
+
+ $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    });
 
 </script>
 </html>

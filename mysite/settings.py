@@ -134,3 +134,6 @@ LOGIN_REDIRECT_URL = '/'
 
 SUMMERNOTE_CONFIG = {
     'lang': 'ru-ru',}
+
+FILE_HANDLERS=["django.core.files.uploadhandler.MemoryFileUploadHandler",
+ "django.core.files.uploadhandler.TemporaryFileUploadHandler"]
