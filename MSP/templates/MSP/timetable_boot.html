@@ -175,7 +175,7 @@
     <div class="block-list" id='no_windows'>
     {% for lesson in lessons %}
     <div id='subject_{{lesson.pk}}_0' class='color-block container-fluid' style="background-color:{{ lesson.color }};">
-        <div class="box name overflowing"><p class="subject-name h3" onclick="Info({{lesson.pk}},'_0')">{% if lesson.title|length < 28 %}{{ lesson.title }}{% else %}{{ lesson.title_short }}{% endif %}</p></div>
+        <div class="box name"><p class="subject-name h3 overflowing" onclick="Info({{lesson.pk}},'_0')">{% if lesson.title|length < 28 %}{{ lesson.title }}{% else %}{{ lesson.title_short }}{% endif %}</p></div>
             <div class="box buttons">
                 <div>
          {% if lesson.link %}
@@ -210,10 +210,10 @@
                                  {% endfor %} 
                  </form>
              </div>
-        <div class="box exams overflowing">
+        <div class="box exams">
                   {% for exam in exams %}
                   {% if exam.lesson == lesson %}
-                  <p class="exam" data-toggle="tooltip" data-placement="left" title="{% if exam.topic %}{{ exam.topic}}{% endif %}">{{exam.type}}</p>
+                  <p class="exam overflowing" data-toggle="tooltip" data-placement="left" title="{% if exam.topic %}{{ exam.topic}}{% endif %}">{{exam.type}}</p>
                    {% endif %}
                    {% endfor %}
         </div>
@@ -226,7 +226,7 @@
     {% if value|length > 0 %}
     {% for lesson in value %}
     <div id='subject_{{lesson.pk}}_1' class='color-block container-fluid' style="background-color:{{ lesson.color }};">
-        <div class="box name overflowing"><p class="subject-name h3" onclick="Info({{lesson.pk}},'_1')">{% if lesson.title|length < 28 %}{{ lesson.title }}{% else %}{{ lesson.title_short }}{% endif %}</p></div>
+        <div class="box name"><p class="subject-name h3 overflowing" onclick="Info({{lesson.pk}},'_1')">{% if lesson.title|length < 28 %}{{ lesson.title }}{% else %}{{ lesson.title_short }}{% endif %}</p></div>
             <div class="box buttons">
                 <div>
          {% if lesson.link %}
@@ -261,10 +261,10 @@
                                  {% endfor %}
                  </form>
              </div>
-        <div class="box exams overflowing">
+        <div class="box exams">
                   {% for exam in exams %}
                   {% if exam.lesson == lesson %}
-                  <p class="exam" data-toggle="tooltip" data-placement="left" title="{% if exam.topic %}{{ exam.topic}}{% endif %}">{{exam.type}}{% if exam.topic %}{% endif %}</p>
+                  <p class="exam overflowing" data-toggle="tooltip" data-placement="left" title="{% if exam.topic %}{{ exam.topic}}{% endif %}">{{exam.type}}{% if exam.topic %}{% endif %}</p>
                    {% endif %}
                    {% endfor %}
         </div>
@@ -285,7 +285,10 @@
             {% if key < first_lesson_today %}
             <p class="relax">можно подольше поспать</p>
             {% else %}
-            <p class="relax">можно заняться чем-то полезным</p>
+            <p class="relax">можно заняться чем-то полезным
+                {% if settings.university == 'Новосибирский государственный университет (НГУ)' %}
+                или <a href="https://sandrenkova.wixsite.com/my-site-1" target="_blank">перекусить</a>
+            {% endif %}</p>
              {% endif %}
     </div>
     </div>

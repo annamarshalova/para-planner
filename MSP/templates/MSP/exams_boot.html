@@ -124,9 +124,9 @@
             <input type="hidden" class="weeknum" value={{subject.weekday}}>
             <input type="hidden" class="deadline_weeknum" value={{exam.weekday}}>
         <input type="hidden" class="deadline_date" value={{task.date}}>
-              <div class="box name overflowing"><p class="subject-name h3">{{ exam.select_subject.title }}</p></div>
-              <div class="box subtitle overflowing">{{ exam.type}}</div>
-              <div class="topic">{{ exam.topic}}</div>
+              <div class="box name"><p class="subject-name h3 overflowing">{{ exam.select_subject.title }}</p></div>
+              <p class="box subtitle overflowing">{{ exam.type}}</p>
+              <p class="topic">{{ exam.topic}}</p>
               <div class="box buttons">
                 <div>
             <a  href="{% url 'exam_edit' pk=exam.pk %}" data-toggle="tooltip" data-placement="top" title="Редактировать"><img alt="Редактировать" src="/static/images/edit.svg" class="edit" width="22px"></a>
@@ -142,7 +142,7 @@
         <br>{{exam.lesson.start_time}}</p>
         {% endif %}
               </div>
-          </div>
+         </div>
          {% endfor %}
      </div>
 
@@ -170,9 +170,9 @@
             <input type="hidden" class="weeknum" value={{subject.weekday}}>
             <input type="hidden" class="deadline_weeknum" value={{exam.weekday}}>
         <input type="hidden" class="deadline_date" value={{task.date}}>
-              <div class="box name overflowing"><p class="subject-name h3">{{ exam.select_subject.title }}</p></div>
-              <div class="box subtitle overflowing">{{ exam.type}}</div>
-              <div class="topic overflowing">{{ exam.topic}}</div>
+              <div class="box name"><p class="subject-name h3 overflowing">{{ exam.select_subject.title }}</p></div>
+              <p class="box subtitle overflowing">{{ exam.type}}</p>
+              <p class="topic overflowing">{{ exam.topic}}</p>
               <div class="box buttons">
                 <div>
             <a  href="{% url 'exam_edit' pk=exam.pk %}" data-toggle="tooltip" data-placement="top" title="Редактировать"><img alt="Редактировать" src="/static/images/edit.svg" class="edit" width="22px"></a>
@@ -187,7 +187,7 @@
         <span class="deadline_weekday"></span>{{ exam.date|date:"d.m"}}</p>
         {% endif %}
         <br>{{exam.lesson.start_time}}
-              </div>
+              </p>
 
           </div>
          {% endfor %}

@@ -113,7 +113,7 @@
         {% for subject in subjects %}
         <div class="color-block container-fluid" style="background-color:{{subject.color}};">
             <input type="hidden" class="weeknum" value={{subject.weekday}}>
-            <div class="box name overflowing"><p class="subject-name h3">{% if subject.title|length < 28 %}{{ subject.title }}{% else %}{{ subject.title_short }}{% endif %}</p></div>
+            <div class="box name"><p class="subject-name h3 overflowing">{% if subject.title|length < 28 %}{{ subject.title }}{% else %}{{ subject.title_short }}{% endif %}</p></div>
             <div class="box buttons">
                 <div>
          {% if subject.link %}

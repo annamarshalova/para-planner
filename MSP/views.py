@@ -466,7 +466,7 @@ def main(request):
         else:
             return redirect(settings.homepage)
     else:
-        return redirect('main')
+        return redirect('login')
 
 
 def info(request, pk):
